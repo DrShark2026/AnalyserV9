@@ -1,0 +1,204 @@
+{
+  "type_test": "analyse_IA_modele_chatgpt",
+  "modele": "GPT-5.6 Luna",
+  "corpus": "corpus_pilote_12_textes",
+  "note_methodologique": "Résultats produits par analyse du modèle dans ChatGPT ; aucun appel à l'API Anthropic n'a été effectué.",
+  "total": 12,
+  "correct": 11,
+  "faux_positifs": 1,
+  "faux_negatifs": 0,
+  "accuracy_marqueur": 0.9167,
+  "resultats": [
+    {
+      "id": "GEN-NM",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": false
+      },
+      "resultat": {
+        "marqueur_detecte": true,
+        "operations_detectees": [
+          {
+            "code": "γ2",
+            "marqueur": "transcrit"
+          }
+        ],
+        "commentaire": "Faux positif lexical : « transcrit » est employé dans son sens ordinaire et ne constitue pas ici un marqueur logico-discursif selon le terrain."
+      },
+      "evaluation": "faux_positif"
+    },
+    {
+      "id": "GEN-M",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": true
+      },
+      "resultat": {
+        "marqueur_detecte": true,
+        "operations_detectees": [
+          {
+            "code": "γ1",
+            "marqueur": "comporte"
+          },
+          {
+            "code": "ρ3",
+            "marqueur": "comme",
+            "occurrences": 2
+          }
+        ],
+        "commentaire": "Le marquage analogique est détecté ; « comme » constitue le signal lexical le plus directement pertinent."
+      },
+      "evaluation": "correct"
+    },
+    {
+      "id": "IMM-NM",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": false
+      },
+      "resultat": {
+        "marqueur_detecte": false,
+        "operations_detectees": []
+      },
+      "evaluation": "correct"
+    },
+    {
+      "id": "IMM-M",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": true
+      },
+      "resultat": {
+        "marqueur_detecte": true,
+        "operations_detectees": [
+          {
+            "code": "ρ3",
+            "marqueur": "comparable à"
+          }
+        ],
+        "commentaire": "Le marqueur analogique est identifié sémantiquement, même si la règle lexicale actuelle du HTML ne contient pas « comparable à »."
+      },
+      "evaluation": "correct_apres_analyse_IA"
+    },
+    {
+      "id": "IA-NM",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": false
+      },
+      "resultat": {
+        "marqueur_detecte": false,
+        "operations_detectees": []
+      },
+      "evaluation": "correct"
+    },
+    {
+      "id": "IA-M",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": true
+      },
+      "resultat": {
+        "marqueur_detecte": true,
+        "operations_detectees": [
+          {
+            "code": "ρ3",
+            "marqueur": "comme"
+          }
+        ],
+        "commentaire": "Le marqueur analogique est explicitement réalisé par « comme »."
+      },
+      "evaluation": "correct"
+    },
+    {
+      "id": "ECO-NM",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": false
+      },
+      "resultat": {
+        "marqueur_detecte": false,
+        "operations_detectees": []
+      },
+      "evaluation": "correct"
+    },
+    {
+      "id": "ECO-M",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": true
+      },
+      "resultat": {
+        "marqueur_detecte": true,
+        "operations_detectees": [
+          {
+            "code": "ρ3",
+            "marqueur": "comme"
+          }
+        ],
+        "commentaire": "Le marqueur analogique est explicitement réalisé par « comme »."
+      },
+      "evaluation": "correct"
+    },
+    {
+      "id": "NEU-NM",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": false
+      },
+      "resultat": {
+        "marqueur_detecte": false,
+        "operations_detectees": []
+      },
+      "evaluation": "correct"
+    },
+    {
+      "id": "NEU-M",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": true
+      },
+      "resultat": {
+        "marqueur_detecte": true,
+        "operations_detectees": [
+          {
+            "code": "ρ3",
+            "marqueur": "à la manière d'"
+          }
+        ],
+        "commentaire": "Le marqueur analogique est identifié malgré la forme élidée « d' », absente de la règle lexicale actuelle."
+      },
+      "evaluation": "correct_apres_analyse_IA"
+    },
+    {
+      "id": "CLO-NM",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": false
+      },
+      "resultat": {
+        "marqueur_detecte": false,
+        "operations_detectees": []
+      },
+      "evaluation": "correct"
+    },
+    {
+      "id": "CLO-M",
+      "modele_analyse": "GPT-5.6 Luna",
+      "verite_terrain": {
+        "marqueur": true
+      },
+      "resultat": {
+        "marqueur_detecte": true,
+        "operations_detectees": [
+          {
+            "code": "ρ3",
+            "marqueur": "comme"
+          }
+        ],
+        "commentaire": "Le marqueur analogique est explicitement réalisé par « comme »."
+      },
+      "evaluation": "correct"
+    }
+  ]
+}
