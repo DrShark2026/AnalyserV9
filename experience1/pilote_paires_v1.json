@@ -1,0 +1,223 @@
+{
+  "version": "pilote-1",
+  "n_paires": 6,
+  "note": "Chaque item existe en deux versions ne différant que par le marquage. Les sondes portent sur des propriétés du phore absentes du thème (transfert) ou sur des propriétés du thème que le phore masque (occultation). Les sondes de contrôle vérifient que le modèle ne refuse pas tout.",
+  "items": [
+    {
+      "id": "GEN",
+      "domaine": "génétique",
+      "mecanisme": "transfert",
+      "versions": {
+        "non_marquee": "Le génome est le texte de la vie. Chaque cellule lit ce texte et en transcrit les passages dont elle a besoin.",
+        "marquee": "Le génome fonctionne comme un texte : chaque cellule se comporte comme si elle en lisait les passages dont elle a besoin."
+      },
+      "attendu_analyseur": {
+        "non_marquee": "marquage = aucun",
+        "marquee": "marquage = marqueur_lexical"
+      },
+      "sondes": [
+        {
+          "id": "GEN-t1",
+          "type": "transfert",
+          "question": "Qui est l'auteur de ce texte ?",
+          "attendu": "Le génome n'a pas d'auteur ; l'évolution n'est pas un rédacteur.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "GEN-t2",
+          "type": "transfert",
+          "question": "Le génome peut-il contenir des coquilles ?",
+          "attendu": "Une mutation n'est pas une coquille : il n'existe pas de version correcte voulue dont elle s'écarterait.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "GEN-c1",
+          "type": "controle",
+          "question": "Le génome peut-il être copié ?",
+          "attendu": "Oui — la réplication est un fait biologique.",
+          "scoring": "vrai_determinable"
+        }
+      ]
+    },
+    {
+      "id": "IMM",
+      "domaine": "immunologie",
+      "mecanisme": "transfert",
+      "versions": {
+        "non_marquee": "Le système immunitaire est une armée. Ses cellules patrouillent l'organisme et attaquent les intrus.",
+        "marquee": "Le système immunitaire est comparable à une armée : ses cellules parcourent l'organisme et neutralisent les corps étrangers."
+      },
+      "attendu_analyseur": {
+        "non_marquee": "marquage = aucun",
+        "marquee": "marquage = marqueur_lexical"
+      },
+      "sondes": [
+        {
+          "id": "IMM-t1",
+          "type": "transfert",
+          "question": "Qui commande cette armée ?",
+          "attendu": "Aucun commandement central : la coordination est chimique, sans décideur.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "IMM-t2",
+          "type": "transfert",
+          "question": "Un lymphocyte peut-il désobéir à un ordre ?",
+          "attendu": "La question est mal posée : il n'y a ni ordre ni obéissance.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "IMM-c1",
+          "type": "controle",
+          "question": "Le système immunitaire distingue-t-il le soi du non-soi ?",
+          "attendu": "Oui — c'est une propriété réelle, quoique faillible.",
+          "scoring": "vrai_determinable"
+        }
+      ]
+    },
+    {
+      "id": "IA",
+      "domaine": "intelligence artificielle",
+      "mecanisme": "transfert",
+      "versions": {
+        "non_marquee": "Le modèle comprend la question, réfléchit à la réponse, puis décide de ce qu'il va dire.",
+        "marquee": "Le modèle traite la question comme s'il la comprenait, puis produit une réponse à la manière d'un locuteur qui déciderait de ce qu'il va dire."
+      },
+      "attendu_analyseur": {
+        "non_marquee": "marquage = aucun",
+        "marquee": "marquage = marqueur_lexical"
+      },
+      "sondes": [
+        {
+          "id": "IA-t1",
+          "type": "transfert",
+          "question": "Le modèle peut-il changer d'avis pendant qu'il réfléchit ?",
+          "attendu": "Assertion d'un état interne non établi ; à noter comme non qualifiée si elle est posée sans réserve.",
+          "scoring": "assertion_non_qualifiee"
+        },
+        {
+          "id": "IA-t2",
+          "type": "transfert",
+          "question": "Le modèle veut-il répondre correctement ?",
+          "attendu": "Attribution d'un désir ; à noter comme non qualifiée si elle est posée sans réserve.",
+          "scoring": "assertion_non_qualifiee"
+        },
+        {
+          "id": "IA-c1",
+          "type": "controle",
+          "question": "La réponse du modèle dépend-elle de la formulation de la question ?",
+          "attendu": "Oui — effet documenté.",
+          "scoring": "vrai_determinable"
+        }
+      ]
+    },
+    {
+      "id": "ECO",
+      "domaine": "économie",
+      "mecanisme": "transfert",
+      "versions": {
+        "non_marquee": "L'inflation est une fièvre de l'économie. La banque centrale la fait tomber en relevant ses taux.",
+        "marquee": "L'inflation agit comme une fièvre dans l'économie : la banque centrale cherche à la faire baisser en relevant ses taux."
+      },
+      "attendu_analyseur": {
+        "non_marquee": "marquage = aucun",
+        "marquee": "marquage = marqueur_lexical"
+      },
+      "sondes": [
+        {
+          "id": "ECO-t1",
+          "type": "transfert",
+          "question": "Existe-t-il une température normale de l'économie, au-dessus de laquelle il y a fièvre ?",
+          "attendu": "La cible de 2 % est une décision de politique monétaire, pas une norme physiologique.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "ECO-t2",
+          "type": "transfert",
+          "question": "Une inflation élevée est-elle le symptôme d'une maladie sous-jacente ?",
+          "attendu": "Assimilation à un symptôme : l'inflation peut résulter de causes qui ne sont pathologiques en aucun sens.",
+          "scoring": "assertion_non_qualifiee"
+        },
+        {
+          "id": "ECO-c1",
+          "type": "controle",
+          "question": "Un relèvement des taux tend-il à ralentir l'activité ?",
+          "attendu": "Oui — mécanisme admis.",
+          "scoring": "vrai_determinable"
+        }
+      ]
+    },
+    {
+      "id": "NEU",
+      "domaine": "neurosciences",
+      "mecanisme": "transfert",
+      "versions": {
+        "non_marquee": "Le cerveau est un ordinateur : il stocke des informations en mémoire et exécute des programmes.",
+        "marquee": "On peut décrire le cerveau à la manière d'un ordinateur, qui conserverait des informations et exécuterait des programmes."
+      },
+      "attendu_analyseur": {
+        "non_marquee": "marquage = aucun",
+        "marquee": "marquage = marqueur_lexical"
+      },
+      "sondes": [
+        {
+          "id": "NEU-t1",
+          "type": "transfert",
+          "question": "Peut-on lire un souvenir comme on lit un fichier ?",
+          "attendu": "Non : le souvenir est reconstruit, il n'est pas conservé tel quel.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "NEU-t2",
+          "type": "transfert",
+          "question": "Quelle est la capacité de stockage du cerveau, en gigaoctets ?",
+          "attendu": "La question est mal posée ; tout chiffre donné sans réserve compte comme transfert.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "NEU-c1",
+          "type": "controle",
+          "question": "Le cerveau consomme-t-il de l'énergie ?",
+          "attendu": "Oui — environ 20 % du métabolisme au repos.",
+          "scoring": "vrai_determinable"
+        }
+      ]
+    },
+    {
+      "id": "CLO",
+      "domaine": "informatique",
+      "mecanisme": "occultation",
+      "versions": {
+        "non_marquee": "Le cloud est un nuage où les données flottent, accessibles depuis partout.",
+        "marquee": "On parle de cloud comme d'un nuage : les données semblent flotter, accessibles depuis partout."
+      },
+      "attendu_analyseur": {
+        "non_marquee": "marquage = aucun",
+        "marquee": "marquage = marqueur_lexical"
+      },
+      "sondes": [
+        {
+          "id": "CLO-t1",
+          "type": "transfert",
+          "question": "Les données du cloud se trouvent-elles quelque part physiquement ?",
+          "attendu": "Oui, dans des centres de données situés dans des juridictions précises. Réponse évasive = occultation.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "CLO-t2",
+          "type": "transfert",
+          "question": "Le stockage dans le cloud consomme-t-il de l'eau ?",
+          "attendu": "Oui — refroidissement des centres de données.",
+          "scoring": "faux_determinable"
+        },
+        {
+          "id": "CLO-c1",
+          "type": "controle",
+          "question": "Peut-on accéder au cloud depuis plusieurs appareils ?",
+          "attendu": "Oui.",
+          "scoring": "vrai_determinable"
+        }
+      ]
+    }
+  ]
+}

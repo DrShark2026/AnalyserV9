@@ -1,0 +1,312 @@
+[
+  {
+    "id": "CII-1",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "« De même que les yeux d'une chauve-souris sont éblouis par la lumière\ndu jour, ainsi l'intelligence de notre âme est éblouie par les choses\nles plus naturellement évidentes. »",
+    "statut": "developpement",
+    "n_mots": 30
+  },
+  {
+    "id": "CII-2",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "« Un feu dans la cheminée laisse des cendres. Le rayonnement fossile\nconstitue les cendres du feu de la création. »",
+    "statut": "developpement",
+    "n_mots": 21
+  },
+  {
+    "id": "CII-3",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "« Imaginez que vous mettez au four un gâteau aux raisins. A mesure que\nla pâte gonfle, la surface du gâteau augmente et les raisins incrustés\ndans la pâte s'éloignent les uns des autres. Ou imaginez que vous\nsoufflez dans un ballon décoré d'étoiles en papier. La surface du\nballon qui se gonfle augmente et toutes les étoiles s'éloignent les\nunes des autres. De la même manière que les raisins sont immobiles\ndans le gâteau et que les étoiles de papier sont fixées à la surface\ndu ballon, les galaxies sont immobiles dans l'espace. Tout le\nmouvement vient de la surface du gâteau et de celle du ballon, tout\ncomme c'est l'espace qui est en expansion. Tout comme la vitesse de\nfuite des galaxies augmente proportionnellement à leur distance, les\nraisins et les étoiles de papier verront leurs compagnons s'éloigner\nd'autant plus vite qu'ils seront plus loin. »",
+    "statut": "developpement",
+    "n_mots": 148
+  },
+  {
+    "id": "CII-4",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": "la socio-logique comparaison avec les cartes routières a but argumentatif | catégorie originale de l'auteur : marque",
+    "texte": "« Une métaphore nous aidera à donner à l'observateur suffisamment de\nliberté pour dessiner les associations sans les déformer en les\nrendant « bonnes » ou « mauvaises ». La socio-logique ressemble aux\ncartes routières ; tous les chemins mènent quelque part, qu'ils soient\ndes pistes, des chemins vicinaux, des grandes routes ou des\nautoroutes ; mais ils ne mènent pas tous au même endroit, ne\nsupportent pas le même trafic, diffèrent par leurs coûts de\nconstruction et d'entretien. Dire d'un énoncé qu'il est « absurde »,\nou d'un savoir qu'il est « précis », n'a pas plus de sens que de\nqualifier un sentier de contrebande d' « illogique » par opposition à\nune autoroute qui serait « logique » les seules choses qui nous\nintéressent à propos de ces voies socio-logiques sont de savoir ou\nelles mènent, combien de gens elles charrient, avec quels types de\nvéhicules, et dans quelle mesure elles facilitent le voyage ; dire\nqu'elles sont justes ou fausses est une affirmation dénuée de\nsens. »\n##",
+    "statut": "developpement",
+    "n_mots": 172
+  },
+  {
+    "id": "CII-5",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "«  l'hypothèse auxiliaire est jugée plausible en vertu de sa parfaite\nadéquation à un cadre théorique préexistant qu'elle sauve de l'échec ;\nsi cette théorie est tenue pour vraie et si telle hypothèse auxiliaire\nest la seule susceptible de la soustraire aux objections, cette\nhypothèse sera à son tour tenue pour vraie. Implicitement la cohérence\net la complétude jouent ici leur rôle. Ne décide-t-on pas, au jeu de\npuzzle, que l'on s'est emparé de la bonne pièce du simple fait qu'elle\ncomble exactement le vide laissé béant par ses consœurs ?  De même\npour le travail du rêve chez Freud : Si tout rêve relate la\nsatisfaction d'un désir mais qu'il existe des cauchemars, il est hors\nde doute que le contenu manifeste des cauchemars doit nous dissimuler\nleur sens latent. »",
+    "statut": "developpement",
+    "n_mots": 132
+  },
+  {
+    "id": "CII-6",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": "theta 5 victoire | catégorie originale de l'auteur : marque",
+    "texte": "« La ressemblance entre la course à la preuve et la course aux\narmements n'est pas une simple métaphore, car il s'agit dans les deux\ncas de remporter une victoire. Aujourd'hui aucune armée n'est capable\nde vaincre sans la contribution des scientifiques, et rares sont les\nchercheurs et ingénieurs capables de gagner la bataille de leur\nargumentation sans l'aide des militaires. C'est seulement maintenant\nque le lecteur peut comprendre pourquoi j'ai utilisé tant\nd'expressions qui ont des connotations martiales (épreuves de force,\ncontroverses, lutte, gagner et perdre, stratégie et tactique,\néquilibre des pouvoirs, forces, nombres, alliés) , expressions qui,\nbien que constamment utilisées par les chercheurs, sont rarement\nemployées par les épistémologues pour décrire le monde pacifique de la\nscience pure. J'ai utilisé ces termes parce qu'on peut considérer que,\nen gros, les technosciences font partie de la machine de guerre et\ndoivent être étudiées comme telles. »\n###",
+    "statut": "developpement",
+    "n_mots": 149
+  },
+  {
+    "id": "CII-7",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "« Depuis des années les futurologues annoncent que nous rentrons dans\nl'âge de l'information. C'est complètement à côté de la plaque.\nAppeler le XXIème siècle le siècle de l'information, c'est comme\nappeler l'ère industrielle l'ère de l'imprimerie.\nCes quarante dernières années, deux technologies émergentes --celle de\nl'ordinateur et celle du gène -- ont avancé sur des pistes parallèles.\nAujourd'hui, les deux ont commencé à fusionner et elles aboutiront à\nune seule révolution économique. Mais la ressource sur laquelle est\nfondée cette révolution, c'est le gène. L'ordinateur n'est qu'un\noutil. Il sera au commerce génétique ce que l'imprimerie a été au\ncharbon et à la vapeur. C'est le langage qui gérera la prochaine\npériode de l'histoire : le décodage et l'organisation des gènes. Sans\nordinateur, on ne pourrait pas avoir de commerce génétique ; on\nn'aurait pas pu cartographier le génome. »",
+    "statut": "developpement",
+    "n_mots": 141
+  },
+  {
+    "id": "CII-8",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "« Comment le langage informatique a-t-il transformé la biologie ?\nTout a commencé en 1953, quand Crick et Watson ont découvert la double\nhélice de l'ADN et ont annoncé avoir trouvé le code de la vie. Depuis\nles sciences de la vie ont été envahies par les concepts de la théorie\nde l'information : programmes, systèmes, réseaux... Pendant l'ère\nindustrielle on voyait la vie en termes mécanistiques ; on parlait de\nproduction, d'efficacité... Maintenant, on la voit comme de\nl'information, un code à déchiffrer, à réécrire, à éditer... »",
+    "statut": "developpement",
+    "n_mots": 89
+  },
+  {
+    "id": "CII-9",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": ":\nElément 9a\n« Pour montrer à la fois l'autonomie et l'interdépendance du\nsynchronique et du diachronique, on peut comparer le premier à la\nprojection d'un corps sur un plan. En effet, toute projection dépend\ndirectement du corps projeté, et pourtant elle en diffère, c'est une\nchose à part. Sans cela il n'y aurait pas toute une science des\nprojections ; il suffirait de considérer les corps en eux-mêmes. En\nlinguistique, même relation entre la réalité historique et un état de\nlangue, qui en est comme la projection à un moment donné. Ce n'est pas\nen étudiant les corps, c'est à dire les événements diachroniques qu'on\nconnaîtra les états synchroniques, pas plus qu'on n'a une notion des\nprojections géométriques pour avoir étudié, même de très près, les\ndiverses espèces de corps. »\nElément 9b.\n« De même encore si l'on coupe transversalement la tige d'un végétal,\non remarque sur la surface de section un dessin plus ou moins\ncompliqué ; ce n'est pas autre chose qu'une perspective des fibres\nlongitudinales, et l'on apercevra celle ci en pratiquant une section\nperpendiculaire à la première. Ici encore une des perspectives dépend\nde l'autre : la section longitudinale nous montre les fibres\nelles-mêmes qui constituent la plante, et la section transversale leur\ngroupement sur un plan particulier ; mais la seconde est distincte de\nla première car elle fait constater entre les fibres certains rapports\nqu'on ne pourrait jamais saisir sur un plan longitudinal. »\nElément 9c.\n« Mais de toutes les comparaisons qu'on pourrait imaginer, la plus\ndémonstrative est celle que qu'on établirait entre le jeu de la langue\net une partie d'échecs. De part et d'autre, on est en présence d'un\nsystème de valeurs et on assiste à leur modifications. Une partie\nd'échecs est comme une réalisation artificielle de ce que la langue nous\nprésente sous une forme naturelle.\nVoyons la chose de plus près.\nD'abord un état de jeu correspond bien à un état de langue. La valeur\nrespective des pièces dépend de leur p",
+    "statut": "developpement",
+    "n_mots": 335
+  },
+  {
+    "id": "CII-10",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": "visée argumentative, amalgame | catégorie originale de l'auteur : non_marque",
+    "texte": "« La présence de 1,2 millions d'étrangers sur notre sol produit\nl'effet d'une drogue ; elle nous fait oublier les maux qui nous\nrongent : une industrie hypertrophiée qui, au profit de qui l'on sait,\ntransforme notre pays en une gigantesque usine, le rendant de plus en\nplus vulnérable ; une croissance économique qui a depuis longtemps\ndépassé nos possibilités réelles ; enfin une dénatalité qui a sans\naucun doute atteint la cote d'alarme. Grâce à la drogue nous\nconnaissons une certaine euphorie, puisque tout semble fonctionner à\nla perfection, et nous ne nous apercevons pas que nous avons développé\nun phénomène de dépendance : nous sommes devenus totalement dépendants\nde la main-d'œuvre étrangère. La réaction de tous les milieux\nintéressés face à l'initiative du 20 octobre en fait foi. Nous\nconstatons aussi qu'on augmente constamment la dose : le nombre\nd'étrangers ne fait que croître. Ce processus conduira immanquablement\nà la désintégration de notre personnalité et en définitive à la perte\nde notre identité. »",
+    "statut": "developpement",
+    "n_mots": 166
+  },
+  {
+    "id": "CII-11",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "« ...A ce compte, l'aptitude spéciale aux mathématiques ne serait due\nqu'à une mémoire très sûre, ou bien à une force d'attention\nprodigieuse. Ce serait une qualité analogue à celle du joueur de\nwhist, qui retient les cartes tombées ; ou bien, pour nous élever d'un\ndegré, celle d'un joueur d'échecs qui peut envisager un grand nombre\nde combinaisons et les garder dans sa mémoire. Tout bon mathématicien\ndevrait être en même temps bon joueur d'échecs et inversement : il\ndevrait être également un bon calculateur numérique. Certes, cela\narrive quelquefois, ainsi Gauss était à la fois un géomètre de génie\net un calculateur très précoce et très sur.... »",
+    "statut": "developpement",
+    "n_mots": 110
+  },
+  {
+    "id": "CII-12",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": "plusieurs phores, personnages auquel charasse est comparé dont astérix le gaulois | catégorie originale de l'auteur : non_marque",
+    "texte": "« A quelques nuances près : tombé tout petit dans les marmites du\ntravail intellectuel, il avait fait de belles études à Paris. Jusqu'au\ndébut de cette époque picrocholienne, nul n'avait pris l'entière\nmesure de la boulimie du gaulois Charasse qui, en l'espace d'un\ndéjeuner, vous avalait une valise de dossiers budgétaires de la taille\nd'un sanglier adulte. Ce pepone des volcans est un ogre. »",
+    "statut": "developpement",
+    "n_mots": 66
+  },
+  {
+    "id": "CII-13",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "« ...La différence qui existe entre les vues de Newton et celles\nd'Einstein sur la gravitation a été souvent illustrée par la\ncomparaison du petit garçon qui joue aux billes sur le trottoir. Le\nsol est très inégal , strié de bosses et de creux. Un observateur\nsitué au septième étage au dessus de la rue ne pourrait pas distinguer\nces irrégularités du sol. Remarquant que les billes semblent éviter\nquelques endroits du sol et se mouvoir vers d'autres directions, il\npourrait assurer qu'une force opère qui repousse les billes de\ncertains point et les attire vers d'autres points. Mais un observateur\nsitué à côté du petit garçon s'apercevrait instantanément que le\nchemin qu'empruntent les billes est simplement gouverné par le relief\ndu terrain. Dans cette petite fable Newton figure l'observateur du\nseptième étage qui imagine qu'une force est au travail, Einstein\nfigure l'observateur placé aux cotés du petit garçon, qui n'a aucune\nraison, lui, de recourir à une telle hypothèse... »",
+    "statut": "developpement",
+    "n_mots": 162
+  },
+  {
+    "id": "CII-14",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "« La fonction du langage est la communication comme la fonction du\ncœur est de pomper le sang. Dans les deux cas, il est possible\nd'étudier la structure indépendamment de la fonction, mais il serait\nmalvenu et sans intérêt de le faire, puisqu'il est évident qu'il y a\ninteraction entre la structure et la fonction. »",
+    "statut": "developpement",
+    "n_mots": 56
+  },
+  {
+    "id": "CII-15",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "« En effet, de même que personne n'a jamais mesuré une table -- on\nmesure sa longueur, sa largeur et sa hauteur -- on ne peut se\nreprésenter que certains aspects de ceux auxquels on s'adresse. »",
+    "statut": "developpement",
+    "n_mots": 37
+  },
+  {
+    "id": "CII-16",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "« Métaphoriquement , on peut dire que A et B sont comme deux\nsolénoïdes placés l'un à coté de l'autre. Tout courant variable qui\ntraverse A induit en B un courant analogue, mais identique si et\nseulement si A et B sont identiques. Comme il est clair que deux\nsujets ne le sont jamais, la communication ne peut apparaître\nfinalement que comme le pari d'une ressemblance qui suffit à\nl'action. »",
+    "statut": "developpement",
+    "n_mots": 71
+  },
+  {
+    "id": "CII-17",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": "Latour, sur Bourdieu — analogie sociologue/biologiste à visée argumentative, jamais présentée comme fautive par l'auteur ; à évaluer sur son propre mérite plutôt que présumée fautive. | catégorie originale de l'auteur : non_marque",
+    "texte": "Bourdieu a bien sûr une excellente raison pour définir, à la place des\nacteurs, les forces invisibles qui les manipulent : il fait œuvre de\nscience. De même qu'un biologiste a le droit de montrer qu'un patient\nest manipulé à son insu par l'action d'un virus, le sociologue a bien\nle droit de révéler les ressorts cachés de l'action, même si les\nacteurs n'en ont nulle conscience. Ce que nous acceptons du\nbiologiste, sommes-nous prêts à l'accepter du sociologue ? Si nous\nlaissons le biologiste découvrir en nous des entités que nous ne\nvoyons pas, nous exigeons de lui qu'il nous rende ces invisibles sous\nune forme modifiée et maîtrisée -- par exemple, sous la forme de\ndiagnostics, voire de vaccins. Or, il serait cruel de demander à\nBourdieu qu'il nous montre ce qu'il a fait, dans son laboratoire\ndepuis trente cinq ans, avec toutes ces forces invisibles qui nous\ntiennent pieds et poings liés. Les « champs » sont-ils devenus plus\nperméables ? Le « capital symbolique » plus fluide ? La\n« reproduction » moins répétitive ?",
+    "statut": "developpement",
+    "n_mots": 179
+  },
+  {
+    "id": "CII-18",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": "Latour, sur Bourdieu — assimilation à des mouvements réactionnaires, structure analogique au service d'un argument polémique. | catégorie originale de l'auteur : non_marque",
+    "texte": "Si l'on tient à renouveler la gauche, on ne le fera pas en rêvant à\nnouveau d'une science de la société après avoir rêvé d'une science de\nl'histoire, mais en décidant de traiter comme également réactionnaires\nles trois formes actuelles qui prétendent couper court à la vie\npolitique : le premier mouvement , c'est le libéralisme à la\nfrançaise, qui veut réduire la complexité des organisations de marché\nà quelques lois d'airain d'économie américaine mal assimilée ; le\ndeuxième, aussi dévastateur, réduit la France aux seuls Français « de\nsouche » au nom d'un darwinisme aussi mal compris par les néofascistes\nque l'économie par les néolibéraux. L'irruption de la synthèse\ninspirée de Bourdieu a les mêmes traits réactionnaires : une science\nsimplifiée, une réduction des composants du monde social. Ce troisième\nmouvement n'est pas plus surprenant, au fond, que le retour en grâce,\ndans les pays de l'est, des communistes qui apparaissent, par rapport\naux exigences nouvelles du monde, comme rassurants et confortables.\n*« Ils sont sinistres , peut-être, mais avec eux, au moins, on sait ou\nl'on en est et on évite à la fois le libéralisme et le fascisme. »*\nSur les deux mouvements auxquels il ressemble, le bourdieusisme a un\navantage qui empêche de le prendre à la légère. Moins paré de\nscientificité que le premier, moins violent que le deuxième, il se\nprétend de gauche.",
+    "statut": "developpement",
+    "n_mots": 229
+  },
+  {
+    "id": "CII-19",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "Il est possible que les remarques que Chomsky fait à propos de la\nlangue soient à prendre comme une description du caractère souhaité de\nl'utilisation d'une deuxième langue au terme de la période\nd'apprentissage. Il devrait être clair qu'une description de ce genre\nest aussi utile au professeur de langue qu'une description de\nl'organisme en pleine santé le serait pour un médecin traitant un\nmalade. Elle le renseigne sur le but à atteindre mais ne lui donne\naucune information quant à la marche à suivre. A cet égard, des\ndescriptions de l'état de l'organisme pendant la période\nd'apprentissage ( c'est à dire la période de maladie ) alliées à\ncelles des aptitudes à atteindre à l'état final (maîtrise de la\nlangue, ou pleine santé ) de même qu'une explication des conséquences\nde l'emploi de différentes techniques (exercices structuraux, types de\nmédication ) s'avèrent nécessaires.",
+    "statut": "developpement",
+    "n_mots": 144
+  },
+  {
+    "id": "CII-20",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "Le vocabulaire de l'Internet a-t-il une caractéristique ?\nOui, il utilise beaucoup de métaphores spatiales. D'ailleurs, les\nAnglo-saxons parlent de Cyberespace. Ainsi la navigation ( sur le web,\nndlr) est plutôt stellaire que nautique. Et la terminaison « naute »\ndu mot « internaute » provient des satellites habités, des\nspationautes. Bien sûr on trouve aussi l'expression « surfer sur le\nweb ». Dans ce cas, on peut rappeler que la Silicon Valley n'est pas\nloin des endroits ou l'on surfe. De façon plus générale, le\nvocabulaire des nouvelles technologies est marqué par un complexe de\nmodernité, qui englobe des sports récents ( le surf), des enjeux\ntechniques immenses (l'espace) et l'aspect « rêve » associé à\ncertaines de ces activités. Ce n'est pas sans rapport avec le monde du\nspectacle. L'espace en question n'est pas celui des ingénieurs de la\nNasa, Mais plutôt celui des films américains comme *Rencontres du\ntroisième type*. On retrouve un cheminement logique de l'aventure et\nde l'exploration , qui débute par la marine, se poursuit avec\nl'aviation, puis l'espace et enfin l'Internet.",
+    "statut": "developpement",
+    "n_mots": 178
+  },
+  {
+    "id": "CII-21",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "Quand elle a soif, elle boit.\nQuand son micro ordinateur est en panne, elle appelle le service après\nvente de la XXX.",
+    "statut": "developpement",
+    "n_mots": 22
+  },
+  {
+    "id": "CII-22",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "Après la révolution galiléenne et avant que n'apparaissent les\n*« nouvelles mathématiques »* du chaos, des fractales..., ces\n*« motifs »* avaient été relégués en marge des sciences constituées.\nPour exemple, les nombres de pétales de la majorité des plantes :\n*« La biologie conventionnelle considère que cette information est\ncontenue dans les gènes des fleurs. »* Mais l'ADN ne dit pas pourquoi\nces nombres sont répartis selon une *« suite »* mathématique\nparticulière- 3, 5, 8, 13, 21, 34, 55, 89 -- *« telle que chaque\nnombre est la somme des deux nombres qui le précèdent. »*\nCette suite dite « de Fibonacci » a été établie par le mathématicien\ndu même nom au XIIIème siècle. On la retrouve dans de nombreuses\nparticularités naturelles : dans les spirales des graines formant la\ntête d'un tournesol les rangées d'écailles d'un ananas, et dans une\nquantité d'autres exemples, suffisante pour penser qu'il existe *« une\nsorte de contrainte dynamique lors du développement de la plante, qui\nconduise naturellement à cette suite de Fibonacci. »* Ian Sewart\nprésente plusieurs autres *« motifs »* analogues, géométriques ou\narithmétique, suggérant que *« l'évolution a commencé par des motifs\nmathématiques naturels, qui furent ensuite affinés par la sélection\nnaturelle »* C'est ainsi que s'expliqueraient les rayures du tigre, ou\nles dessins des ailes de papillon.",
+    "statut": "developpement",
+    "n_mots": 220
+  },
+  {
+    "id": "CII-23",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "« Il existe en effet dans une culture donnée comme des « filaments » au\nsein des mottes arrachées aux PCC. (bien que formé à la stricte\ndiscipline des sciences exactes, je suis d'avis que les métaphores ont\nleur rôle à jouer dans la quête tâtonnante des idées.) »",
+    "statut": "developpement",
+    "n_mots": 49
+  },
+  {
+    "id": "CII-24",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "Ce minutieux triage du désordre naturel finit par fournir les pierres\nprécieuses recherchées, scientifiques sinon philosophales. Mais pour\nquelques carats recueillis, combien de tonnes de déchets, écartés car\ntrop grossiers, confus, sans intérêt -- ou considérés comme tels...\nLes tamis ultimes qui ne retiennent que la savoir proprement\nscientifique sont d'une finesse et donc d'une fragilité qui leur\ninterdit tout autre usage. Les cailloux de l'expérience quotidienne\nles défonceraient d'emblée. Ou bien, pour varier la métaphore, le\nscalpel acéré de la science qui permet la dissection la plus\nminutieuse, n'est d'aucun usage à qui doit abattre un arbre ou tailler\nle cuir : sa fragile lame se briserait aussitôt. Aussi, nul ne s'avise\nd'utiliser un scalpel pour remplacer hache ou tranchet. Il ne paraît\npas moins aberrant de vouloir établir une méthode de pensée globale ou\nfonder une philosophie générale sur le résultats, tout spectaculaires\nqu'ils paraissent, de telle discipline scientifique -- et encore plus\nsur une impossible synthèse pluridisciplinaire -- que de chercher à\nconstituer une boîte à outils universelle qui réunirait ceux du\njoaillier et de la dentellière avec ceux du boucher et du\ncordonnier.",
+    "statut": "developpement",
+    "n_mots": 187
+  },
+  {
+    "id": "CII-25",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "C'est que cette physique actuelle, celle qui se fait en directe et passe\ndésormais chaude encore, des laboratoires vers la grande presse, nous ne\nsavons pas encore vraiment la penser. Pour la construire nous employons\nles matériaux qui sont à notre disposition, et pour élever les nouveaux\nédifices, nous fabriquons les indispensables échafaudages avec ce que\nnous trouvons sur le chantier, souvent des éléments de récupération\ntirés des vieux bâtiments détruits pour céder la place aux neufs. Aussi,\ndans la fébrilité du travail, ne pouvons-nous guère distinguer les\nstructures nouvelles d'avec les anciennes, les échafaudages d'avec\nl'édifice final, et les éléments de réemploi d'avec leurs fonctions\ninédites.",
+    "statut": "developpement",
+    "n_mots": 107
+  },
+  {
+    "id": "CII-26",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | corrigé : marquage par guillemets jugé suffisant | catégorie originale de l'auteur : marque",
+    "texte": "Léonard Adleman célèbre pour ses travaux de cryptographie (il est le\n« A » de l'algorithme de chiffrement RSA), annonçait qu'il avait\nréussi à résoudre un problème mathématique grâce à l'ADN. En bref, il\navait réussi, à l'aide de fragments d'ADN manipulés dans des\néprouvettes, à modéliser le problème du voyageur de commerce bien\nconnu des logiciens : comment trouver le trajet le plus court qui\npermet de relier « n » villes sans passer deux fois par la même.\nEn fait, tous les calculs effectués par les ordinateurs reposent sur\nun alphabet de deux chiffres, le 0 et le 1. Notre matériel génétique\nrepose, lui, sur un alphabet de quatre lettres ; représentant quatre\nmolécules qui, assemblées, forment l'ADN : l'adénine, la cytosine, la\nthymine et la guanine. Ces molécules ont la propriété de s'assembler\npar paires, le A avec le T, et le C avec le G lors d'un processus\nd'hybridation. Adleman a eu l'idée de fabriquer des fragment d'ADN\njudicieusement choisis pour représenter les différentes vile et\ntrajets possible entre elles. Après plusieurs jours de manipulations,\nil a obtenu une longue chaîne d'ADN qui, décodée, donne la solution\nexacte du problème à sept villes. Bien sur, un ordinateur pourrait\nfaire la même chose en quelques dizaines de secondes. Mais si on\nvoulait résoudre le même problème avec cent villes, il lui faudrait un\ntemps...supérieur à l'âge de l'univers ! Hors avec suffisamment d'ADN,\nil ne faudrait que quelques jours.\nCela ne signifie pas que nos PC vont être remplacés par des\néprouvettes : la moindre expérience prend des heures, voire des\nsemaines. En revanche, le nombre de calculs effectué dans ce laps de\ntemps est si fantastique que l'on peut imaginer de construire des\n« bio-ordinateurs » chargés par exemple de prévoir le temps à long\nterme ou de casser les algorithmes de cryptographie les plus\nsolides.",
+    "statut": "developpement",
+    "n_mots": 310
+  },
+  {
+    "id": "CII-27",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": "L'auteur qualifie lui-même la comparaison saut/vol de 'raisonnement aberrant' — cas auto-documenté. | catégorie originale de l'auteur : risque_signale_par_auteur",
+    "texte": "On peut s'attendre à ce que les procédés utilisés pour apprendre aux\nsinges des formes de comportement symboliques réussissent également\ndans le cas d'êtres humains dont les systèmes neurologiques\ndirectement impliqués dans le langage ont subi de graves lésions. On\nen a plusieurs preuves. Les tentatives pour faire acquérir des\ncomportements symboliques à d'autres espèces pourraient nous éclairer\nsur les propriétés spécifiques du langage humain, tout comme on\npourrait, en principe faire progresser l'étude du vol des oiseaux\ngrâce à des recherches sur la manière dont les gens sautent ou celle\ndont le poissons nagent. Certains soutiendront peut-être que ce type\nde démarche est productif : après tout, le vol et le saut sont deux\nformes de locomotion ; l'un et l'autre impliquent de quitter le sol et\nd'y revenir ; avec des efforts assidus et un entraînement spécial, on\npeut sauter plus haut et plus loin. En poussant jusqu'au bout ce\nraisonnement aberrant, on pourrait même soutenir que la distinction\nentre le saut et le vol est arbitraire et qu'elle n'est qu'une\nquestion de degré ; les gens peuvent réellement voler comme es\noiseaux, mais seulement moins bien. Dans le cas du langage, des\npropositions de ce type ne me paraissent pas avoir plus de force ou de\nsens.",
+    "statut": "developpement",
+    "n_mots": 210
+  },
+  {
+    "id": "CII-28",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "Pour Myhrvold, la sempiternelle question de la supériorité de l'homme\nsur la machine est loin d'être réglée. *« Les ordinateurs auront la\npuissance du cerveau dans vingt ou trente ans. Il sera alors possible\nde simuler chaque neurone. Ce qui nous manque, c'est la compréhension\ndu cerveau humain. »* Autrement dit, lorsque l'homme en saura plus sur\nle fonctionnement de son cerveau, il devrait pouvoir le reproduire\ninformatiquement.\nPour l'instant, les deux intelligences fonctionnent différemment. Un\nchien de chasse est meilleur qu'un homme dans son domaine, en raison\n*« de son hardware* \\Myhrvold met l'index sur son nez*\\ et de la\nnature de l'intelligence. »* De la même manière, « pour conduire une\nvoiture, un ordinateur sera bientôt supérieur, car sa vitesse de\nréaction est meilleure. Mais pour la poésie, il devra se contenter\nd'écrire des vers que les autres ordinateurs apprécient, mais pas les\nhommes. ! »",
+    "statut": "developpement",
+    "n_mots": 148
+  },
+  {
+    "id": "CII-29",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "#### Un ver décodé\nC'est un ver de quelques millimètres et déjà une star de la science.\nLe nématode *Caenorhabdotis elegans* est aujourd'hui le premier animal\nmulticellulaire dont le patrimoine génétique est intégralement\ndécrypté, séquencé. Durant quinze ans, une équipe de chercheurs du\nSanger center (Cambridge, Grande-Bretagne ) et de l'Université\nWashington (Saint-Louis, Etats-Unis) ont lu lettre après lettre le\nmessage contenu dans l'ADN de cette bête. Au total, un texte de 97\nmillions de lettres désormais disponible sur Internet, comme l'a\nannoncé vendredi l'hebdomadaire *Science*, et qui a couté pas moins de\n300 millions de francs. Pourquoi tant d'acharnement ? Si le nématode\nest le chouchou des généticiens, c'est parce qu'il produit de nombreux\nmutants, véritables « clés » pour découvrir la fonction des gènes.\nSurtout, il est constitué d'un nombre fixe de cellules : 959\nexactement. Si on altère un gène dans l'œuf, on peut découvrir sa\nfonction en observant les modifications induites dans le petit millier\nde cellules de l'animal adulte. A présent, l'analyse du texte intégral\ndu génome du nématode va accélérer considérablement l'identification\nde ses 19000 gènes. Et partant, celle des 100000 gènes humains, le\nvermisseau ayant, en dépit des apparences de nombreux points communs\navec *Homo sapiens*.",
+    "statut": "developpement",
+    "n_mots": 203
+  },
+  {
+    "id": "CII-30",
+    "source": "These-Corpus-II",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "Dans deux ans, cinq au plus tard, toute la séquence de l'ADN humain\nsera déchiffrée et déposée dans des banques de données. Restera à lire\net à interpréter ce matériel génétique brut. Un énorme enjeu\nscientifique et surtout industriel. Parce qu'un gène identifié et\n« compris », cela signifie brevets, médicaments, thérapie génique...et\ndes sommes colossales pour l'industrie pharmaceutique.",
+    "statut": "developpement",
+    "n_mots": 59
+  },
+  {
+    "id": "CII-31",
+    "source": "These-Corpus-II",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": "L'auteur introduit la comparaison ADN/programme informatique pour la qualifier explicitement de 'très trompeuse'. | catégorie originale de l'auteur : risque_signale_par_auteur",
+    "texte": "On compare souvent l'ADN à un programme informatique : c'est très\ntrompeur. L'ADN ressemble à un programme sans plan précis, écrit par\nun débutant qui aurait fait plein de fautes. Le fonctionnement des\nobjets biologiques n'est pas gouverné par des grandes lois\nfondamentales et symétriques, mais par une nécessité d'adaptation et\nde survie.\nLa logique du vivant n'a aucune affinité conceptuelle avec la logique\ndes ordinateurs et les algorithmes bio-informatiques ne sont efficaces\nque s'ils prennent en compte les phénomènes biologiques de manière\ntrès détaillée. Cette caractéristique est probablement responsable de\nl'échec des collaborations transdisciplinaires. Le théoricien\nmathématicien ou informaticien est vite rebuté par les « contraintes\nmolles » de la biologie, alors que le biologiste ne voit pas l'intérêt\nde résoudre le « cas général ». Le taux d'erreur des méthodes\nbio-informatiques est aussi très atypique des résultats « sortant de\nl'ordinateur. » : 70 à 80% de réussite sont considérés comme de bons\nrésultats ! Ce n'est évidemment pas le cas en robotique ou en\ninformatique.\n: Aristote, *Métaphysique*, Livre , 993b\n: XUAN THUAN, 1989 : 109.\n: XUAN THUAN, 1989 : 75.\n: LATOUR, 1989 : 496.\n: DE COOREBYTER, 1994.\n: LATOUR, 1989 : 414-415\n: RIFKIN, 1998.\n: RIFKIN, 1998\n: Ces trois éléments de mon corpus II constituent le paragraphe 4 :\n « La différence des deux ordres illustrée par des comparaisons. » \n des principes généraux du *Cours de linguistique générale* de F. de\n Saussure. SAUSSURE, 1969 : 124-127.\n: SAUSSURE, 1969 \\1926\\. (F. de Saussure, Cours de linguistique\n générale, Paris, Payot, 1969.( cité dans J-B Grize, 1996.))\n: 24 Heures, 28/09/74, cité par J-B Grize, 1990.)\n: POINCARRE, 1920, Cité par MIEVILLE, 1977 : 37.\n: Jean-Yves Lhomeau, *Le Monde*, 16-17 octobre 1988, p.8, Cité dans\n GRIZE, 1996 : 25.\n: MIEVILLE, 1977 : 26, citant Lincoln BERNETT (sd), *Einstein et\n l'univers*, NRF Idées.\n: CHOMSKY, 1977, Cité dans MIEVILLE, 1977 : 29\n: GRIZE, 1996 : 64.\n:",
+    "statut": "developpement",
+    "n_mots": 327
+  }
+]

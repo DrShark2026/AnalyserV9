@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Analyseur d'opérations logico-discursives — Grize, Charconnet 1999</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E9E7DD;
+    --paper-2:#F3F1E8;
+    --ink:#26312B;
+    --ink-soft:#5B655E;
+    --line:#C9C5B6;
+    --theme-c:#2F5D50;
+    --theme-bg:#DCE8E2;
+    --phore-c:#8A4A24;
+    --phore-bg:#EFDECD;
+    --accent:#7A6A45;
+    --cand:#B8942F;
+    --risk-high-bg:#F7D9D9;
+    --risk-high-c:#A32D2D;
+    --risk-med-bg:#F1E6C8;
+    --risk-med-c:#8A6A1E;
+    --fam-g:#4A5D8A;
+    --fam-g-bg:#DFE3EF;
+    --fam-r:#6B4A8A;
+    --fam-r-bg:#E6DFEF;
+    --fam-t:#3D7A6C;
+    --fam-t-bg:#DCEBE6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Source Serif 4', Georgia, serif;line-height:1.6;padding:2.5rem 1.5rem 4rem;}
+  .wrap{max-width:800px;margin:0 auto;}
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;}
+  h1{font-size:1.5rem;font-weight:600;margin:0 0 .25rem;letter-spacing:.01em;}
+  .sub{color:var(--ink-soft);font-size:.95rem;margin:0 0 1.5rem;font-style:italic;}
+  .lang-toggle{display:flex;gap:.3rem;flex-shrink:0;}
+  .lang-toggle button{font-family:'JetBrains Mono', monospace;font-size:.78rem;padding:.3rem .55rem;border:1px solid var(--line);border-radius:3px;background:var(--paper-2);color:var(--ink-soft);cursor:pointer;}
+  .lang-toggle button.on{background:var(--ink);color:var(--paper-2);border-color:var(--ink);}
+
+  .tab-bar{display:flex;gap:.6rem;margin:1.5rem 0 2rem;border-bottom:1px solid var(--line);}
+  .tab-btn{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:1.05rem;
+    font-weight:600;
+    padding:.7rem 1.4rem;
+    background:transparent;
+    border:none;
+    border-bottom:3px solid transparent;
+    color:var(--ink-soft);
+    cursor:pointer;
+    margin-bottom:-1px;
+  }
+  .tab-btn:hover{color:var(--ink);}
+  .tab-btn.on{color:var(--ink);border-bottom-color:var(--theme-c);}
+
+  .notions{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+  .notion-field label{display:block;font-size:.8rem;color:var(--ink-soft);margin-bottom:.35rem;}
+  .notion-field input{width:100%;font-family:'JetBrains Mono', monospace;font-size:.9rem;padding:.5rem .6rem;border:1px solid var(--line);border-radius:3px;background:var(--paper-2);color:var(--ink);}
+  .notion-field.theme input{border-left:3px solid var(--theme-c);}
+  .notion-field.phore input{border-left:3px solid var(--phore-c);}
+
+  textarea{width:100%;min-height:120px;font-family:'Source Serif 4', Georgia, serif;font-size:1.02rem;line-height:1.65;padding:1rem;border:1px solid var(--line);border-radius:4px;background:var(--paper-2);color:var(--ink);resize:vertical;}
+  .row{display:flex;gap:.6rem;align-items:center;margin-top:.75rem;flex-wrap:wrap;}
+  button{font-family:'Source Serif 4', Georgia, serif;font-size:.9rem;padding:.5rem 1rem;border:1px solid var(--ink-soft);border-radius:3px;background:transparent;color:var(--ink);cursor:pointer;}
+  button:hover{background:var(--paper-2);}
+  button.primary{background:var(--ink);color:var(--paper-2);border-color:var(--ink);}
+  button.primary:hover{background:#39463F;}
+  button.ghost{border-color:var(--line);color:var(--ink-soft);}
+  button.detect{border-color:var(--cand);color:var(--cand);}
+  .example-link{background:none;border:none;color:var(--accent);text-decoration:underline;cursor:pointer;font-size:.85rem;padding:0;}
+
+  .stage{margin-top:2rem;display:none;}
+  .stage.active{display:block;}
+
+  .legend{font-size:.78rem;color:var(--ink-soft);margin:.75rem 0 1rem;display:flex;gap:1.2rem;flex-wrap:wrap;align-items:center;}
+  .legend .sw{display:inline-block;width:.7em;height:.7em;border-radius:2px;margin-right:.35em;vertical-align:-1px;}
+  .sw.cand{border:1.5px dashed var(--cand);}
+  .sw.th{background:var(--theme-bg);}
+  .sw.ph{background:var(--phore-bg);}
+
+  .rendered{font-size:1.05rem;line-height:2;padding:1.25rem 1.4rem;background:var(--paper-2);border:1px solid var(--line);border-radius:4px;}
+  .tok{cursor:pointer;border-radius:2px;padding:1px 0;}
+  .tok:hover{background:rgba(0,0,0,.06);}
+  .tok.sel{background:#D9CFA0;}
+  .tok.tag-theme{background:var(--theme-bg);color:var(--theme-c);}
+  .tok.tag-phore{background:var(--phore-bg);color:var(--phore-c);}
+  .tok.cand{border-bottom:2px dashed var(--cand);}
+  .tok.cand.first::after{content:attr(data-op-label);font-family:'JetBrains Mono', monospace;font-size:.65rem;color:var(--cand);vertical-align:super;margin-left:2px;}
+  .tok.cand-ai{border-bottom:2px solid var(--fam-r);}
+  .tok.cand-ai.first::after{content:attr(data-op-label);font-family:'JetBrains Mono', monospace;font-size:.65rem;color:var(--fam-r);vertical-align:super;margin-left:2px;}
+  .ai-status{font-size:.8rem;color:var(--ink-soft);margin-top:.5rem;font-style:italic;}
+  .risk-badge.ai-src{border:1px solid var(--fam-r);}
+
+  .tagbar{margin-top:1rem;padding:1rem;border:1px dashed var(--line);border-radius:4px;background:var(--paper-2);display:none;}
+  .tagbar.active{display:block;}
+  .tagbar .sel-preview{font-family:'JetBrains Mono', monospace;font-size:.85rem;color:var(--ink-soft);margin-bottom:.75rem;}
+  .tagbar .sel-preview b{color:var(--ink);}
+  .choice-group{margin-bottom:.75rem;}
+  .choice-group .label{font-size:.78rem;color:var(--ink-soft);margin-bottom:.4rem;}
+  .chips{display:flex;gap:.4rem;flex-wrap:wrap;}
+  .chip{font-family:'JetBrains Mono', monospace;font-size:.82rem;padding:.3rem .6rem;border:1px solid var(--line);border-radius:12px;cursor:pointer;background:var(--paper);}
+  .chip.on{background:var(--ink);color:var(--paper-2);border-color:var(--ink);}
+  .chip.on.theme-on{background:var(--theme-c);border-color:var(--theme-c);}
+  .chip.on.phore-on{background:var(--phore-c);border-color:var(--phore-c);}
+  .op-desc{font-size:.78rem;color:var(--ink-soft);margin-top:.4rem;min-height:1.2em;}
+  .op-family-group{margin-bottom:.55rem;}
+  .op-family-label{font-size:.72rem;padding:.1rem .4rem;border-radius:3px;display:inline-block;margin-bottom:.35rem;}
+  .op-family-label.g{background:var(--fam-g-bg);color:var(--fam-g);}
+  .op-family-label.r{background:var(--fam-r-bg);color:var(--fam-r);}
+  .op-family-label.t{background:var(--fam-t-bg);color:var(--fam-t);}
+
+  .classes{margin-top:2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+  .pec-panel{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line);}
+  .pec-panel h2{font-size:.95rem;font-weight:600;margin:0 0 .75rem;font-family:'JetBrains Mono', monospace;color:var(--fam-r);}
+  .cl-col h2{font-size:.95rem;font-weight:600;margin:0 0 .1rem;font-family:'JetBrains Mono', monospace;}
+  .cl-col.theme h2{color:var(--theme-c);}
+  .cl-col.phore h2{color:var(--phore-c);}
+  .cl-col .notion-name{font-size:.78rem;color:var(--ink-soft);margin-bottom:.75rem;font-family:'JetBrains Mono', monospace;}
+  .entry{display:flex;gap:.5rem;align-items:baseline;padding:.4rem 0;border-bottom:1px solid var(--line);font-size:.92rem;flex-wrap:wrap;}
+  .entry:last-child{border-bottom:none;}
+  .op-badge{font-family:'JetBrains Mono', monospace;font-size:.75rem;font-weight:600;min-width:1.8em;text-align:center;}
+  .cl-col.theme .op-badge{color:var(--theme-c);}
+  .cl-col.phore .op-badge{color:var(--phore-c);}
+  .empty-hint{color:var(--ink-soft);font-size:.85rem;font-style:italic;}
+  .set-line{margin-top:1rem;font-family:'JetBrains Mono', monospace;font-size:.82rem;color:var(--ink-soft);line-height:1.7;word-break:break-word;}
+  .instructions{font-size:.85rem;color:var(--ink-soft);margin-top:.6rem;}
+
+  .risk-badge{display:inline-flex;align-items:center;font-family:'JetBrains Mono', monospace;font-size:.66rem;padding:.15rem .45rem;border-radius:8px;margin-left:.5rem;white-space:nowrap;}
+  .risk-badge.high{background:var(--risk-high-bg);color:var(--risk-high-c);}
+  .risk-badge.medium{background:var(--risk-med-bg);color:var(--risk-med-c);}
+  .risk-fb-btn{font-family:'JetBrains Mono', monospace;font-size:.72rem;padding:0 .3rem;margin-left:.3rem;border:none;background:transparent;cursor:pointer;color:inherit;}
+  .risk-fb-btn:hover{text-decoration:underline;}
+  .risk-fb-btn:disabled{opacity:.35;cursor:default;text-decoration:none;}
+  .risk-fb-note{font-size:.62rem;margin-left:.3rem;opacity:.7;}
+  .risk-heading{font-size:.78rem;color:var(--ink-soft);margin-top:1rem;margin-bottom:.35rem;font-family:'JetBrains Mono', monospace;}
+  .risk-summary{font-size:.82rem;}
+  .risk-summary .risk-line{color:var(--risk-high-c);margin-bottom:.25rem;}
+  .risk-summary .risk-line.medium{color:var(--risk-med-c);}
+  .risk-summary .none{color:var(--ink-soft);font-style:italic;}
+
+  .ref-table{margin-top:2.5rem;font-size:.82rem;}
+  .ref-table summary{
+    cursor:pointer;
+    color:var(--ink);
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:1rem;
+    font-weight:600;
+    padding:.75rem 1.2rem;
+    background:var(--paper-2);
+    border:1px solid var(--ink-soft);
+    border-radius:4px;
+    list-style:none;
+    display:inline-block;
+  }
+  .ref-table summary::-webkit-details-marker{display:none;}
+  .ref-table summary:hover{background:var(--ink);color:var(--paper-2);border-color:var(--ink);}
+  .ref-table[open] summary{margin-bottom:1rem;}
+  .ref-row{display:grid;grid-template-columns:3em 1fr;gap:.6rem;padding:.4rem 0;border-bottom:1px solid var(--line);}
+  .ref-row .ref-op{font-family:'JetBrains Mono', monospace;font-weight:600;}
+  .ref-row .ref-ex{color:var(--ink-soft);font-family:'JetBrains Mono', monospace;font-size:.78rem;}
+
+  .batch-cards{margin-top:.5rem;}
+  .batch-card{
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:.85rem 1rem;
+    margin-bottom:.75rem;
+    background:var(--paper-2);
+  }
+  .batch-card.ok{border-left:3px solid var(--theme-c);}
+  .batch-card.bad{border-left:3px solid var(--risk-high-c);}
+  .batch-card-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.5rem;}
+  .batch-card-id{font-family:'JetBrains Mono', monospace;font-weight:600;font-size:.85rem;}
+  .batch-card-verdict{font-family:'JetBrains Mono', monospace;font-size:.75rem;}
+  .batch-card.ok .batch-card-verdict{color:var(--theme-c);}
+  .batch-card.bad .batch-card-verdict{color:var(--risk-high-c);}
+  .batch-card-citation{font-size:.92rem;line-height:1.5;margin-bottom:.65rem;font-style:italic;}
+  .batch-card-vars{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:.5rem;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.78rem;
+  }
+  .batch-var-label{display:block;color:var(--ink-soft);font-size:.68rem;margin-bottom:.15rem;}
+  .batch-card-erreur{margin-top:.5rem;color:var(--risk-high-c);font-size:.75rem;font-family:'JetBrains Mono', monospace;}
+  .batch-card-classes{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:.75rem;margin-top:.75rem;padding-top:.65rem;border-top:1px solid var(--line);}
+  .batch-card-dets{margin-top:.65rem;padding-top:.55rem;border-top:1px dashed var(--line);}
+  .batch-card-verif{margin-top:.65rem;padding-top:.55rem;border-top:1px dashed var(--line);}
+  .batch-card-sigma{margin-top:.65rem;padding-top:.55rem;border-top:1px dashed var(--line);}
+  .batch-neutral{display:inline-block;font-size:.72rem;color:#2f6b4f;font-style:italic;margin-left:.4rem;}
+  .batch-missing{display:inline-block;font-size:.72rem;color:#9a3b3b;font-style:italic;margin-left:.4rem;}
+  .batch-card-mnemo{margin-top:.65rem;padding-top:.55rem;border-top:1px dashed var(--line);}
+  .batch-card-mnemo .batch-class-label{color:#6b4f8a;}
+  .batch-mnemo-chip{display:inline-block;font-size:.75rem;padding:.05rem .4rem;margin:.15rem .2rem 0 0;border:1px solid #b9a6cf;border-radius:3px;color:#4a3766;}
+  .batch-mnemo-chip em{color:#888;font-style:normal;}
+  .batch-sigma-tag{display:inline-block;font-size:.72rem;padding:0 .35rem;border-radius:3px;margin-right:.35rem;border:1px solid #888;color:#555;}
+  .batch-sigma-tag.adh-totale{border-color:#8a5a00;color:#8a5a00;}
+  .batch-sigma-tag.adh-partielle{border-color:#9a7b2f;color:#9a7b2f;}
+  .batch-sigma-tag.adh-contestee,.batch-sigma-tag.adh-refutee{border-color:#2f6b4f;color:#2f6b4f;}
+  .batch-sigma-meta{font-size:.72rem;color:#888;margin:.1rem 0 .15rem 0;}
+  .batch-card-verif .batch-class-label{color:#3b6ea5;}
+  .batch-verif-tag{display:inline-block;min-width:1.2em;text-align:center;font-weight:700;color:#3b6ea5;border:1px solid #3b6ea5;border-radius:3px;margin-right:.35rem;}
+  .batch-verif-reason{color:var(--muted, #777);font-style:italic;}
+  .batch-card-dets .batch-class-label{color:var(--fam-r);}
+  .batch-class-label{font-family:'JetBrains Mono', monospace;font-size:.7rem;color:var(--ink-soft);margin-bottom:.35rem;}
+  .batch-op-line{font-family:'JetBrains Mono', monospace;font-size:.72rem;line-height:1.6;margin-bottom:.25rem;}
+  .batch-op-tag{color:var(--fam-r);font-weight:600;margin-right:.3rem;}
+  .batch-op-empty{color:var(--ink-soft);font-style:italic;font-size:.75rem;}
+  .batch-op-risk{display:inline-block;margin-left:.4rem;font-size:.68rem;padding:.05rem .35rem;border-radius:6px;}
+  .batch-op-risk.risque-oui{background:var(--risk-high-bg);color:var(--risk-high-c);}
+  .batch-op-risk.risque-ambigu{background:var(--risk-med-bg);color:var(--risk-med-c);}
+  .risque-non{color:var(--theme-c);font-weight:600;}
+  .risque-oui{color:var(--risk-high-c);font-weight:600;}
+  .risque-ambigu{color:var(--cand);font-weight:600;}
+  .batch-summary{margin-top:1.25rem;padding:1rem;background:var(--paper-2);border:1px solid var(--line);border-radius:4px;font-family:'JetBrains Mono', monospace;font-size:.85rem;line-height:1.8;}
+  .batch-summary strong{color:var(--theme-c);}
+
+  .batch-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:1.25rem;
+  }
+  .batch-input-col textarea{min-height:220px;}
+  .batch-results-col{max-height:70vh;overflow-y:auto;}
+  @media (max-width: 720px){
+    .batch-grid{grid-template-columns:1fr;}
+    .batch-card-vars{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <a href="index.html" style="font-family:'JetBrains Mono', monospace; font-size:.75rem; color:var(--ink-soft); text-decoration:none;" id="back-link">← le survivant — histoire d'une thèse</a>
+      <h1 id="title">Analyseur d'opérations logico-discursives — Grize, Charconnet 1999</h1>
+      <p class="sub" id="subtitle">Repérer les opérations logico-discursives et suivre la progression des classes-objets, thème / phore</p>
+    </div>
+    <div class="lang-toggle">
+      <button id="lang-fr" class="on">FR</button>
+      <button id="lang-en">EN</button>
+    </div>
+  </div>
+
+  <div class="tab-bar" style="display:none;">
+    <button class="tab-btn on" id="tab-btn-individuel">Analyse individuelle</button>
+    <button class="tab-btn" id="tab-btn-lot">Traitement par lot</button>
+  </div>
+
+  <div id="tab-individuel" style="display:none;">
+  <div class="notions">
+    <div class="notion-field theme">
+      <label id="lbl-theme">Notion thème (ex. /GENOME/)</label>
+      <input id="notion-theme" value="/GENOME/">
+    </div>
+    <div class="notion-field phore">
+      <label id="lbl-phore">Notion phore (ex. /TEXTE/)</label>
+      <input id="notion-phore" value="/TEXTE/">
+    </div>
+  </div>
+
+  <textarea id="input-text">Cet enchaînement constitue le texte de notre génome, un texte écrit avec quatre lettres, les bases nucléotidiques. Imaginez une encyclopédie microscopique de plusieurs centaines de milliers de pages composées d'un texte étrange.</textarea>
+  <div class="row">
+    <button class="primary" id="btn-analyze">Analyser</button>
+    <button class="detect" id="btn-detect">Détecter les marqueurs</button>
+    <button class="detect" id="btn-ai-detect">Analyser avec l'IA</button>
+    <button class="ghost" id="btn-reset">Réinitialiser</button>
+    <button class="example-link" id="btn-example">charger un autre extrait</button>
+  </div>
+  <p class="instructions" id="instr">Cliquez un ou plusieurs mots contigus pour les sélectionner et leur attribuer une opération. Les marqueurs détectés automatiquement sont soulignés en pointillés — cliquez dessus pour préremplir l'opération suggérée.</p>
+  <p class="ai-status" id="ai-status"></p>
+
+  <div class="stage" id="stage-render">
+    <div class="legend" id="legend">
+      <span><span class="sw cand"></span>marqueur détecté</span>
+      <span><span class="sw th"></span>thème</span>
+      <span><span class="sw ph"></span>phore</span>
+      <span><span class="sw" style="background:var(--risk-high-bg)"></span><span id="legend-risk-high">risque élevé</span></span>
+      <span><span class="sw" style="background:var(--risk-med-bg)"></span><span id="legend-risk-med">risque moyen</span></span>
+    </div>
+    <div class="rendered" id="rendered"></div>
+
+    <div class="tagbar" id="tagbar">
+      <div class="sel-preview" id="sel-label">Sélection : <b id="sel-text">—</b></div>
+      <div class="choice-group">
+        <div class="label" id="lbl-classe">Classe-objet</div>
+        <div class="chips" id="chips-classe">
+          <div class="chip" data-classe="theme" id="chip-theme">thème</div>
+          <div class="chip" data-classe="phore" id="chip-phore">phore</div>
+        </div>
+      </div>
+      <div class="choice-group">
+        <div class="label" id="lbl-op">Opération</div>
+        <div id="chips-op"></div>
+        <div class="op-desc" id="op-desc"></div>
+      </div>
+      <div class="choice-group">
+        <div class="label" id="lbl-notion">Notion (optionnel — par défaut, le thème/phore général)</div>
+        <input type="text" id="tag-notion-input" placeholder="ex. génome" style="width:100%;font-family:'JetBrains Mono', monospace;font-size:.85rem;padding:.4rem .6rem;border:1px solid var(--line);border-radius:3px;background:var(--paper);color:var(--ink);">
+      </div>
+      <div class="row">
+        <button class="primary" id="btn-tag">Ajouter au faisceau</button>
+        <button class="ghost" id="btn-clear-sel">Annuler la sélection</button>
+      </div>
+    </div>
+
+    <div class="classes">
+      <div class="cl-col theme">
+        <h2 id="h-theme">Classe-objet 1 — thème</h2>
+        <div class="notion-name" id="name-theme-out">/GENOME/</div>
+        <div id="list-theme"></div>
+        <div class="set-line" id="set-theme"></div>
+        <div class="risk-heading" id="risk-heading-theme">Facteurs de risque</div>
+        <div class="risk-summary" id="risk-theme"></div>
+      </div>
+      <div class="cl-col phore">
+        <h2 id="h-phore">Classe-objet 2 — phore</h2>
+        <div class="notion-name" id="name-phore-out">/TEXTE/</div>
+        <div id="list-phore"></div>
+        <div class="set-line" id="set-phore"></div>
+      </div>
+    </div>
+
+    <div class="pec-panel">
+      <h2 id="pec-title">Prise en charge énonciative</h2>
+      <div id="pec-body"></div>
+    </div>
+  </div>
+
+  <details class="ref-table">
+    <summary id="ref-summary">Tableau de référence des 14 opérations</summary>
+    <div id="ref-body"></div>
+  </details>
+
+  <details class="ref-table">
+    <summary id="journal-summary">Journal d'apprentissage</summary>
+    <div id="journal-body"></div>
+    <div class="row"><button class="ghost" id="btn-clear-journal">Effacer le journal</button></div>
+  </details>
+  </div>
+
+  <div id="tab-lot">
+    <div class="batch-grid">
+      <div class="batch-input-col">
+        <p class="instructions" id="batch-instr">Collez soit un texte unique à analyser, soit un tableau JSON d'exemples (chacun avec au minimum "texte", et optionnellement "id" et "verite_terrain" — "hallucination_confirmee" ou "reponse_correcte" — pour comparer contre un jugement de référence).</p>
+        <textarea id="batch-input" placeholder='Collez un texte ici, ou un tableau JSON : [{"id":"ex-1","texte":"...","verite_terrain":"hallucination_confirmee"}]' style="min-height:300px;"></textarea>
+        <div class="row">
+          <button class="primary" id="btn-batch-run">Analyser</button>
+          <button class="ghost" id="btn-batch-clear">Effacer</button>
+          <button class="ghost" id="btn-batch-export">Exporter en JSON</button>
+        </div>
+        <span class="ai-status" id="batch-status"></span>
+      </div>
+      <div class="batch-results-col">
+        <div id="batch-results"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const STRINGS = {
+  fr: {
+    title:'Analyseur d\u2019opérations logico-discursives — Grize, Charconnet 1999',
+    subtitle:'Repérer les opérations logico-discursives et suivre la progression des classes-objets, thème / phore',
+    lblTheme:'Notion thème (ex. /GENOME/)', lblPhore:'Notion phore (ex. /TEXTE/)',
+    backLink:'\u2190 le survivant — histoire d\u2019une thèse',
+    analyze:'Pré-analyse', detect:'Détecter les marqueurs', reset:'Réinitialiser',
+    aiDetect:'Analyser avec l\u2019IA', aiLoading:'Analyse en cours\u2026', aiError:'Échec de l\u2019analyse — réessayez.', aiNone:'Aucune suggestion retournée.',
+    aiSrc:'IA', aiNotionApplied:'Notions thème/phore suggérées par l\u2019IA — modifiables ci-dessus.',
+    aiAutoAdded:'{n} opération(s) ajoutée(s) au faisceau ci-dessous.',
+    example:'charger un autre extrait',
+    instr:'Cliquez un ou plusieurs mots contigus pour les sélectionner et leur attribuer une opération. Les marqueurs détectés automatiquement sont soulignés en pointillés — cliquez dessus pour préremplir l\u2019opération suggérée.',
+    legendCand:'marqueur détecté', legendTh:'thème', legendPh:'phore',
+    selLabel:'Sélection :', classe:'Classe-objet', theme:'thème', phore:'phore',
+    op:'Opération', addBtn:'Ajouter au faisceau', clearBtn:'Annuler la sélection',
+    lblNotion:'Notion (optionnel — par défaut, le thème/phore général)',
+    hTheme:'Classe-objet 1 — thème', hPhore:'Classe-objet 2 — phore',
+    emptyHint:'Aucun élément ajouté',
+    defaultTheme:'/GENOME/', defaultPhore:'/TEXTE/',
+    legendRiskHigh:'risque élevé', legendRiskMed:'risque moyen',
+    riskSectionTitle:'Facteurs de risque',
+    batchSummary:'Traitement par lot — analyser un corpus entier',
+    batchInstr:'Collez soit un texte unique à analyser, soit un tableau JSON d\u2019exemples (chacun avec au minimum "texte", et optionnellement "id" et "verite_terrain" — "hallucination_confirmee" ou "reponse_correcte" — pour comparer contre un jugement de référence).',
+    batchRun:'Analyser',
+    batchClear:'Effacer',
+    batchExport:'Exporter en JSON',
+    batchLabelVerite:'vérité terrain', batchLabelRisque:'risque détecté', batchLabelNotions:'notions',
+    batchLabelDets:'déterminations', batchLabelDoubleAlpha:'double α',
+    batchDetsHeader:'Déterminations (relations entre notions — seul terrain de ρ1-ρ4 / θ5)',
+    batchDetsNone:'— aucune (texte monadique, ou aucune relation établie)',
+    batchNoGroundTruth:'exemple(s) traité(s) — aucune vérité terrain fournie, pas de mesure de précision/rappel possible.',
+    batchVerifHeader:'À vérifier (affirmations factuelles non sourcées — pas un verdict de risque)',
+    batchSigmaHeader:'Prise en charge (\u03c3) — qui endosse quoi, et à quel degré',
+    batchNeutralSigma:'risque neutralisé par \u03c3 (passage tenu à distance)',
+    batchNeutralAuto:'risque neutralisé : mention autonymique (terme entre guillemets)',
+    batchNeutralMarquage:'risque neutralisé : marquage déclaré',
+    batchMissing:'extrait introuvable tel quel dans le texte',
+    batchMnemoHeader:'Mnémoniques de souhait (McDermott) — termes techniques d\u2019origine humaine employés sans marque — pas un verdict de risque',
+    sigmaAdhesion:{totale:'adhésion totale', partielle:'adhésion partielle', suspendue:'suspendue', contestee:'contestée', refutee:'réfutée'},
+    sigmaSource:{locuteur:'source : locuteur', nommee:'source nommée', vague:'source vague', effacee:'source effacée'},
+    sigmaFonction:{autorite:'argument d\u2019autorité', concession:'concession', refutation:'réfutation', rapport:'rapport'},
+    batchRunning:'Traitement en cours\u2026 {n}/{total}',
+    batchDone:'Terminé.',
+    tabIndividuel:'Analyse individuelle', tabLot:'Traitement par lot',
+    batchError:'Collez un texte ou un corpus JSON avant de lancer l\u2019analyse.',
+    pecTitle:'Prise en charge énonciative',
+    pecJe:'je', pecNous:'nous', pecCertains:'certains pensent que', pecImpersonnel:'il apparaît que (impersonnel)',
+    pecEmpty:'Aucun marqueur de prise en charge détecté',
+    pecRiskImpersonnel:'affirmation sans source repérable (tournure impersonnelle)',
+    riskAssim:'assimilation métaphorique non marquée (ρ3 sans comparatif)',
+    riskCoHyper:'généralisation non justifiée (θ5 sans marqueur causal)',
+    riskEvacuation:'vidage référentiel (θ4 : contenu de l\u2019objet évacué)',
+    riskUnstable:'faisceau instable : propriétés non recoupées par un synonyme (θ0)',
+    riskNone:'Aucun facteur de risque détecté',
+    refSummary:'Tableau de référence des 14 opérations',
+    famG:'Opérations sur les faisceaux', famR:'Opérations sur les domaines', famT:'Opérations de pure désignation',
+    journalSummary:'Journal d\u2019apprentissage', journalClear:'Effacer le journal',
+    journalCorrections:'Corrections (suggestion \u2192 choix retenu)',
+    journalRiskFeedback:'Retours sur les facteurs de risque',
+    journalEmpty:'Aucune donnée enregistrée pour l\u2019instant',
+    feedbackPertinent:'marquer comme pertinent', feedbackFauxPositif:'marquer comme faux positif',
+    feedbackLogged:'noté'
+  },
+  en: {
+    title:'Logico-discursive operations analyzer — Grize, Charconnet 1999',
+    subtitle:'Spotting logico-discursive operations and tracking the progression of object-classes, theme / phore',
+    lblTheme:'Theme notion (e.g. /GENOME/)', lblPhore:'Phore notion (e.g. /TEXT/)',
+    backLink:'\u2190 the survivor — the story of a thesis',
+    analyze:'Pre-analysis', detect:'Detect markers', reset:'Reset',
+    aiDetect:'Analyze with AI', aiLoading:'Analyzing\u2026', aiError:'Analysis failed — try again.', aiNone:'No suggestions returned.',
+    aiSrc:'AI', aiNotionApplied:'Theme/phore notions suggested by AI — editable above.',
+    aiAutoAdded:'{n} operation(s) added to the bundle below.',
+    example:'load another excerpt',
+    instr:'Click one or more contiguous words to select them and assign an operation. Automatically detected markers are underlined with dashes — click one to pre-fill the suggested operation.',
+    legendCand:'detected marker', legendTh:'theme', legendPh:'phore',
+    selLabel:'Selection:', classe:'Object-class', theme:'theme', phore:'phore',
+    op:'Operation', addBtn:'Add to bundle', clearBtn:'Clear selection',
+    lblNotion:'Notion (optional — defaults to the overall theme/phore)',
+    hTheme:'Object-class 1 — theme', hPhore:'Object-class 2 — phore',
+    emptyHint:'No element added yet',
+    defaultTheme:'/GENOME/', defaultPhore:'/TEXT/',
+    legendRiskHigh:'high risk', legendRiskMed:'medium risk',
+    riskSectionTitle:'Risk factors',
+    batchSummary:'Batch processing — analyze a full corpus',
+    batchInstr:'Paste either a single text to analyze, or a JSON array of examples (each with at least "texte", and optionally "id" and "verite_terrain" — "hallucination_confirmee" or "reponse_correcte" — to compare against a reference judgment).',
+    batchRun:'Analyze',
+    batchClear:'Clear',
+    batchExport:'Export as JSON',
+    batchLabelVerite:'ground truth', batchLabelRisque:'risk detected', batchLabelNotions:'notions',
+    batchLabelDets:'determinations', batchLabelDoubleAlpha:'double alpha',
+    batchDetsHeader:'Determinations (relations between notions — the only ground for ρ1-ρ4 / θ5)',
+    batchDetsNone:'— none (single-notion text, or no relation established)',
+    batchNoGroundTruth:'example(s) processed — no ground truth provided, precision/recall cannot be measured.',
+    batchVerifHeader:'To verify (unsourced factual claims — not a risk verdict)',
+    batchSigmaHeader:'Stance-taking (\u03c3) — who endorses what, and how far',
+    batchNeutralSigma:'risk neutralised by \u03c3 (passage held at a distance)',
+    batchNeutralAuto:'risk neutralised: autonymic mention (term in quotation marks)',
+    batchNeutralMarquage:'risk neutralised: declared marking',
+    batchMissing:'extract not found verbatim in the text',
+    batchMnemoHeader:'Wishful mnemonics (McDermott) — technical terms of human origin used unmarked — not a risk verdict',
+    sigmaAdhesion:{totale:'full endorsement', partielle:'partial', suspendue:'suspended', contestee:'contested', refutee:'refuted'},
+    sigmaSource:{locuteur:'source: speaker', nommee:'named source', vague:'vague source', effacee:'effaced source'},
+    sigmaFonction:{autorite:'argument from authority', concession:'concession', refutation:'refutation', rapport:'report'},
+    batchRunning:'Processing\u2026 {n}/{total}',
+    batchDone:'Done.',
+    tabIndividuel:'Individual analysis', tabLot:'Batch processing',
+    batchError:'Paste some text or a JSON corpus before running the analysis.',
+    pecTitle:'Enunciative responsibility (prise en charge)',
+    pecJe:'I', pecNous:'we', pecCertains:'some believe that', pecImpersonnel:'it appears that (impersonal)',
+    pecEmpty:'No responsibility-taking marker detected',
+    pecRiskImpersonnel:'claim with no traceable source (impersonal phrasing)',
+    riskAssim:'unmarked metaphorical assimilation (\u03c13 with no comparative marker)',
+    riskCoHyper:'unjustified generalization (\u03b85 with no causal marker)',
+    riskEvacuation:'referential evacuation (\u03b84: object emptied of its content)',
+    riskUnstable:'unstable bundle: properties never corroborated by a synonym (\u03b80)',
+    riskNone:'No risk factors detected',
+    refSummary:'Reference table of the 14 operations',
+    famG:'Operations on bundles', famR:'Operations on domains', famT:'Pure designation operations',
+    journalSummary:'Learning journal', journalClear:'Clear journal',
+    journalCorrections:'Corrections (suggested \u2192 kept)',
+    journalRiskFeedback:'Risk factor feedback',
+    journalEmpty:'No data logged yet',
+    feedbackPertinent:'mark as relevant', feedbackFauxPositif:'mark as false positive',
+    feedbackLogged:'logged'
+  }
+};
+
+const FAM_CLASS = { '\u03b3':'g', '\u03c1':'r', '\u03b8':'t' };
+
+const OPS = {
+  fr: [
+    {id:'\u03b31', family:'\u03b3', desc:'Elle introduit une partie de l\u2019objet.', example:'\u03b31{maison} \u21a6 {maison, porte}'},
+    {id:'\u03b32', family:'\u03b3', desc:'Elle marque un processus interne à l\u2019objet, reposant sur les schèmes d\u2019action du faisceau.', example:'\u03b32{eau} \u21a6 {eau, évaporation}'},
+    {id:'\u03b33', family:'\u03b3', desc:'Elle marque un état de l\u2019objet, une de ses façons d\u2019apparaître, ou une de ses qualités.', example:'\u03b33{eau} \u21a6 {eau, pression}'},
+    {id:'\u03b34', family:'\u03b3', desc:'Elle marque une dimension, une pluralité, une extension.', example:'\u03b34{difficulté} \u21a6 {difficulté, quantité de difficultés}'},
+    {id:'\u03c11', family:'\u03c1', desc:'Elle introduit une composante du domaine.', example:'\u03c11{auto} \u21a6 {auto, prix}'},
+    {id:'\u03c12', family:'\u03c1', desc:'Elle renvoie à un processus qui réclame un agent extérieur.', example:'\u03c12{auto} \u21a6 {auto, entretien}'},
+    {id:'\u03c13', family:'\u03c1', desc:'Dans une métaphore, elle introduit un élément du phore.', example:'\u03c13{lune} \u21a6 {lune, faucille d\u2019or}'},
+    {id:'\u03c14', family:'\u03c1', desc:'Elle sert à délimiter l\u2019extension de l\u2019objet.', example:'\u03c14{vins} \u21a6 {vins, vins de France}'},
+    {id:'\u03b80', family:'\u03b8', desc:'Elle introduit un synonyme.', example:'\u03b80{question} \u21a6 {question, interrogation}'},
+    {id:'\u03b81', family:'\u03b8', desc:'Elle introduit un terme du genre prochain.', example:'\u03b81{table} \u21a6 {table, meuble}'},
+    {id:'\u03b82', family:'\u03b8', desc:'Elle présente l\u2019objet sous un autre angle ; elle est de l\u2019ordre de la métonymie.', example:'\u03b82{ministère des Affaires étrangères} \u21a6 {ministère des Affaires étrangères, Quai d\u2019Orsay}'},
+    {id:'\u03b83', family:'\u03b8', desc:'Elle implique un jugement de valeur.', example:'\u03b83{père} \u21a6 {père, héros au sourire si doux}'},
+    {id:'\u03b84', family:'\u03b8', desc:'Elle vide l\u2019objet de son contenu.', example:'\u03b84{Mac} \u21a6 {Mac, machin}'},
+    {id:'\u03b85', family:'\u03b8', desc:'Elle introduit le nom d\u2019un co-hyperonyme commun au phore et au thème.', example:'\u03b85{langage, code génétique} \u21a6 {langage, code génétique, systèmes de communication}'}
+  ],
+  en: [
+    {id:'\u03b31', family:'\u03b3', desc:'Introduces a part of the object.', example:'\u03b31{house} \u21a6 {house, door}'},
+    {id:'\u03b32', family:'\u03b3', desc:'Marks an internal process of the object, drawing on the bundle\u2019s own action schemes.', example:'\u03b32{water} \u21a6 {water, evaporation}'},
+    {id:'\u03b33', family:'\u03b3', desc:'Marks a state of the object, a way it appears, or one of its qualities.', example:'\u03b33{water} \u21a6 {water, pressure}'},
+    {id:'\u03b34', family:'\u03b3', desc:'Marks a dimension, a plurality, an extension.', example:'\u03b34{difficulty} \u21a6 {difficulty, amount of difficulties}'},
+    {id:'\u03c11', family:'\u03c1', desc:'Introduces a component of the domain.', example:'\u03c11{car} \u21a6 {car, price}'},
+    {id:'\u03c12', family:'\u03c1', desc:'Points to a process that requires an external agent.', example:'\u03c12{car} \u21a6 {car, maintenance}'},
+    {id:'\u03c13', family:'\u03c1', desc:'In a metaphor, introduces an element of the phore.', example:'\u03c13{moon} \u21a6 {moon, golden sickle}'},
+    {id:'\u03c14', family:'\u03c1', desc:'Delimits the extension of the object.', example:'\u03c14{wines} \u21a6 {wines, wines of France}'},
+    {id:'\u03b80', family:'\u03b8', desc:'Introduces a synonym.', example:'\u03b80{question} \u21a6 {question, query}'},
+    {id:'\u03b81', family:'\u03b8', desc:'Introduces a term from the next genus up.', example:'\u03b81{table} \u21a6 {table, piece of furniture}'},
+    {id:'\u03b82', family:'\u03b8', desc:'Presents the object from another angle; a metonymy.', example:'\u03b82{Ministry of Foreign Affairs} \u21a6 {Ministry of Foreign Affairs, the Quai d\u2019Orsay}'},
+    {id:'\u03b83', family:'\u03b8', desc:'Implies a value judgment.', example:'\u03b83{father} \u21a6 {father, hero with the gentle smile}'},
+    {id:'\u03b84', family:'\u03b8', desc:'Empties the object of its content.', example:'\u03b84{Mac} \u21a6 {Mac, that thing}'},
+    {id:'\u03b85', family:'\u03b8', desc:'Introduces the name of a co-hyperonym shared by phore and theme.', example:'\u03b85{language, genetic code} \u21a6 {language, genetic code, communication systems}'}
+  ]
+};
+
+const EXAMPLES = {
+  fr: [
+    "Cet enchaînement constitue le texte de notre génome, un texte écrit avec quatre lettres, les bases nucléotidiques. Imaginez une encyclopédie microscopique de plusieurs centaines de milliers de pages composées d'un texte étrange.",
+    "Toute protéine est codée par un gène, c'est à dire une portion d'ADN. Lors de son expression ce dernier est copié, ou transcrit, en une molécule complémentaire d'ARN messager qui est ensuite traduite en protéine.",
+    "La séquence de l'ADN, l'ordre des nucléotides correspond exactement à l'enchaînement des acides aminés, de la même manière qu'à l'ordre de lecture des mots d'une phrase correspond un sens précis.",
+    "Il existe encore de nombreux segments d'ADN sans fonction qui ne sont que les traces de l'évolution, fixées dans le génome. Ce reste constitue probablement des archives inutilisées actuellement.",
+    "Il (le vocabulaire de l'Internet) utilise beaucoup de métaphores spatiales. D'ailleurs, les Anglo-saxons parlent de Cyberespace. Ainsi la navigation (sur le web) est plutôt stellaire que nautique. Et la terminaison « naute » du mot « internaute » provient des satellites habités, de spationautes.",
+    "Comme le morse, dont la succession de points et de traits permet une infinité de messages, l'ADN est le support d'un code dont l'alphabet est constitué de quatre lettres, A T C G. Ce sont les initiales de composants chimiques appelés bases. Tout au long des filaments de l'ADN, il y en a trois milliards qui se succèdent, telles les lettres d'une phrase, suivant un ordre très précis et tout à fait déterminant.",
+    "Mais de toutes les comparaisons qu'on pourrait imaginer, la plus démonstrative est celle qu'on établirait entre le jeu de la langue et une partie d'échecs. De part et d'autre, on est en présence d'un système de valeurs et on assiste à leurs modifications. Une partie d'échecs est comme une réalisation artificielle de ce que la langue nous présente sous une forme naturelle.",
+    "En 2023, un avocat new-yorkais a déposé des conclusions citant des affaires judiciaires inventées par ChatGPT. Ces fausses affaires semblaient réelles, avec des noms et des numéros de dossier plausibles. Ce truc a été soumis à un tribunal fédéral, et l'avocat a été sanctionné.",
+    "Le chatbot d'Air Canada a annoncé à un client un tarif de deuil spécial, remboursable après coup. Cette politique n'existait pas. Quand la compagnie a refusé de l'honorer, le client a porté l'affaire devant un tribunal — et a gagné.",
+    "Lors d'une démonstration publique, le chatbot Bard de Google a affirmé que le télescope James Webb avait pris les toutes premières images d'une exoplanète. Cette affirmation était fausse — des télescopes terrestres l'avaient déjà fait des années plus tôt. L'erreur a été repérée presque aussitôt et a contribué à une chute du cours de l'action Google ce jour-là."
+  ],
+  en: [
+    "This strand makes up the text of our genome, a text written with four letters, the nucleotide bases. Picture a microscopic encyclopedia of several hundred thousand pages composed of a strange text.",
+    "Every protein is encoded by a gene, that is a portion of DNA. During its expression this gene is copied, or transcribed, into a complementary messenger RNA molecule which is then translated into a protein.",
+    "The order of the nucleotides corresponds exactly to the sequence of amino acids, just as the reading order of the words in a sentence corresponds to a precise meaning.",
+    "There are still many segments of DNA with no known function, which are merely traces of evolution fixed within the genome. This remainder is probably a kind of unused archive.",
+    "It (Internet vocabulary) uses a lot of spatial metaphors. In fact, English speakers talk about Cyberspace. So navigation (on the web) is more stellar than nautical. And the ending \u201c-naut\u201d in \u201cinternaut\u201d comes from crewed satellites, from astronauts.",
+    "Like Morse code, whose succession of dots and dashes allows for an infinite number of messages, DNA is the medium of a code whose alphabet consists of four letters, A T C G. These are the initials of chemical components called bases. Along the strands of DNA, three billion of them follow one another, like the letters of a sentence, in a very precise and entirely determining order.",
+    "But of all the comparisons one could imagine, the most telling is the one to be drawn between the game of language and a game of chess. In both cases we are dealing with a system of values, and we witness their transformation. A game of chess is like an artificial realization of what language presents to us in a natural form.",
+    "In 2023, a New York attorney filed a legal brief citing court cases invented by ChatGPT. The fake cases looked real, complete with plausible names and docket numbers. This thing was submitted to a federal court, and the attorney faced sanctions.",
+    "Air Canada's chatbot told a customer about a special bereavement fare that could be claimed after the fact. No such policy existed. When the airline refused to honor it, the customer took the case to a tribunal — and won.",
+    "During a public demo, Google's Bard chatbot claimed the James Webb Space Telescope took the very first pictures of a planet outside our solar system. This claim was false — ground-based telescopes had already done so years earlier. The error was noticed almost immediately and contributed to a drop in Google's stock price that day."
+  ]
+};
+
+const PATTERNS = {
+  fr: [
+    {re:'\\b(composé(?:e|s|es)? de|constitué(?:e|s|es)? de|comport(?:e|ant)|fait partie de)\\b', op:'\u03b31', tag:'partie'},
+    {re:'\\b(transcrit(?:e|s|es)?|copié(?:e|s|es)?|traduit(?:e|s|es)?|codé(?:e|s|es)?|exprimé(?:e|s|es)?)\\b', op:'\u03b32', tag:'processus'},
+    {re:'\\b(des milliers de|des millions de|de nombreux|de nombreuses|des dizaines de|plusieurs centaines de)\\b', op:'\u03b34', tag:'extension'},
+    {re:'\\b(comme|tel que|telle que|de même que|ainsi que|à la manière de)\\b', op:'\u03c13', tag:'comparatif'},
+    {re:'\\b(c\'est-à-dire|autrement dit|à savoir)\\b', op:'\u03b80', tag:'reprise'},
+    {re:'\\b(une sorte de|un type de|une forme de)\\b', op:'\u03b81', tag:'genre'},
+    {re:'\\b(truc|machin)\\b', op:'\u03b84', tag:'vidage'},
+    {re:'\\b(peut être vu comme|peut être considéré comme)\\b', op:'\u03b85', tag:'cohyperonyme'}
+  ],
+  en: [
+    {re:'\\b(made up of|composed of|consists? of|contains?|part of)\\b', op:'\u03b31', tag:'part'},
+    {re:'\\b(transcribed|copied|translated|encoded|coded|expressed|processed)\\b', op:'\u03b32', tag:'process'},
+    {re:'\\b(thousands of|millions of|several|many|dozens of|hundreds of)\\b', op:'\u03b34', tag:'extension'},
+    {re:'\\b(like|as if|just as|similar to|analogous to)\\b', op:'\u03c13', tag:'comparative'},
+    {re:'\\b(that is|in other words|namely|i\\.e\\.)\\b', op:'\u03b80', tag:'reprise'},
+    {re:'\\b(a kind of|a type of|a sort of)\\b', op:'\u03b81', tag:'genus'},
+    {re:'\\b(that thing|this thing|whatchamacallit)\\b', op:'\u03b84', tag:'evacuation'},
+    {re:'\\b(can be seen as|can be viewed as|can be regarded as)\\b', op:'\u03b85', tag:'cohyperonym'}
+  ]
+};
+
+const JUSTIF = {
+  fr:'\\b(parce que|car|puisque|donc|du fait que|dans la mesure où)\\b',
+  en:'\\b(because|since|therefore|given that|as a result|due to)\\b'
+};
+const COMP_TAG = { fr:'comparatif', en:'comparative' };
+
+const PEC_PATTERNS = {
+  fr: [
+    {re:'\\bje\\s+(pense|crois|considère|affirme|soutiens|estime)\\s+que\\b', category:'je'},
+    {re:'\\bnous\\s+(pensons|croyons|considérons|affirmons|soutenons|estimons)\\s+que\\b', category:'nous'},
+    {re:'\\b(certains|d\'aucuns|beaucoup)\\s+(pensent|estiment|croient|affirment)\\s+que\\b', category:'certains'},
+    {re:'\\bil\\s+(apparaît|semble|s\'avère|est à noter)\\s+que\\b', category:'impersonnel'}
+  ],
+  en: [
+    {re:'\\bI\\s+(think|believe|consider|argue|contend|would say)\\s+that\\b', category:'je'},
+    {re:'\\bwe\\s+(think|believe|consider|argue|contend)\\s+that\\b', category:'nous'},
+    {re:'\\b(some|many)\\s+(believe|think|argue|claim)\\s+that\\b', category:'certains'},
+    {re:'\\bit\\s+(appears|seems|turns out|is worth noting)\\s+that\\b', category:'impersonnel'}
+  ]
+};
+
+const REAL_EXAMPLES_FR = [
+  { op:'\u03c13', text:'/CYBERESPACE/ ... on assimile le cyberespace à un espace que l\u2019on peut explorer', set:'\u03c13{le cyberespace} \u21a6 {le cyberespace, navigation}' },
+  { op:'\u03b31', text:'ce texte de notre génome, un texte écrit avec quatre lettres, les bases nucléotidiques', set:'\u03b31{texte} \u21a6 {texte, lettres}' },
+  { op:'\u03b85', text:'l\u2019ADN et le texte sont tous deux considérés comme relevant d\u2019un même ordre', set:'\u03b85{ADN, Texte} \u21a6 {ADN, texte, enchaînement}' },
+  { op:'\u03b85', text:'le code génétique et le code linguistique appartiennent à un même ensemble', set:'\u03b85{code génétique, code linguistique} \u21a6 {code génétique, code linguistique, systèmes de communication}' },
+  { op:'\u03c13', text:'il existe encore de nombreux segments d\u2019ADN sans fonction, qui ne sont que les traces de l\u2019évolution', set:'\u03c13{segments d\u2019ADN sans fonction} \u21a6 {segments d\u2019ADN sans fonction, traces de l\u2019évolution}' },
+  { op:'\u03b85', text:'Cet enchaînement constitue le texte de notre génome', set:'\u03b85{génome, texte} \u21a6 {génome, texte, enchaînement} — "enchaînement" nomme le co-hyperonyme commun aux deux notions' },
+  { op:'\u03c13', text:'le texte de notre génome', set:'liaison phore/thème dans un syntagme nominal : "texte" (élément du phore) est le centre du syntagme, qualifié par "de notre génome" (élément du thème) — l\u2019assimilation se fait par la construction syntaxique elle-même, sans aucun marqueur comparatif possible' }
+];
+
+let lang = 'fr';
+let tokens = [];
+let offsets = [];
+let selected = new Set();
+let entries = { theme: [], phore: [] };
+let pendingClasse = null;
+let pendingOp = null;
+let candidates = [];
+let exampleIdx = 0;
+let sentences = [];
+let fullTextGlobal = '';
+let currentCandidateOp = null;
+let learningLog = { corrections: [], riskFeedback: [] };
+let aiCandidates = [];
+let pecMarkers = [];
+let aiPendingRisk = null;
+let aiLoading = false;
+let lastBatchResults = [];
+
+const renderedEl = document.getElementById('rendered');
+const tagbarEl = document.getElementById('tagbar');
+const selTextEl = document.getElementById('sel-text');
+const chipsOpEl = document.getElementById('chips-op');
+const opDescEl = document.getElementById('op-desc');
+
+function applyStrings(){
+  const s = STRINGS[lang];
+  document.title = s.title;
+  document.getElementById('title').textContent = s.title;
+  document.getElementById('subtitle').textContent = s.subtitle;
+  document.getElementById('back-link').textContent = s.backLink;
+  document.getElementById('lbl-theme').textContent = s.lblTheme;
+  document.getElementById('lbl-phore').textContent = s.lblPhore;
+  document.getElementById('btn-analyze').textContent = s.analyze;
+  document.getElementById('btn-detect').textContent = s.detect;
+  document.getElementById('btn-ai-detect').textContent = s.aiDetect;
+  document.getElementById('btn-reset').textContent = s.reset;
+  document.getElementById('btn-example').textContent = s.example;
+  document.getElementById('instr').textContent = s.instr;
+  document.getElementById('sel-label').childNodes[0].textContent = s.selLabel + ' ';
+  document.getElementById('lbl-classe').textContent = s.classe;
+  document.getElementById('chip-theme').textContent = s.theme;
+  document.getElementById('chip-phore').textContent = s.phore;
+  document.getElementById('lbl-op').textContent = s.op;
+  document.getElementById('btn-tag').textContent = s.addBtn;
+  document.getElementById('lbl-notion').textContent = s.lblNotion;
+  document.getElementById('btn-clear-sel').textContent = s.clearBtn;
+  document.getElementById('h-theme').textContent = s.hTheme;
+  document.getElementById('h-phore').textContent = s.hPhore;
+  const legend = document.getElementById('legend').children;
+  legend[0].lastChild.textContent = s.legendCand;
+  legend[1].lastChild.textContent = s.legendTh;
+  legend[2].lastChild.textContent = s.legendPh;
+  document.getElementById('legend-risk-high').textContent = s.legendRiskHigh;
+  document.getElementById('legend-risk-med').textContent = s.legendRiskMed;
+  document.getElementById('risk-heading-theme').textContent = s.riskSectionTitle;
+  document.getElementById('batch-instr').textContent = s.batchInstr;
+  document.getElementById('btn-batch-run').textContent = s.batchRun;
+  document.getElementById('tab-btn-individuel').textContent = s.tabIndividuel;
+  document.getElementById('tab-btn-lot').textContent = s.tabLot;
+  document.getElementById('btn-batch-clear').textContent = s.batchClear;
+  document.getElementById('btn-batch-export').textContent = s.batchExport;
+  document.getElementById('pec-title').textContent = s.pecTitle;
+  renderPEC();
+  document.getElementById('ref-summary').textContent = s.refSummary;
+  document.getElementById('journal-summary').textContent = s.journalSummary;
+  document.getElementById('btn-clear-journal').textContent = s.journalClear;
+  buildOpChips();
+  buildRefTable();
+  renderJournal();
+}
+
+async function loadLog(){
+  try{
+    const res = await window.storage.get('grize-log', false);
+    if(res && res.value){ learningLog = JSON.parse(res.value); }
+  }catch(e){ /* no log yet */ }
+  renderJournal();
+}
+
+async function saveLog(){
+  try{
+    await window.storage.set('grize-log', JSON.stringify(learningLog), false);
+  }catch(e){ console.error('storage error', e); }
+}
+
+function renderJournal(){
+  const box = document.getElementById('journal-body');
+  if(!box) return;
+  box.innerHTML = '';
+  if(learningLog.corrections.length === 0 && learningLog.riskFeedback.length === 0){
+    box.innerHTML = '<p class="empty-hint">' + STRINGS[lang].journalEmpty + '</p>';
+    return;
+  }
+  if(learningLog.corrections.length){
+    const h = document.createElement('div');
+    h.className = 'risk-heading';
+    h.textContent = STRINGS[lang].journalCorrections + ' (' + learningLog.corrections.length + ')';
+    box.appendChild(h);
+    const counts = {};
+    learningLog.corrections.forEach(c=>{
+      const k = c.suggested + ' \u2192 ' + c.actual;
+      counts[k] = (counts[k] || 0) + 1;
+    });
+    Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{
+      const line = document.createElement('div');
+      line.className = 'ref-ex';
+      line.textContent = k + '  \u00d7' + v;
+      box.appendChild(line);
+    });
+  }
+  if(learningLog.riskFeedback.length){
+    const h2 = document.createElement('div');
+    h2.className = 'risk-heading';
+    h2.textContent = STRINGS[lang].journalRiskFeedback + ' (' + learningLog.riskFeedback.length + ')';
+    box.appendChild(h2);
+    const counts = {};
+    learningLog.riskFeedback.forEach(f=>{
+      const k = f.riskLabel + ' — ' + f.judgment;
+      counts[k] = (counts[k] || 0) + 1;
+    });
+    Object.entries(counts).forEach(([k,v])=>{
+      const line = document.createElement('div');
+      line.className = 'ref-ex';
+      line.textContent = k + '  \u00d7' + v;
+      box.appendChild(line);
+    });
+  }
+}
+
+document.getElementById('btn-clear-journal').addEventListener('click', async ()=>{
+  learningLog = { corrections: [], riskFeedback: [] };
+  await saveLog();
+  renderJournal();
+});
+
+function switchLang(l){
+  lang = l;
+  document.getElementById('lang-fr').classList.toggle('on', l==='fr');
+  document.getElementById('lang-en').classList.toggle('on', l==='en');
+  const themeInput = document.getElementById('notion-theme');
+  const phoreInput = document.getElementById('notion-phore');
+  if(themeInput.value === STRINGS.fr.defaultTheme || themeInput.value === STRINGS.en.defaultTheme){
+    themeInput.value = STRINGS[l].defaultTheme;
+  }
+  if(phoreInput.value === STRINGS.fr.defaultPhore || phoreInput.value === STRINGS.en.defaultPhore){
+    phoreInput.value = STRINGS[l].defaultPhore;
+  }
+  document.getElementById('input-text').value = EXAMPLES[l][0];
+  exampleIdx = 0;
+  applyStrings();
+}
+document.getElementById('lang-fr').addEventListener('click', ()=>switchLang('fr'));
+document.getElementById('lang-en').addEventListener('click', ()=>switchLang('en'));
+
+function buildOpChips(){
+  chipsOpEl.innerHTML = '';
+  const s = STRINGS[lang];
+  const famNames = { '\u03b3': s.famG, '\u03c1': s.famR, '\u03b8': s.famT };
+  ['\u03b3','\u03c1','\u03b8'].forEach(fam=>{
+    const group = document.createElement('div');
+    group.className = 'op-family-group';
+    const label = document.createElement('div');
+    label.className = 'op-family-label ' + FAM_CLASS[fam];
+    label.textContent = famNames[fam];
+    group.appendChild(label);
+    const row = document.createElement('div');
+    row.className = 'chips';
+    OPS[lang].filter(o=>o.family===fam).forEach(op=>{
+      const c = document.createElement('div');
+      c.className = 'chip';
+      c.dataset.op = op.id;
+      c.textContent = op.id;
+      c.addEventListener('click', ()=>{
+        pendingOp = op.id;
+        [...chipsOpEl.querySelectorAll('.chip')].forEach(x=>x.classList.remove('on'));
+        c.classList.add('on');
+        opDescEl.textContent = op.desc + '  ' + op.example;
+      });
+      row.appendChild(c);
+    });
+    group.appendChild(row);
+    chipsOpEl.appendChild(group);
+  });
+}
+
+function buildRefTable(){
+  const body = document.getElementById('ref-body');
+  body.innerHTML = '';
+  OPS[lang].forEach(op=>{
+    const row = document.createElement('div');
+    row.className = 'ref-row';
+    const opEl = document.createElement('div');
+    opEl.className = 'ref-op';
+    opEl.textContent = op.id;
+    const descEl = document.createElement('div');
+    const d = document.createElement('div');
+    d.textContent = op.desc;
+    const ex = document.createElement('div');
+    ex.className = 'ref-ex';
+    ex.textContent = op.example;
+    descEl.appendChild(d);
+    descEl.appendChild(ex);
+    row.appendChild(opEl);
+    row.appendChild(descEl);
+    body.appendChild(row);
+  });
+}
+
+document.getElementById('chips-classe').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  pendingClasse = chip.dataset.classe;
+  [...document.getElementById('chips-classe').children].forEach(x=>x.classList.remove('on','theme-on','phore-on'));
+  chip.classList.add('on', pendingClasse === 'theme' ? 'theme-on' : 'phore-on');
+});
+
+function tokenize(text){ return text.split(/(\s+)/).filter(t=>t.length>0); }
+
+function computeOffsets(){
+  offsets = [];
+  let pos = 0;
+  tokens.forEach(t=>{ offsets.push(pos); pos += t.length; });
+}
+
+function computeSentences(text){
+  const sents = [];
+  const re = /[^.!?]*[.!?]+|[^.!?]+$/g;
+  let m;
+  while((m = re.exec(text)) !== null){
+    if(m[0].length === 0){ re.lastIndex++; continue; }
+    sents.push({start:m.index, end:m.index+m[0].length});
+  }
+  if(sents.length === 0) sents.push({start:0, end:text.length});
+  return sents;
+}
+function sentenceIdxForOffset(off){
+  for(let i=0;i<sentences.length;i++){
+    if(off >= sentences[i].start && off < sentences[i].end) return i;
+  }
+  return sentences.length - 1;
+}
+function sentenceIdxForToken(i){ return sentenceIdxForOffset(offsets[i]); }
+function sentenceText(idx){ const s = sentences[idx]; return s ? fullTextGlobal.slice(s.start, s.end) : ''; }
+function sentenceHasPattern(idx, regexStr){
+  if(!regexStr) return false;
+  const re = new RegExp(regexStr, 'i');
+  return re.test(sentenceText(idx));
+}
+
+function evaluateEntryRisk(entry){
+  const risks = [];
+  const sentIdx = sentenceIdxForToken(entry.indices[0]);
+  if(entry.op === '\u03c13'){
+    const compPattern = PATTERNS[lang].find(p => p.tag === COMP_TAG[lang]);
+    const marked = compPattern && sentenceHasPattern(sentIdx, compPattern.re);
+    if(!marked) risks.push({level:'high', label: STRINGS[lang].riskAssim});
+  }
+  if(entry.op === '\u03b84'){
+    risks.push({level:'high', label: STRINGS[lang].riskEvacuation});
+  }
+  return risks;
+}
+
+function evaluateClassRisk(){
+  const risks = [];
+  const propCount = entries.theme.filter(e => e.op[0]==='\u03b3' || e.op[0]==='\u03c1').length;
+  const synoCount = entries.theme.filter(e => e.op === '\u03b80').length;
+  if(propCount >= 3 && synoCount === 0){
+    risks.push({level:'medium', label: STRINGS[lang].riskUnstable});
+  }
+  return risks;
+}
+
+function detectCandidates(fullText){
+  const found = [];
+  PATTERNS[lang].forEach(p=>{
+    const re = new RegExp(p.re, 'gi');
+    let m;
+    while((m = re.exec(fullText)) !== null){
+      found.push({start:m.index, end:m.index+m[0].length, op:p.op, tag:p.tag});
+      if(m[0].length===0) re.lastIndex++;
+    }
+  });
+  found.sort((a,b)=>a.start-b.start);
+  const claimed = [];
+  found.forEach(f=>{
+    const overlaps = claimed.some(c=> f.start < c.end && f.end > c.start);
+    if(!overlaps) claimed.push(f);
+  });
+  const withTokens = claimed.map(f=>{
+    const idxs = [];
+    tokens.forEach((t,i)=>{
+      const tStart = offsets[i], tEnd = tStart + t.length;
+      if(/^\s+$/.test(t)) return;
+      if(tStart < f.end && tEnd > f.start) idxs.push(i);
+    });
+    return { indices: idxs, op: f.op, tag: f.tag };
+  }).filter(c=>c.indices.length>0);
+  return withTokens;
+}
+
+function detectPEC(fullText){
+  const found = [];
+  PEC_PATTERNS[lang].forEach(p=>{
+    const re = new RegExp(p.re, 'gi');
+    let m;
+    while((m = re.exec(fullText)) !== null){
+      found.push({start:m.index, end:m.index+m[0].length, category:p.category});
+      if(m[0].length===0) re.lastIndex++;
+    }
+  });
+  found.sort((a,b)=>a.start-b.start);
+  return found.map(f=>{
+    const text = fullText.slice(f.start, f.end);
+    const risk = f.category === 'impersonnel' ? { level:'medium', label: STRINGS[lang].pecRiskImpersonnel } : null;
+    return { text, category: f.category, risk, source: 'rules' };
+  });
+}
+
+function renderPEC(){
+  const panel = document.getElementById('pec-body');
+  if(!panel) return;
+  if(pecMarkers.length === 0){
+    panel.innerHTML = '<p class="empty-hint">' + STRINGS[lang].pecEmpty + '</p>';
+    return;
+  }
+  const catLabel = { je: STRINGS[lang].pecJe, nous: STRINGS[lang].pecNous, certains: STRINGS[lang].pecCertains, impersonnel: STRINGS[lang].pecImpersonnel };
+  panel.innerHTML = '';
+  pecMarkers.forEach(m=>{
+    const row = document.createElement('div');
+    row.className = 'entry';
+    const badge = document.createElement('span');
+    badge.className = 'op-badge';
+    badge.textContent = catLabel[m.category] || m.category;
+    const txt = document.createElement('span');
+    txt.textContent = '« ' + m.text + ' »';
+    row.appendChild(badge);
+    row.appendChild(txt);
+    if(m.risk){
+      const riskBadge = document.createElement('span');
+      riskBadge.className = 'risk-badge medium' + (m.source === 'ai' ? ' ai-src' : '');
+      riskBadge.textContent = (m.source === 'ai' ? STRINGS[lang].aiSrc + ' · ' : '') + m.risk.label;
+      row.appendChild(riskBadge);
+    }
+    panel.appendChild(row);
+  });
+}
+
+function buildAISystemPrompt(){
+  const opsList = OPS[lang].map(o => `${o.id} : ${o.desc} (ex. ${o.example})`).join('\n');
+  // the last authentic example duplicated the [terme] de [terme] rule, now stated once in step 5
+  const fewshot = REAL_EXAMPLES_FR.slice(0, 6).map(e => `- "${e.text}" \u2192 ${e.set}`).join('\n');
+  return [
+    "Tu es un analyste appliquant la logique naturelle de Jean-Blaise Grize, dans la formalisation de Jean Charconnet (thèse, 1999, Paris VIII). Tu décris comment un texte construit ses notions, et tu repères les assimilations que le locuteur commet sans les marquer.",
+    "Les 14 opérations de base :",
+    opsList,
+    "Deux opérations énonciatives s’y ajoutent : λ, l’insertion d’un discours autre (citation, discours rapporté, croyance attribuée) ; σ, la polyopération de prise en charge, par laquelle le locuteur endosse, tient à distance ou rejette ce qu’il énonce.",
+    "Exemples authentiques du corpus de la thèse :",
+    fewshot,
+    "",
+    "1. NOTIONS (α). Liste toutes les notions que le texte ancre réellement, sans présupposer qu’il y en a deux : un texte peut n’en ancrer qu’une — texte monadique, résultat normal —, deux, ou davantage (θ5 à discours intermédiaire). Identifiant \"N1\", \"N2\"… et étiquette de 1 à 4 mots, style \"/NOTION/\". N’invente jamais une notion que le texte ne pose pas : ce serait commettre le biais que cet outil détecte.",
+    "2. PRISE EN CHARGE (σ, tableau \"pec\"). Pour les passages significatifs — en priorité ceux qui portent sur une notion empruntée ou une assimilation —, décris l’attitude de l’AUTEUR DU TEXTE ENTIER, jamais celle de la personne citée envers ses propres mots. \"source\" : locuteur (en son nom propre) | nommee | vague (\"on\", \"certains\", \"les experts\", \"des études\") | effacee (tournure impersonnelle qui rend la source introuvable). \"adhesion\" : totale | partielle (concession, restriction) | suspendue (rapporté sans se prononcer) | contestee (mise en cause du point de vue du premier concepteur de la notion) | refutee. \"modalite\" : le marqueur de modalisation, ou null. \"fonction\" : autorite (l’auteur s’appuie sur la source pour étayer SA thèse) | concession | refutation | rapport | null. Un journaliste qui rapporte une citation sans la commenter : adhésion suspendue, fonction rapport. \"risk\" d’une entrée σ : pour une source effacee ou vague, ou locuteur sans appui, risk medium si aucune justification n’apparaît dans la même phrase ou une phrase proche — source nommée, donnée vérifiable, raisonnement explicite (y compris a fortiori ou conditionnel : \"si trois chercheurs ont pu le faire, nous devons supposer…\"), renvoi à un fait établi dans le texte ; une reformulation ou une autre tournure vague ne justifie rien. Signale toujours une autorité invoquée sans source identifiable (\"des études montrent\", \"research shows\") avec adhésion totale : c’est un λ sans source. Sinon risk null.",
+    "3. MARQUAGE ET RISQUE — règle qui s’applique aux étapes 4 et 5. Principe directeur : une assimilation non marquée est un risque par défaut, même bien établie et souvent répétée en vulgarisation. Pour chaque assimilation candidate (ρ3, θ5, θ4, emprunt de vocabulaire à une autre notion), décide dans cet ordre :",
+    "(a) MENTION OU USAGE — si le texte parle de la métaphore au lieu de l’employer (modalisation autonymique : terme court entre guillemets de distance ; cadre métalinguistique \"X are called Y\", \"referred to as\", \"the term\", \"the Y metaphor\", \"on appelle\", \"le terme\" ; inventaire de métaphores proposées par d’autres) : c’est une mention, risk null. Le même terme repris ensuite hors guillemets dans la voix du locuteur redevient un usage.",
+    "(b) NÉGATION — si le rapprochement est nié ou refusé (\"X, not Y\", \"ne… pas\", \"rather than\", \"contrairement à\") : risk null, c’est un marquage fort.",
+    "(c) λ — si l’assimilation se trouve dans un discours inséré (citation de toute forme, discours rapporté, croyance attribuée, conditionnel, formule de cadrage : \"should be considered\", \"so-called\", \"qualifié de\") : l’adhésion σ de l’auteur décide. Suspendue, contestée ou réfutée : risk null. Partielle : au plus medium. Totale, surtout en fonction autorité (\"comme l’a montré X, le génome est un texte\") : la citation légitime au lieu de protéger — signale l’assimilation comme non marquée.",
+    "(d) MARQUEUR LEXICAL — \"comme\", \"tel\", \"à la manière de\", ou verbe de dérivation (\"s’inspirer de\", \"imiter\", \"emprunter à\", \"calqué sur\", \"à l’image de\", \"par analogie avec\") : risk null, sauf si la suite reprend le rapprochement comme une identité — c’est alors la suite qu’on signale.",
+    "(e) LEXICALISATION — terme devenu l’unique désignation technique disponible dans son domaine, sans alternative littérale vivante (\"transcription\" en biologie moléculaire, \"neurone artificiel\", \"sandbox escape\") : risk null, et relève-le en mnémonique (étape 6). Mais si le cadre syntaxique lui prête un motif, une intention ou un sentiment (\"why its agents escaped\", \"wanted to\", \"pourquoi il s’est échappé\"), la métaphore morte est réanimée : signale-la en θ5 en citant ce cadre. Un terme seulement fréquent en vulgarisation (\"le génome est un texte\") n’est pas lexicalisé ; dans le doute, signale.",
+    "(f) Sinon : \"risk\":{\"level\":\"high\"|\"medium\",\"label\":\"<15 mots maximum>\"}.",
+    "RÈGLE CONTRAIGNANTE : chaque entrée de \"operations\" et de \"determinations\" porte un champ \"marquage\" qui dit LEQUEL de ces cas s\u2019applique, décidé AVANT le risque — \"mention\" (a), \"negation\" (b), \"lambda_distance\" (c, adhésion suspendue, contestée ou réfutée), \"lambda_endosse\" (c, adhésion totale, surtout en fonction autorité), \"marqueur_lexical\" (d), \"lexicalise\" (e), ou \"aucun\" (f). Un \"risk\" non null n\u2019est permis QUE si \"marquage\" vaut \"aucun\" ou \"lambda_endosse\" ; pour les cinq autres valeurs, \"risk\" est null sans exception, le principe directeur ne s\u2019appliquant qu\u2019au cas (f). Une analogie filée sur plusieurs phrases reste marquée si son marqueur est posé une fois (\"de la même manière que...\", \"ressemble à...\", \"s\u2019inspire de...\") : ne signale alors que les reprises ultérieures qui abandonnent le marqueur.",
+    "Un passage que σ tient à distance ne porte jamais de risque, ni dans \"operations\" ni dans \"determinations\".",
+    "4. OPÉRATIONS INTERNES (\"operations\"). Pour chaque notion, les opérations γ1-γ4 et θ0-θ4 qui l’enrichissent au fil du texte : une opération s’applique à UNE notion pour lui ajouter UN élément, format {notion} ↦ {notion, ajout}, jamais à une proposition entière. Jamais de ρ ni de θ5 ici. Si l’ajout importe le vocabulaire d’une autre notion ancrée, ce n’est pas une opération interne mais une détermination.",
+    "5. DÉTERMINATIONS (\"determinations\"). Seul lieu de ρ1-ρ4 et θ5 : uniquement quand le texte met en relation au moins deux notions distinctes et nommées, par ressemblance, comparaison ou catégorisation commune ; sinon tableau vide. Formes souvent manquées : (a) le syntagme \"[terme de B] de [terme de A]\" (\"le texte de notre génome\") — ρ3, l’assimilation se fait par la construction syntaxique elle-même ; (b) le terme qui nomme ce que deux notions ont en commun (\"enchaînement\", \"système\", \"code\") — θ5 ; (c) les reprises recatégorisantes, quel que soit le déterminant — démonstratif, défini, possessif, reprise nominale (\"cette intelligence\" pour l’IA, \"nos progénitures numériques\", \"these digital offspring\", \"such minds\") — θ5 non marqué, y compris dans une conclusion qui semble seulement récapituler ; (d) θ5 en préambule, qui pose d’avance une catégorie commune pour légitimer une assimilation énoncée plus loin : risk medium, label \"θ5 en préambule, légitime une assimilation à venir\". Ne classe jamais en ρ3 ou θ5 une simple erreur de référence — une entité remplacée par une autre du même type, comme \"Metallica\" pour \"Megadeth\" : une seule notion est en jeu.",
+    "Pour les étapes 4 et 5 : \"ajout\" est un extrait copié mot pour mot du texte, guillemets compris (1 à 6 mots pour une opération interne) ; \"pec_ref\" est l’index (à partir de 0) de l’entrée \"pec\" concernée si le passage — ou l’argument qu’il rapporte ou commente — y est décrit, sinon null.",
+    "6. MNÉMONIQUES DE SOUHAIT (McDermott, \"mnemoniques\"). Termes techniques d’origine humaine que le locuteur EMPLOIE (et non mentionne) dans leur sens consacré — \"training\", \"learning\", \"reward\", \"agent\", \"attention\", \"reasoning\", \"hallucination\", \"apprentissage\"… Hors calcul de risque : on les observe. {\"terme\":\"<forme exacte>\",\"domaine_source\":\"<domaine humain d’origine, 1 à 3 mots>\"}, 6 au plus.",
+    "7. À VÉRIFIER (\"a_verifier\"). Affirmations factuelles avancées sans source et impossibles à trancher depuis le texte seul : exploits, records ou premières attribués à une notion, chiffres précis, événements récents présentés comme établis. {\"text\":\"<extrait exact, dans une seule phrase, sans reformuler>\",\"raison\":\"<10 mots maximum>\"}. Ce n’est pas un verdict : n’affirme jamais qu’une affirmation est fausse ou mal attribuée ; relis l’extrait, et dis seulement pourquoi une vérification externe serait utile. Hors calcul de risque.",
+    "8. VERDICT (\"risque_global\", décidé en dernier). true si une opération ou une détermination de niveau high porte sur l’assimilation centrale du texte, ou si au moins deux risques subsistent, medium compris ; false si les risques éventuels sont isolés et périphériques. En cas de doute réel, true.",
+    "",
+    "SORTIE. Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ou après ni balises markdown, en produisant les sections dans cet ordre exact :",
+    "{\"notions\":[{\"id\":\"N1\",\"label\":\"...\"}],\"pec\":[{\"text\":\"<extrait exact>\",\"source\":\"locuteur|nommee|vague|effacee\",\"adhesion\":\"totale|partielle|suspendue|contestee|refutee\",\"modalite\":\"<marqueur>\"|null,\"fonction\":\"autorite|concession|refutation|rapport\"|null,\"risk\":{\"level\":\"medium\",\"label\":\"<15 mots maximum>\"}|null}],\"operations\":[{\"notion_id\":\"N1\",\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"determinations\":[{\"notion_ids\":[\"N1\",\"N2\"],\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"ρ3|θ5|...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"mnemoniques\":[{\"terme\":\"...\",\"domaine_source\":\"...\"}],\"a_verifier\":[{\"text\":\"...\",\"raison\":\"<10 mots maximum>\"}],\"risque_global\":true|false}",
+    "Au plus 8 entrées au total entre \"operations\" et \"determinations\", et 6 dans \"pec\". Rédige \"label\" et \"notion\" dans la langue du texte analysé ; \"ajout\" et \"text\" restent des copies exactes du texte source. Le JSON doit toujours être complet et valide, quitte à raccourcir les labels ; aucun raisonnement hors du JSON.",
+  ].join('\n');
+}
+
+function findTokenRangeForText(snippet){
+  if(!snippet) return null;
+  let idx = fullTextGlobal.indexOf(snippet);
+  if(idx === -1) idx = fullTextGlobal.toLowerCase().indexOf(snippet.toLowerCase());
+  if(idx === -1) return null;
+  const end = idx + snippet.length;
+  const idxs = [];
+  tokens.forEach((t,i)=>{
+    const tStart = offsets[i], tEnd = tStart + t.length;
+    if(/^\s+$/.test(t)) return;
+    if(tStart < end && tEnd > idx) idxs.push(i);
+  });
+  return idxs.length ? idxs : null;
+}
+
+function applyNotionSuggestion(themeSuggestion, phoreSuggestion){
+  const themeInput = document.getElementById('notion-theme');
+  const phoreInput = document.getElementById('notion-phore');
+  const isDefaultTheme = themeInput.value === STRINGS.fr.defaultTheme || themeInput.value === STRINGS.en.defaultTheme || themeInput.value.trim() === '';
+  const isDefaultPhore = phoreInput.value === STRINGS.fr.defaultPhore || phoreInput.value === STRINGS.en.defaultPhore || phoreInput.value.trim() === '';
+  let applied = false;
+  if(isDefaultTheme && themeSuggestion){ themeInput.value = themeSuggestion; applied = true; }
+  if(isDefaultPhore && phoreSuggestion){ phoreInput.value = phoreSuggestion; applied = true; }
+  document.getElementById('name-theme-out').textContent = themeInput.value || '/THEME/';
+  document.getElementById('name-phore-out').textContent = phoreInput.value || '/PHORE/';
+  renderClasses();
+  return applied;
+}
+
+async function callClaudeJSON(systemPrompt, userPrompt, strict, tentativeRateLimit){
+  tentativeRateLimit = tentativeRateLimit || 0;
+  const finalSystem = strict
+    ? systemPrompt + '\n\nRappel impératif : réponse ultra-courte exigée. Chaque "label" doit tenir en 5 mots maximum, ou null. Ne dépasse jamais 4 opérations dans "operations".'
+    : systemPrompt;
+  const fetchPromise = fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 8000,
+      system: finalSystem,
+      messages: [{ role:'user', content: userPrompt }]
+    })
+  });
+  const timeoutPromise = new Promise((_, reject)=>{
+    setTimeout(()=> reject(new Error('délai dépassé (90s)')), 90000);
+  });
+  const response = await Promise.race([fetchPromise, timeoutPromise]);
+  if(response.status === 429 && tentativeRateLimit < 4){
+    const attente = 3000 * Math.pow(2, tentativeRateLimit); // 3s, 6s, 12s, 24s
+    await new Promise(res => setTimeout(res, attente));
+    return callClaudeJSON(systemPrompt, userPrompt, strict, tentativeRateLimit + 1);
+  }
+  if(!response.ok){
+    const errText = await response.text().catch(()=>'');
+    throw new Error('HTTP ' + response.status + ' ' + errText.slice(0,200));
+  }
+  const data = await response.json();
+  if(data.error){
+    throw new Error(data.error.message || JSON.stringify(data.error).slice(0,200));
+  }
+  const raw = (data.content || []).map(b => b.text || '').join('');
+  return raw.replace(/```json|```/g, '').trim();
+}
+
+async function callClaudeJSONWithRetry(systemPrompt, userPrompt){
+  let clean = await callClaudeJSON(systemPrompt, userPrompt, false);
+  try{
+    return JSON.parse(clean);
+  }catch(e){
+    // première tentative invalide (probablement tronquée) - on retente une fois en plus strict
+  }
+  clean = await callClaudeJSON(systemPrompt, userPrompt, true);
+  return JSON.parse(clean); // laisse remonter l'erreur si la deuxième tentative échoue aussi
+}
+
+async function analyzeWithAI(){
+  if(tokens.length === 0 || aiLoading) return;
+  aiLoading = true;
+  let lastErrorDetail = '';
+  updateAIStatus();
+  try{
+    const notionTheme = document.getElementById('notion-theme').value || '/THEME/';
+    const notionPhore = document.getElementById('notion-phore').value || '/PHORE/';
+    const systemPrompt = buildAISystemPrompt();
+    const userPrompt = `Thème (fixé par l'utilisateur, peut être ajusté si besoin) : ${notionTheme}\nPhore (fixé par l'utilisateur, peut être ajusté si besoin) : ${notionPhore}\n\nTexte à analyser :\n${fullTextGlobal}`;
+    let parsed;
+    try{
+      parsed = await callClaudeJSONWithRetry(systemPrompt, userPrompt);
+    }catch(parseErr){
+      throw new Error('JSON invalide reçu (après 2 tentatives) : ' + String(parseErr.message||parseErr).slice(0,150));
+    }
+    // --- compatibilité : le nouveau schéma renvoie "notions" (N dynamique) + "operations" (internes) + "determinations" (relationnelles \u03c1/\u03b85)
+    // le mode texte seul reste affiché sur deux colonnes fixes (thème/phore) en attendant sa propre généralisation.
+    const notionsArr = Array.isArray(parsed) ? [] : (parsed.notions || []);
+    const themeId = notionsArr[0] && notionsArr[0].id;
+    const themeSuggestion = notionsArr[0] && notionsArr[0].label;
+    const phoreSuggestion = notionsArr[1] && notionsArr[1].label;
+    const opsArr = Array.isArray(parsed) ? parsed : (parsed.operations || []);
+    const detArr = Array.isArray(parsed) ? [] : (parsed.determinations || []);
+    let notionApplied = false;
+    if(themeSuggestion || phoreSuggestion){
+      notionApplied = applyNotionSuggestion(themeSuggestion, phoreSuggestion);
+    }
+    const opsAsTheme = opsArr.map(p=>({...p, classe: (p.notion_id === themeId || notionsArr.length < 2) ? 'theme' : 'phore'}));
+    const detsAsPhore = detArr.map(p=>({...p, classe: 'phore', notion_id: (p.notion_ids && p.notion_ids[0]) }));
+    aiCandidates = [...opsAsTheme, ...detsAsPhore].map(p=>{
+      const ajoutText = p.ajout || p.text;
+      const idxs = findTokenRangeForText(ajoutText);
+      if(!idxs) return null;
+      return { indices: idxs, op: p.op, classe: p.classe, risk: p.risk || null, notion: p.notion || null };
+    }).filter(Boolean);
+    let addedCount = 0;
+    aiCandidates.forEach(c=>{
+      if(findTagFor(c.indices[0])) return;
+      const cls = c.classe === 'phore' ? 'phore' : 'theme';
+      const text = c.indices.map(i=>tokens[i]).join('');
+      entries[cls].push({ op:c.op, text:text, indices:c.indices, aiRisk: c.risk || null, notion: c.notion || null });
+      addedCount++;
+    });
+    const pecArr = Array.isArray(parsed) ? [] : (parsed.pec || []);
+    const srcToCat = { locuteur:'je', nommee:'certains', vague:'certains', effacee:'impersonnel' };
+    pecMarkers = pecArr.map(p=>({ text: p.text, category: p.category || srcToCat[p.source] || 'impersonnel', risk: p.risk || null, source: 'ai' }));
+    aiLoading = false;
+    updateAIStatus(false, notionApplied, null, addedCount);
+    renderTokens();
+    renderClasses();
+    renderPEC();
+  }catch(e){
+    aiLoading = false;
+    lastErrorDetail = e && e.message ? e.message : String(e);
+    updateAIStatus(true, false, lastErrorDetail);
+  }
+}
+
+function updateAIStatus(isError, notionApplied, detail, addedCount){
+  const el = document.getElementById('ai-status');
+  if(!el) return;
+  if(aiLoading){ el.textContent = STRINGS[lang].aiLoading; return; }
+  if(isError){ el.textContent = STRINGS[lang].aiError + (detail ? ' (' + detail + ')' : ''); return; }
+  let msg = '';
+  if(addedCount){ msg = STRINGS[lang].aiAutoAdded.replace('{n}', addedCount); }
+  if(notionApplied){ msg = (msg ? msg + ' ' : '') + STRINGS[lang].aiNotionApplied; }
+  el.textContent = msg;
+}
+
+async function analyzeOneForBatch(texte){
+  const systemPrompt = buildAISystemPrompt();
+  const userPrompt = `Texte à analyser :\n${texte}`;
+  const parsed = await callClaudeJSONWithRetry(systemPrompt, userPrompt);
+  const notions = Array.isArray(parsed) ? [] : (parsed.notions || []);
+  const ops = Array.isArray(parsed) ? parsed : (parsed.operations || []);
+  const dets = Array.isArray(parsed) ? [] : (parsed.determinations || []);
+  const pec = Array.isArray(parsed) ? [] : (parsed.pec || []);
+  const aVerifier = Array.isArray(parsed) ? [] : (parsed.a_verifier || []);
+  const mnemoniques = Array.isArray(parsed) ? [] : (parsed.mnemoniques || []);
+  const nNeutralises = enforceMarquage(ops, dets) + enforceSigmaCoherence(ops, dets, pec) + enforceAutonymy(ops, dets, texte);
+  const nIntrouvables = checkExtracts(texte, ops, dets, pec, aVerifier);
+  // recomputed rather than trusted: the model states the rule but applies it unevenly
+  const risqueDetecte = computeGlobalVerdict(ops, dets, pec);
+  return {
+    double_alpha: Array.isArray(parsed) ? null : (parsed.double_alpha ?? null),
+    n_notions: notions.length,
+    n_operations_internes: ops.length,
+    n_determinations: dets.length,
+    risk_detected: risqueDetecte,
+    notions: notions,
+    operations: ops,
+    determinations: dets,
+    pec: pec,
+    a_verifier: aVerifier,
+    mnemoniques: mnemoniques,
+    n_neutralises_sigma: nNeutralises,
+    n_extraits_introuvables: nIntrouvables
+  };
+}
+
+// Deterministic coherence between sigma (stance-taking) and the risks of operations/determinations:
+// a risk attached to a passage that sigma classes as held at a distance (suspended, contested, refuted, or plain report)
+// is neutralised. The original risk is kept for transparency.
+function normForMatch(t){
+  return String(t||'').toLowerCase()
+    .replace(/[\u2018\u2019\u201c\u201d\u00ab\u00bb"'`]/g,' ')
+    .replace(/[.,;:!?()\[\]\u2014\u2013-]/g,' ')
+    .replace(/\s+/g,' ').trim();
+}
+// Deterministic global verdict: a remaining high risk, or at least two remaining risks (medium included).
+function computeGlobalVerdict(ops, dets, pec){
+  const risks = [...(ops||[]), ...(dets||[]), ...(pec||[])].map(o => o.risk).filter(Boolean);
+  return risks.some(r => r.level === 'high') || risks.length >= 2;
+}
+
+// A risk is admissible only where the model itself recorded that nothing marks the assimilation.
+const MARQUAGE_NEUTRALISANT = new Set(['mention','negation','lambda_distance','marqueur_lexical','lexicalise']);
+function enforceMarquage(ops, dets){
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(o.risk && MARQUAGE_NEUTRALISANT.has(o.marquage)){
+      o.risk_avant_marquage = o.risk; o.risk = null; o.neutralise_marquage = true; n++;
+    }
+  });
+  return n;
+}
+
+function enforceSigmaCoherence(ops, dets, pec){
+  const isDistant = p => p && (['suspendue','contestee','refutee'].includes(p.adhesion) || p.fonction === 'rapport');
+  let nRef = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!o.risk || o.pec_ref === null || o.pec_ref === undefined) return;
+    const ref = (pec||[])[Number(o.pec_ref)];
+    if(isDistant(ref)){
+      o.risk_avant_sigma = o.risk; o.risk = null; o.neutralise_sigma = true; nRef++;
+    }
+  });
+  const distant = (pec||[]).filter(isDistant);
+  if(!distant.length) return nRef;
+  const zones = distant.map(p => normForMatch(p.text)).filter(z => z.length > 0);
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!o.risk) return;
+    const a = normForMatch(o.ajout || o.text);
+    if(a.split(' ').length < 2) return;           // too short to match reliably
+    if(zones.some(z => z.includes(a) || (a.length > 40 && a.includes(z)))){
+      o.risk_avant_sigma = o.risk;
+      o.risk = null;
+      o.neutralise_sigma = true;
+      n++;
+    }
+  });
+  return n + nRef;
+}
+
+// Deterministic mention/use check (autonymy): a risk is neutralised when most of the content
+// words of its extract appear inside quotation marks in the source text.
+const STOP_AUTO = new Set(['that','this','with','have','from','they','their','which','what','when','dans','avec','pour','sont','cette','comme','mais','plus','leur','leurs','elle','nous','vous','être','avoir','qui','que','des','les','une','the','and','are','was','were','been','into','such']);
+function quotedSpans(text){
+  const spans = [];
+  const re = /[\u201c"\u00ab]([^\u201c\u201d"\u00ab\u00bb]{1,400})[\u201d"\u00bb]|\u2018([^\u2018\u2019]{1,80})\u2019/g;
+  // only short quoted terms (<= 3 words) count as autonymic mention; longer quotations are reported
+  // discourse (lambda), judged by sigma adhesion so that authority-backed endorsement is not laundered
+  let m; while((m = re.exec(String(text||''))) !== null){
+    const sp = normForMatch(m[1] || m[2]);
+    if(sp && sp.split(' ').length <= 3) spans.push(sp);
+  }
+  return spans;
+}
+// Integrity: every extract the model returns must actually occur in the source text.
+// Paraphrased, merged or invented extracts are flagged (not deleted), so they stay visible.
+function checkExtracts(texte, ops, dets, pec, aVerifier){
+  const src = ' ' + normForMatch(texte) + ' ';
+  let n = 0;
+  const check = (o, field) => {
+    const e = normForMatch(o[field]);
+    if(!e) return;
+    const core = e.replace(/\s*\u2026\s*/g,' ').trim();
+    const ok = src.includes(' ' + core + ' ') || src.includes(core) ||
+      core.split(/\s{2,}|\.\.\./).every(part => !part.trim() || src.includes(part.trim()));
+    if(!ok){ o.extrait_introuvable = true; n++; }
+  };
+  (ops||[]).forEach(o => check(o, 'ajout'));
+  (dets||[]).forEach(o => check(o, 'ajout'));
+  (pec||[]).forEach(o => check(o, 'text'));
+  (aVerifier||[]).forEach(o => check(o, 'text'));
+  return n;
+}
+
+function enforceAutonymy(ops, dets, texte){
+  const spans = quotedSpans(texte);
+  if(!spans.length) return 0;
+  const inQuotes = w => spans.some(sp => (' ' + sp + ' ').includes(' ' + w + ' '));
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!o.risk) return;
+    const words = normForMatch(o.ajout || o.text).split(' ').filter(w => w.length >= 4 && !STOP_AUTO.has(w));
+    if(words.length < 1) return;
+    const q = words.filter(inQuotes).length;
+    if(q >= 2 || (q >= 1 && words.length <= 2)){
+      o.risk_avant_autonymie = o.risk; o.risk = null; o.neutralise_autonymie = true; n++;
+    }
+  });
+  return n;
+}
+
+async function runBatch(){
+  const raw = document.getElementById('batch-input').value.trim();
+  if(!raw){
+    document.getElementById('batch-status').textContent = STRINGS[lang].batchError;
+    return;
+  }
+  let exemples;
+  try{
+    const parsedInput = JSON.parse(raw);
+    if(Array.isArray(parsedInput)){
+      exemples = parsedInput;
+    }else if(typeof parsedInput === 'object' && parsedInput.texte){
+      exemples = [parsedInput]; // un seul objet JSON plutôt qu'un tableau
+    }else{
+      exemples = [{ id: null, texte: raw, verite_terrain: null }];
+    }
+  }catch(e){
+    // pas du JSON valide : on traite l'entrée comme un texte brut unique
+    exemples = [{ id: null, texte: raw, verite_terrain: null }];
+  }
+
+  const statusEl = document.getElementById('batch-status');
+  const resultsEl = document.getElementById('batch-results');
+  resultsEl.innerHTML = '';
+  const resultats = [];
+  lastBatchResults = resultats; // référence partagée, se remplit au fur et à mesure
+
+  const cardsContainer = document.createElement('div');
+  cardsContainer.className = 'batch-cards';
+  resultsEl.appendChild(cardsContainer);
+  const summaryEl = document.createElement('div');
+  summaryEl.className = 'batch-summary';
+  resultsEl.appendChild(summaryEl);
+
+  for(let i = 0; i < exemples.length; i++){
+    const ex = exemples[i];
+    statusEl.textContent = STRINGS[lang].batchRunning.replace('{n}', i+1).replace('{total}', exemples.length);
+    let r;
+    try{
+      r = await analyzeOneForBatch(ex.texte || '');
+      r = { ...ex, ...r };
+    }catch(e){
+      r = { ...ex, double_alpha: null, n_theme_ops: null, n_phore_ops: null, risk_detected: null, erreur: e.message };
+    }
+    resultats.push(r);
+    appendBatchCard(cardsContainer, r);
+    updateBatchSummary(summaryEl, resultats);
+    await new Promise(res => setTimeout(res, 1200));
+  }
+
+  statusEl.textContent = STRINGS[lang].batchDone;
+}
+
+function exportBatchResults(){
+  if(!lastBatchResults || lastBatchResults.length === 0) return;
+  const blob = new Blob([JSON.stringify(lastBatchResults, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'resultats_batch_' + new Date().toISOString().slice(0,19).replace(/[:T]/g,'-') + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+document.getElementById('btn-batch-export').addEventListener('click', exportBatchResults);
+
+function escapeHtmlBatch(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderBatchOpsForNotion(ops, notionId){
+  const filtered = (ops || []).filter(o => o.notion_id === notionId);
+  if(filtered.length === 0) return '<span class="batch-op-empty">—</span>';
+  return filtered.map(o=>{
+    const notion = escapeHtmlBatch(o.notion || '?');
+    const ajout = escapeHtmlBatch(o.ajout || '');
+    const riskBadge = o.risk ? `<span class="batch-op-risk ${o.risk.level==='high'?'risque-oui':'risque-ambigu'}">${escapeHtmlBatch(o.risk.label||'')}</span>` : '';
+    const neutral = o.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(o.marquage||'')})</span>` : (o.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (o.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : ''));
+    return `<div class="batch-op-line"><span class="batch-op-tag">${escapeHtmlBatch(o.op||'')}</span> {${notion}} \u21a6 {${notion}, ${ajout}}${riskBadge}${neutral}${o.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}</div>`;
+  }).join('');
+}
+
+function renderBatchDeterminations(dets, notions){
+  if(!dets || dets.length === 0) return `<span class="batch-op-empty">${STRINGS[lang].batchDetsNone}</span>`;
+  const labelFor = id => { const n = (notions||[]).find(x=>x.id===id); return n ? n.label : id; };
+  return dets.map(d=>{
+    const notion = escapeHtmlBatch(d.notion || '?');
+    const ajout = escapeHtmlBatch(d.ajout || '');
+    const refs = (d.notion_ids||[]).map(labelFor).map(escapeHtmlBatch).join(' + ');
+    const riskBadge = d.risk ? `<span class="batch-op-risk ${d.risk.level==='high'?'risque-oui':'risque-ambigu'}">${escapeHtmlBatch(d.risk.label||'')}</span>` : '';
+    const neutral = d.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(d.marquage||'')})</span>` : (d.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (d.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : ''));
+    return `<div class="batch-op-line"><span class="batch-op-tag">${escapeHtmlBatch(d.op||'')}</span> [${refs}] \u2192 {${notion}, ${ajout}}${riskBadge}${neutral}${d.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}</div>`;
+  }).join('');
+}
+
+function appendBatchCard(container, r){
+  const correct = r.verite_terrain
+    ? ((r.verite_terrain === 'hallucination_confirmee') === !!r.risk_detected)
+    : null;
+  const card = document.createElement('div');
+  card.className = 'batch-card ' + (correct === true ? 'ok' : (correct === false ? 'bad' : ''));
+
+  const citationTxt = escapeHtmlBatch(r.texte || '');
+  const erreurLigne = r.erreur ? `<div class="batch-card-erreur">Erreur : ${escapeHtmlBatch(String(r.erreur).slice(0,300))}</div>` : '';
+
+  const risqueClasse = r.risk_detected === true ? 'risque-oui' : (r.risk_detected === false ? 'risque-non' : 'risque-ambigu');
+  const risqueTexte = r.risk_detected === true ? 'true' : (r.risk_detected === false ? 'false' : String(r.risk_detected));
+
+  const notions = r.notions || [];
+  const notionColsHtml = notions.length === 0
+    ? '<span class="batch-op-empty">— aucune notion détectée —</span>'
+    : notions.map(n => `
+      <div class="batch-class-col">
+        <div class="batch-class-label">${escapeHtmlBatch(n.id)} — ${escapeHtmlBatch(n.label)}</div>
+        ${renderBatchOpsForNotion(r.operations, n.id)}
+      </div>`).join('');
+  const detsHtml = renderBatchDeterminations(r.determinations, notions);
+  const S = STRINGS[lang];
+  const mnemoHtml = (r.mnemoniques && r.mnemoniques.length) ? `
+    <div class="batch-card-mnemo">
+      <div class="batch-class-label">${S.batchMnemoHeader}</div>
+      ${r.mnemoniques.map(m => `<span class="batch-mnemo-chip">${escapeHtmlBatch(m.terme||'')}${m.domaine_source ? ` <em>\u2190 ${escapeHtmlBatch(m.domaine_source)}</em>` : ''}</span>`).join(' ')}
+    </div>` : '';
+  const sigmaHtml = (r.pec && r.pec.length) ? `
+    <div class="batch-card-sigma">
+      <div class="batch-class-label">${S.batchSigmaHeader}</div>
+      ${r.pec.map(p => {
+        const adh = p.adhesion || '';
+        const meta = [ (S.sigmaSource||{})[p.source] || p.source || p.category, p.fonction ? ((S.sigmaFonction||{})[p.fonction] || p.fonction) : null, p.modalite ? '\u00ab ' + escapeHtmlBatch(p.modalite) + ' \u00bb' : null ].filter(Boolean).join(' \u00b7 ');
+        const riskBadge = p.risk ? `<span class="batch-op-risk ${p.risk.level==='high'?'risque-oui':'risque-ambigu'}">${escapeHtmlBatch(p.risk.label||'')}</span>` : '';
+        return `<div class="batch-op-line"><span class="batch-sigma-tag adh-${escapeHtmlBatch(adh)}">${escapeHtmlBatch((S.sigmaAdhesion||{})[adh] || adh || '\u03c3')}</span> ${escapeHtmlBatch(p.text||'')}${p.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}<div class="batch-sigma-meta">${meta}</div>${riskBadge}</div>`;
+      }).join('')}
+    </div>` : '';
+  const verifHtml = (r.a_verifier && r.a_verifier.length) ? `
+    <div class="batch-card-verif">
+      <div class="batch-class-label">${STRINGS[lang].batchVerifHeader}</div>
+      ${r.a_verifier.map(v => `<div class="batch-op-line"><span class="batch-verif-tag">?</span> ${escapeHtmlBatch(v.text||'')}${v.raison ? ` <span class="batch-verif-reason">— ${escapeHtmlBatch(v.raison)}</span>` : ''}${v.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}</div>`).join('')}
+    </div>` : '';
+
+  card.innerHTML = `
+    <div class="batch-card-head">
+      <span class="batch-card-id">${r.id||''}</span>
+      <span class="batch-card-verdict">${correct === true ? '✓ cohérent' : (correct === false ? '✗ désaccord' : '')}</span>
+    </div>
+    <div class="batch-card-citation">« ${citationTxt} »</div>
+    <div class="batch-card-vars">
+      ${r.verite_terrain ? `<div><span class="batch-var-label">${STRINGS[lang].batchLabelVerite}</span>${r.verite_terrain}</div>` : ''}
+      <div><span class="batch-var-label">${STRINGS[lang].batchLabelRisque}</span><span class="${risqueClasse}">${risqueTexte}</span></div>
+      <div><span class="batch-var-label">${STRINGS[lang].batchLabelNotions}</span>${r.n_notions ?? ''}</div>
+      <div><span class="batch-var-label">${STRINGS[lang].batchLabelDets}</span>${r.n_determinations ?? ''}</div>
+      ${(r.double_alpha === true || r.double_alpha === false) ? `<div><span class="batch-var-label">${STRINGS[lang].batchLabelDoubleAlpha}</span>${r.double_alpha}</div>` : ''}
+    </div>
+    <div class="batch-card-classes">
+      ${notionColsHtml}
+    </div>
+    <div class="batch-card-dets">
+      <div class="batch-class-label">${STRINGS[lang].batchDetsHeader}</div>
+      ${detsHtml}
+    </div>
+    ${sigmaHtml}
+    ${mnemoHtml}
+    ${verifHtml}
+    ${erreurLigne}
+  `;
+  container.appendChild(card);
+  card.scrollIntoView({ block: 'nearest' });
+}
+
+function updateBatchSummary(summaryEl, resultats){
+  const aucuneVeriteTerrainFournie = resultats.every(r => !r.verite_terrain);
+  if(aucuneVeriteTerrainFournie){
+    summaryEl.innerHTML = resultats.length > 1 ? `<div>${resultats.length} ${STRINGS[lang].batchNoGroundTruth}</div>` : '';
+    summaryEl.style.display = resultats.length > 1 ? '' : 'none';
+    return;
+  }
+  const valides = resultats.filter(r => r.risk_detected !== null && r.verite_terrain);
+  let vp=0, fp=0, vn=0, fn=0;
+  valides.forEach(r=>{
+    const attendu = r.verite_terrain === 'hallucination_confirmee';
+    if(attendu && r.risk_detected) vp++;
+    else if(attendu && !r.risk_detected) fn++;
+    else if(!attendu && r.risk_detected) fp++;
+    else vn++;
+  });
+  const precision = (vp+fp) ? (vp/(vp+fp)) : NaN;
+  const rappel = (vp+fn) ? (vp/(vp+fn)) : NaN;
+  const f1 = (precision+rappel) ? (2*precision*rappel/(precision+rappel)) : NaN;
+
+  function moyenneChamp(liste, champ){
+    const v = liste.filter(r=>r.verite_terrain==='hallucination_confirmee' && r[champ]!=null).map(r=>r[champ]);
+    const f = liste.filter(r=>r.verite_terrain==='reponse_correcte' && r[champ]!=null).map(r=>r[champ]);
+    const moy = a => a.length ? (a.reduce((s,x)=>s+x,0)/a.length).toFixed(2) : 'n/a';
+    return { moyVrai: moy(v), nVrai: v.length, moyFaux: moy(f), nFaux: f.length };
+  }
+  const notionsStats = moyenneChamp(valides, 'n_notions');
+  const detsStats = moyenneChamp(valides, 'n_determinations');
+
+  summaryEl.innerHTML = `
+    <div><strong>${valides.length}</strong> exemples valides sur ${resultats.length} traités jusqu'ici</div>
+    <div>VP: ${vp} · FP: ${fp} · VN: ${vn} · FN: ${fn}</div>
+    <div>Précision: <strong>${precision.toFixed(2)}</strong> · Rappel: <strong>${rappel.toFixed(2)}</strong> · F1: <strong>${f1.toFixed(2)}</strong></div>
+    <div style="margin-top:.75rem;">Moyenne nombre de notions — risque_attendu=true: ${notionsStats.moyVrai} (n=${notionsStats.nVrai}) · risque_attendu=false: ${notionsStats.moyFaux} (n=${notionsStats.nFaux})</div>
+    <div>Moyenne nombre de déterminations — risque_attendu=true: ${detsStats.moyVrai} (n=${detsStats.nVrai}) · risque_attendu=false: ${detsStats.moyFaux} (n=${detsStats.nFaux})</div>
+  `;
+}
+
+document.getElementById('btn-batch-run').addEventListener('click', runBatch);
+document.getElementById('btn-batch-clear').addEventListener('click', ()=>{
+  document.getElementById('batch-input').value = '';
+  document.getElementById('batch-results').innerHTML = '';
+  document.getElementById('batch-status').textContent = '';
+  lastBatchResults = [];
+});
+
+function aiCandidateFor(idx){ return aiCandidates.find(c=>c.indices.includes(idx)); }
+
+function selectAICandidate(cand){
+  selected = new Set(cand.indices);
+  pendingOp = cand.op;
+  currentCandidateOp = cand.op;
+  aiPendingRisk = cand.risk || null;
+  if(cand.classe === 'theme' || cand.classe === 'phore'){
+    pendingClasse = cand.classe;
+  }
+  updateSelectionUI();
+  renderTokens();
+  [...chipsOpEl.querySelectorAll('.chip')].forEach(x=>{ x.classList.toggle('on', x.dataset.op === cand.op); });
+  const opDef = OPS[lang].find(o=>o.id===cand.op);
+  if(opDef) opDescEl.textContent = opDef.desc + '  ' + opDef.example;
+  if(pendingClasse){
+    [...document.getElementById('chips-classe').children].forEach(x=>{
+      x.classList.toggle('on', x.dataset.classe === pendingClasse);
+      x.classList.toggle('theme-on', x.dataset.classe === pendingClasse && pendingClasse==='theme');
+      x.classList.toggle('phore-on', x.dataset.classe === pendingClasse && pendingClasse==='phore');
+    });
+  }
+}
+
+function renderTokens(){
+  renderedEl.innerHTML = '';
+  tokens.forEach((t, i)=>{
+    if(/^\s+$/.test(t)){ renderedEl.appendChild(document.createTextNode(t)); return; }
+    const span = document.createElement('span');
+    span.className = 'tok';
+    span.dataset.idx = i;
+    span.textContent = t;
+    if(selected.has(i)) span.classList.add('sel');
+    const tagged = findTagFor(i);
+    if(tagged) span.classList.add('tag-' + tagged.classe);
+    const cand = candidateFor(i);
+    const aiCand = aiCandidateFor(i);
+    if(aiCand && !tagged){
+      span.classList.add('cand-ai');
+      if(aiCand.indices[0] === i){ span.classList.add('first'); span.dataset.opLabel = aiCand.op; }
+      span.addEventListener('click', (e)=>{ e.stopPropagation(); selectAICandidate(aiCand); });
+    } else if(cand && !tagged){
+      span.classList.add('cand');
+      if(cand.indices[0] === i){ span.classList.add('first'); span.dataset.opLabel = cand.op; }
+      span.addEventListener('click', (e)=>{ e.stopPropagation(); selectCandidate(cand); });
+    } else {
+      span.addEventListener('click', ()=> toggleSelect(i));
+    }
+    renderedEl.appendChild(span);
+  });
+}
+
+function candidateFor(idx){ return candidates.find(c=>c.indices.includes(idx)); }
+
+function selectCandidate(cand){
+  selected = new Set(cand.indices);
+  pendingOp = cand.op;
+  currentCandidateOp = cand.op;
+  updateSelectionUI();
+  renderTokens();
+  [...chipsOpEl.querySelectorAll('.chip')].forEach(x=>{ x.classList.toggle('on', x.dataset.op === cand.op); });
+  const opDef = OPS[lang].find(o=>o.id===cand.op);
+  if(opDef) opDescEl.textContent = opDef.desc + '  ' + opDef.example;
+}
+
+function findTagFor(idx){
+  for(const cls of ['theme','phore']){
+    for(const e of entries[cls]){ if(e.indices.includes(idx)) return {classe:cls}; }
+  }
+  return null;
+}
+
+function toggleSelect(i){
+  currentCandidateOp = null;
+  if(selected.has(i)) selected.delete(i); else selected.add(i);
+  updateSelectionUI();
+  renderTokens();
+}
+
+function updateSelectionUI(){
+  if(selected.size === 0){ tagbarEl.classList.remove('active'); return; }
+  tagbarEl.classList.add('active');
+  const sorted = [...selected].sort((a,b)=>a-b);
+  const text = sorted.map(i=>tokens[i]).join('');
+  selTextEl.textContent = '\u00ab ' + text + ' \u00bb';
+}
+
+document.getElementById('btn-clear-sel').addEventListener('click', ()=>{
+  selected.clear(); pendingClasse = null; pendingOp = null; currentCandidateOp = null;
+  document.getElementById('tag-notion-input').value = '';
+  [...document.getElementById('chips-classe').children].forEach(x=>x.classList.remove('on','theme-on','phore-on'));
+  [...chipsOpEl.querySelectorAll('.chip')].forEach(x=>x.classList.remove('on'));
+  opDescEl.textContent = '';
+  updateSelectionUI();
+  renderTokens();
+});
+
+document.getElementById('btn-tag').addEventListener('click', ()=>{
+  if(selected.size === 0 || !pendingClasse || !pendingOp){
+    tagbarEl.style.borderColor = '#A32D2D';
+    setTimeout(()=>{ tagbarEl.style.borderColor = ''; }, 900);
+    return;
+  }
+  const sorted = [...selected].sort((a,b)=>a-b);
+  const text = sorted.map(i=>tokens[i]).join('');
+  if(currentCandidateOp && currentCandidateOp !== pendingOp){
+    learningLog.corrections.push({suggested: currentCandidateOp, actual: pendingOp, text: text, ts: Date.now()});
+    saveLog();
+  }
+  const notionInput = document.getElementById('tag-notion-input').value.trim();
+  const defaultNotion = pendingClasse === 'theme'
+    ? document.getElementById('notion-theme').value.trim()
+    : document.getElementById('notion-phore').value.trim();
+  const notionVal = (notionInput || defaultNotion || '').replace(/^\/|\/$/g, '');
+  entries[pendingClasse].push({op:pendingOp, text:text, indices:sorted, aiRisk: aiPendingRisk, notion: notionVal || null});
+  selected.clear(); pendingClasse = null; pendingOp = null; currentCandidateOp = null; aiPendingRisk = null;
+  document.getElementById('tag-notion-input').value = '';
+  [...document.getElementById('chips-classe').children].forEach(x=>x.classList.remove('on','theme-on','phore-on'));
+  [...chipsOpEl.querySelectorAll('.chip')].forEach(x=>x.classList.remove('on'));
+  opDescEl.textContent = '';
+  updateSelectionUI();
+  renderTokens();
+  renderClasses();
+});
+
+function renderClasses(){
+  const s = STRINGS[lang];
+  ['theme','phore'].forEach(cls=>{
+    const listEl = document.getElementById('list-' + cls);
+    const setEl = document.getElementById('set-' + cls);
+    const list = entries[cls];
+    if(list.length === 0){
+      listEl.innerHTML = '<p class="empty-hint">' + s.emptyHint + '</p>';
+      setEl.textContent = '';
+      if(cls === 'theme') document.getElementById('risk-theme').innerHTML = '';
+      return;
+    }
+    listEl.innerHTML = '';
+    const allRisks = [];
+    list.forEach(e=>{
+      const row = document.createElement('div');
+      row.className = 'entry';
+      const opBadge = document.createElement('span');
+      opBadge.className = 'op-badge';
+      opBadge.textContent = e.op;
+      const txt = document.createElement('span');
+      txt.textContent = e.notion ? ('{' + e.notion + '} \u21a6 {' + e.notion + ', ' + e.text + '}') : e.text;
+      row.appendChild(opBadge);
+      row.appendChild(txt);
+      if(cls === 'theme'){
+        const risks = evaluateEntryRisk(e);
+        risks.forEach(r=>{
+          const badge = document.createElement('span');
+          badge.className = 'risk-badge ' + r.level;
+          const labelSpan = document.createElement('span');
+          labelSpan.textContent = r.label;
+          badge.appendChild(labelSpan);
+          const fbOk = document.createElement('button');
+          fbOk.className = 'risk-fb-btn';
+          fbOk.textContent = '\u2713';
+          fbOk.title = STRINGS[lang].feedbackPertinent;
+          const fbNo = document.createElement('button');
+          fbNo.className = 'risk-fb-btn';
+          fbNo.textContent = '\u2717';
+          fbNo.title = STRINGS[lang].feedbackFauxPositif;
+          const note = document.createElement('span');
+          note.className = 'risk-fb-note';
+          const logFeedback = (judgment)=>{
+            learningLog.riskFeedback.push({riskLabel:r.label, entryOp:e.op, entryText:e.text, judgment, ts:Date.now()});
+            saveLog();
+            fbOk.disabled = true; fbNo.disabled = true;
+            note.textContent = STRINGS[lang].feedbackLogged;
+            renderJournal();
+          };
+          fbOk.addEventListener('click', ()=>logFeedback('pertinent'));
+          fbNo.addEventListener('click', ()=>logFeedback('faux-positif'));
+          badge.appendChild(fbOk);
+          badge.appendChild(fbNo);
+          badge.appendChild(note);
+          row.appendChild(badge);
+          allRisks.push(r);
+        });
+        if(e.aiRisk){
+          const aiBadge = document.createElement('span');
+          aiBadge.className = 'risk-badge ai-src ' + e.aiRisk.level;
+          aiBadge.textContent = STRINGS[lang].aiSrc + ' · ' + e.aiRisk.label;
+          row.appendChild(aiBadge);
+        }
+      }
+      listEl.appendChild(row);
+    });
+    const notionField = document.getElementById(cls === 'theme' ? 'notion-theme' : 'notion-phore').value || (cls === 'theme' ? '/THEME/' : '/PHORE/');
+    const setNotation = '{' + notionField.replace(/\//g,'') + ', ' + list.map(e=>e.text).join(', ') + '}';
+    setEl.textContent = setNotation;
+    if(cls === 'theme'){
+      allRisks.push(...evaluateClassRisk());
+      const riskBox = document.getElementById('risk-theme');
+      if(allRisks.length === 0){
+        riskBox.innerHTML = '<div class="none">' + STRINGS[lang].riskNone + '</div>';
+      } else {
+        const counts = {}; const levels = {};
+        allRisks.forEach(r=>{ counts[r.label] = (counts[r.label] || 0) + 1; levels[r.label] = r.level; });
+        riskBox.innerHTML = '';
+        Object.keys(counts).forEach(label=>{
+          const line = document.createElement('div');
+          line.className = 'risk-line' + (levels[label] === 'medium' ? ' medium' : '');
+          line.textContent = label + ' (' + counts[label] + ')';
+          riskBox.appendChild(line);
+        });
+      }
+    }
+  });
+}
+
+document.getElementById('btn-analyze').addEventListener('click', ()=>{
+  const text = document.getElementById('input-text').value.trim();
+  if(!text) return;
+  tokens = tokenize(text);
+  computeOffsets();
+  fullTextGlobal = text;
+  sentences = computeSentences(fullTextGlobal);
+  selected.clear();
+  candidates = [];
+  aiCandidates = [];
+  pecMarkers = [];
+  entries = { theme: [], phore: [] };
+  document.getElementById('name-theme-out').textContent = document.getElementById('notion-theme').value || '/THEME/';
+  document.getElementById('name-phore-out').textContent = document.getElementById('notion-phore').value || '/PHORE/';
+  document.getElementById('stage-render').classList.add('active');
+  renderTokens();
+  updateSelectionUI();
+  renderClasses();
+  renderPEC();
+});
+
+document.getElementById('btn-detect').addEventListener('click', ()=>{
+  if(tokens.length === 0) return;
+  const fullText = tokens.join('');
+  candidates = detectCandidates(fullText);
+  pecMarkers = detectPEC(fullText);
+  renderTokens();
+  renderPEC();
+});
+
+document.getElementById('btn-ai-detect').addEventListener('click', ()=>{
+  analyzeWithAI();
+});
+
+document.getElementById('btn-reset').addEventListener('click', ()=>{
+  tokens = []; offsets = []; selected.clear(); candidates = []; aiCandidates = []; pecMarkers = [];
+  entries = { theme: [], phore: [] };
+  fullTextGlobal = ''; sentences = [];
+  document.getElementById('stage-render').classList.remove('active');
+  document.getElementById('input-text').value = '';
+  renderPEC();
+});
+
+document.getElementById('btn-example').addEventListener('click', ()=>{
+  exampleIdx = (exampleIdx + 1) % EXAMPLES[lang].length;
+  document.getElementById('input-text').value = EXAMPLES[lang][exampleIdx];
+});
+
+function switchTab(tab){
+  document.getElementById('tab-individuel').style.display = tab === 'individuel' ? '' : 'none';
+  document.getElementById('tab-lot').style.display = tab === 'lot' ? '' : 'none';
+  document.getElementById('tab-btn-individuel').classList.toggle('on', tab === 'individuel');
+  document.getElementById('tab-btn-lot').classList.toggle('on', tab === 'lot');
+}
+document.getElementById('tab-btn-individuel').addEventListener('click', ()=>switchTab('individuel'));
+document.getElementById('tab-btn-lot').addEventListener('click', ()=>switchTab('lot'));
+
+applyStrings();
+loadLog();
+</script>
+</body>
+</html>

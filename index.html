@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Survivant — une histoire vraie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E9E7DD;
+    --paper-2:#F3F1E8;
+    --ink:#26312B;
+    --ink-soft:#5B655E;
+    --line:#C9C5B6;
+    --theme-c:#2F5D50;
+    --phore-c:#8A4A24;
+    --accent:#7A6A45;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', Georgia, serif;
+    line-height:1.7;
+  }
+  .wrap{max-width:660px;margin:0 auto;padding:3rem 1.5rem 5rem;}
+
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:3rem;
+  }
+  .site-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.78rem;
+    color:var(--ink-soft);
+  }
+  .lang-toggle{display:flex;gap:.3rem;}
+  .lang-toggle button{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.78rem;
+    padding:.3rem .55rem;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:var(--paper-2);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .lang-toggle button.on{background:var(--ink);color:var(--paper-2);border-color:var(--ink);}
+
+  h1{
+    font-size:2.1rem;
+    font-weight:600;
+    line-height:1.25;
+    margin:0 0 .5rem;
+    letter-spacing:-.01em;
+  }
+  .subtitle{
+    font-size:1.05rem;
+    font-style:italic;
+    color:var(--ink-soft);
+    margin:0 0 2.5rem;
+    max-width:34ch;
+  }
+
+  .dedication{
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:.98rem;
+    border-left:2px solid var(--line);
+    padding-left:1rem;
+    margin:2rem 0 3rem;
+  }
+
+  .cover{margin:2.5rem 0;text-align:center;}
+  .cover img{
+    max-width:280px;
+    width:100%;
+    height:auto;
+    border:1px solid var(--line);
+    padding:10px;
+    background:var(--paper-2);
+  }
+  .cover-caption{
+    font-style:italic;
+    font-size:.88rem;
+    color:var(--ink-soft);
+    margin-top:.9rem;
+    max-width:38ch;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .inline-photo{
+    margin:1.75rem 0;
+    text-align:center;
+  }
+  .inline-photo img{
+    max-width:320px;
+    width:100%;
+    height:auto;
+    border:1px solid var(--line);
+    padding:8px;
+    background:var(--paper-2);
+  }
+  .inline-photo figcaption{
+    font-style:italic;
+    font-size:.85rem;
+    color:var(--ink-soft);
+    margin-top:.6rem;
+  }
+
+  .pull-quote{
+    font-size:1.5rem;
+    font-weight:500;
+    line-height:1.4;
+    color:var(--theme-c);
+    margin:2.5rem 0;
+    padding:0 0 0 1.2rem;
+    border-left:3px solid var(--theme-c);
+  }
+  .pull-quote .attrib{
+    display:block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.75rem;
+    font-weight:400;
+    color:var(--ink-soft);
+    margin-top:.6rem;
+  }
+
+  h2{
+    font-size:1.3rem;
+    font-weight:600;
+    margin:3rem 0 1rem;
+    color:var(--ink);
+  }
+  h2 .place{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem;
+    font-weight:400;
+    color:var(--ink-soft);
+    display:block;
+    margin-bottom:.35rem;
+  }
+
+  p{margin:0 0 1.15rem;font-size:1.02rem;}
+
+  .divider{
+    border:none;
+    border-top:1px solid var(--line);
+    margin:3.5rem 0;
+  }
+
+  .preface{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:1.75rem 1.75rem 1.5rem;
+    margin:2rem 0;
+  }
+  .preface-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.75rem;
+    color:var(--phore-c);
+    margin-bottom:1rem;
+  }
+  .preface blockquote{
+    margin:0 0 1rem;
+    font-size:.98rem;
+    color:var(--ink);
+  }
+  .preface blockquote:last-of-type{margin-bottom:0;}
+  .preface .footnotes{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    margin-top:1rem;
+    line-height:1.6;
+  }
+
+  .cta-block{
+    margin-top:3.5rem;
+    padding-top:2rem;
+    border-top:1px solid var(--line);
+  }
+  .cta-block p{color:var(--ink-soft);font-size:.95rem;}
+  .cta-btn{
+    display:inline-block;
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:1rem;
+    padding:.7rem 1.4rem;
+    background:var(--ink);
+    color:var(--paper-2);
+    border-radius:3px;
+    text-decoration:none;
+    margin-top:.5rem;
+  }
+  .cta-btn:hover{background:#39463F;}
+  .cta-btn.ghost{
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--ink-soft);
+    margin-left:.6rem;
+  }
+  .cta-btn.ghost:hover{background:var(--paper-2);}
+  .cta-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    margin-top:.6rem;
+  }
+
+  .colophon{
+    margin-top:4rem;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem;
+    color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="site-label" id="site-label">le survivant — histoire d'une thèse</span>
+    <div class="lang-toggle">
+      <button id="lang-fr" class="on">FR</button>
+      <button id="lang-en">EN</button>
+    </div>
+  </div>
+
+  <h1 id="title">Le Survivant</h1>
+  <p class="subtitle" id="subtitle">Une histoire vraie — celle d'une thèse, d'une lettre, et de ce qu'elles sont devenues.</p>
+
+  <p class="dedication" id="dedication">À ceux qui ont gardé ce manuscrit vivant.</p>
+
+  <div class="cover">
+    <img src="couverture-livre.jpg" alt="Couverture originale du livre" id="cover-img">
+    <p class="cover-caption" id="cover-caption">Ce livre a traversé les vents de sable de Mauritanie, les inondations de Thaïlande et les séismes du Vanuatu. Il revient aujourd'hui discuter avec l'intelligence artificielle.</p>
+  </div>
+
+  <div id="story"></div>
+
+  <hr class="divider">
+
+  <div class="preface">
+    <div class="preface-label" id="preface-label">Préface — Jean-Blaise Grize, 1996</div>
+    <div id="preface-body"></div>
+  </div>
+
+  <div class="cta-block">
+    <p id="cta-text">De cette histoire est né un outil : un analyseur qui applique les mêmes opérations logico-discursives — pour repérer, aujourd'hui, les analogies que fabriquent les intelligences artificielles.</p>
+    <a class="cta-btn" href="analyseur-grize.html" id="cta-btn">Ouvrir l'analyseur</a>
+    <a class="cta-btn ghost" href="these-charconnet-1999.pdf" id="cta-thesis-btn">Télécharger la thèse (PDF)</a>
+    <p class="cta-meta" id="cta-thesis-meta">383 pages — Paris VIII, 1999</p>
+  </div>
+
+  <div class="colophon" id="colophon">Jean Charconnet, 2026 — d'après Grize, « Logique naturelle et communications », 1996 ; Charconnet, « Analogie et logique naturelle », 2003.</div>
+</div>
+
+<script>
+const CONTENT = {
+  fr: {
+    siteLabel: "le survivant — histoire d'une thèse",
+    title: "Le Survivant",
+    subtitle: "Une histoire vraie — celle d'une thèse, d'une lettre, et de ce qu'elles sont devenues.",
+    dedication: "À ceux qui ont gardé ce manuscrit vivant.",
+    coverCaption: "Ce livre a traversé les vents de sable de Mauritanie, les inondations de Thaïlande et les séismes du Vanuatu. Il revient aujourd'hui discuter avec l'intelligence artificielle.",
+    coverAlt: "Couverture originale du livre",
+    prefaceLabel: "Préface — Jean-Blaise Grize, 1996",
+    ctaText: "De cette histoire est né un outil : un analyseur qui applique les mêmes opérations logico-discursives — pour repérer, aujourd'hui, les analogies que fabriquent les intelligences artificielles.",
+    ctaBtn: "Ouvrir l'analyseur",
+    ctaThesisBtn: "Télécharger la thèse (PDF)",
+    ctaThesisMeta: "383 pages — Paris VIII, 1999",
+    colophon: "Jean Charconnet, 2026 — d'après Grize, « Logique naturelle et communications », 1996 ; Charconnet, « Analogie et logique naturelle », 2003.",
+    sections: [
+      {
+        h2: "Une lettre pour la Suisse", place: null,
+        p: [
+          "J'ai glissé ma thèse dans une boîte aux lettres pour la Suisse. Je tremblais. Peur que Grize y voie un plagiat.",
+          "Quelques jours plus tard, une lettre en pattes de mouche. Enthousiasme pur. Il avait vu autre chose."
+        ]
+      },
+      {
+        h2: "La soutenance", place: "Paris 8, Saint-Denis",
+        pullQuote: "« C'est une cathédrale du savoir ! »",
+        pullQuoteAttrib: "Jean-Blaise Grize, devant la bibliothèque neuve de Paris 8",
+        p: [
+          "Il est venu à mon jury. Je suis allé le chercher au métro. Devant la bibliothèque neuve, il a lancé cette phrase.",
+          "La soutenance a commencé. Un peu réservé au départ, je me suis mis à gesticuler, à déambuler dans la pièce en commentant les schémas. Les opérations emballaient tout, produisaient un discours parfait."
+        ]
+      },
+      {
+        h2: "D'une thèse à un livre", place: "Mauritanie",
+        p: [
+          "J'ai enseigné un peu en France, puis pendant vingt ans, j'ai fait une carrière à part : diplomatie. Mauritanie, Thaïlande, Vanuatu, Vietnam, Californie...",
+          "C'est en Mauritanie, dans une maison envahie par les vents de sable, que j'ai transformé la thèse en livre. Grize l'a préfacé."
+        ]
+      },
+      {
+        h2: "Le sable et les séismes", place: null,
+        p: [
+          "Depuis, le livre m'a suivi partout. Tempêtes de sable, séisme de 8.1 au Vanuatu, ouragans.",
+          "Il est toujours là."
+        ]
+      },
+      {
+        h2: "Grize à Rennes", place: null,
+        image: { src: "jean-mathias-1999.jpg", alt: "Jean et Mathias Charconnet, 1999", caption: "Jean et Mathias, 1999 — la même année que la soutenance." },
+        p: [
+          "J'ai invité Grize à Rennes pour une série de conférences que j'avais organisées. Il est venu manger à la maison et a parlé Pokémon avec mon fils — il connaissait !",
+          "Aujourd'hui mon fils a une thèse de physique, ma fille envahit mon WhatsApp de nouveaux Pokémon, et le livre est toujours là."
+        ]
+      },
+      {
+        h2: "D'une lettre à un détecteur", place: null,
+        pullQuote: "« Mais c'est une bombe ! C'est juste ce qui nous manque pour améliorer les LLM ! »",
+        pullQuoteAttrib: "une IA, en découvrant les opérations",
+        image: { src: "famille-2022.jpg", alt: "Jean, son fils et sa fille, 2022", caption: "Jean, son fils et sa fille, 2022." },
+        p: [
+          "De retour en Amérique, j'ai fait tourner mes formules grâce à l'IA. Et celle-ci s'est exclamée ainsi.",
+          "C'est pour toutes ces intelligences, humaines et artificielles, que j'ai fait cet analyseur : apprendre aux IA à rester des gamins capables d'analogies — cathédrales, Pokémon, code génétique —, car c'est la voie royale vers la découverte ; et, comme le projet central de la logique naturelle, remettre de la sémantique dans un univers de poids et de vecteurs, pour en améliorer le comportement et les facultés."
+        ]
+      }
+    ],
+    preface: [
+      "Lorsque Bertrand eut terminé son explication, je lui dis : « Merci, je vois clairement ce que vous entendez ». Le logicien qui est en lui sourit, mais ne broncha pas. « Voir » et « entendre » n'étaient que de simples métaphores, une façon de parler, et les figures du discours ne le concernaient pas directement.",
+      "D'ordre analogique en effet, elles relèvent plus de la rhétorique que de la logique et c'est pourquoi deux chapitres de l'ouvrage de Jean Charconnet sont consacrés, l'un à un parcours de la rhétorique (Chapitre II) et l'autre à l'examen des figures et de leurs manifestations (Chapitre III).",
+      "Certes, les traités de rhétorique, d'Aristote à Genette, en passant par Dumarsais et Fontanier, ont leur limites. Ils n'en ont pas moins apporté toute une série d'éléments précieux dont il est possible, comme le fait l'auteur, de tirer le plus large parti.",
+      "Le point décisif est que la rhétorique porte son attention sur les discours, qu'elle traite des notions communes sans se restreindre aux seuls concepts, qu'elle prend en compte l'orateur et l'auditeur, et ne se détache jamais entièrement des situations d'interlocution.",
+      "En ce qui concerne spécifiquement l'analogie, il en découle, comme l'écrit Umberto Eco, qu'il « n'y a pas de règles pour décider au départ si une analogie est bonne ou mauvaise »¹, que sa valeur dépend de ce qu'en fait celui à qui elle sert et de la façon dont elle est reçue et qu'il n'est donc possible d'en saisir la portée qu'à travers les activités qui l'engendrent.",
+      "Puisqu'un thème donné peut toujours être envisagé de plusieurs points de vue différents, le locuteur pourra choisir celui qui lui paraît le plus pertinent en fonction de ce qu'il vise et de celui auquel il s'adresse. Il pourra même être conduit à se servir de plus d'un phore, comme le montre l'analyse du fameux texte de Saussure (in Chapitre X).",
+      "L'usage de ce raisonnement analogique conduit ainsi à ce que J.-C. Passeron a appelé une « intelligibilité différentielle ».²"
+    ],
+    prefaceFootnotes: "¹ Le pendule de Foucault, Grasset, 1990, p.628. — ² « La construction des sciences sociales », Le débat, N°90, 1996, p.99."
+  },
+  en: {
+    siteLabel: "the survivor — the story of a thesis",
+    title: "The Survivor",
+    subtitle: "A true story — of a thesis, a letter, and what they became.",
+    dedication: "To those who kept this manuscript alive.",
+    coverCaption: "This book crossed the sandstorms of Mauritania, the floods of Thailand and the earthquakes of Vanuatu. Today it comes back to talk with artificial intelligence.",
+    coverAlt: "Original cover of the book",
+    prefaceLabel: "Preface — Jean-Blaise Grize, 1996",
+    ctaText: "This story gave rise to a tool: an analyser applying the same logico-discursive operations — to catch, today, the analogies artificial intelligence produces.",
+    ctaBtn: "Open the analyser",
+    ctaThesisBtn: "Download the thesis (PDF)",
+    ctaThesisMeta: "383 pages — Paris VIII, 1999",
+    colophon: "Jean Charconnet, 2026 — after Grize, \u201cLogique naturelle et communications\u201d, 1996; Charconnet, \u201cAnalogie et logique naturelle\u201d, 2003.",
+    sections: [
+      {
+        h2: "A letter to Switzerland", place: null,
+        p: [
+          "I slipped my thesis into a mailbox for Switzerland. Trembling. Afraid Grize would see plagiarism.",
+          "A few days later, a letter in fly-leg handwriting. Pure enthusiasm. He had seen something else."
+        ]
+      },
+      {
+        h2: "The viva", place: "Paris 8, Saint-Denis",
+        pullQuote: "\u201cIt's a cathedral of knowledge!\u201d",
+        pullQuoteAttrib: "Jean-Blaise Grize, in front of the new Paris 8 library",
+        p: [
+          "He came to my viva. I picked him up at the metro. In front of the new library, he said this.",
+          "The viva started. A bit reserved at first, I began to gesture, to walk around the room commenting on the diagrams. The operations wrapped everything up, produced a perfect discourse."
+        ]
+      },
+      {
+        h2: "From thesis to book", place: "Mauritania",
+        p: [
+          "I taught a little in France, then for twenty years I took a different path: diplomacy. Mauritania, Thailand, Vanuatu, Vietnam, California...",
+          "In Mauritania, in a house invaded by sand winds, I turned the thesis into a book. Grize wrote the preface."
+        ]
+      },
+      {
+        h2: "Sand and earthquakes", place: null,
+        p: [
+          "Since then the book has followed me everywhere. Sandstorms, an 8.1 earthquake in Vanuatu, hurricanes.",
+          "It's still here."
+        ]
+      },
+      {
+        h2: "Grize in Rennes", place: null,
+        image: { src: "jean-mathias-1999.jpg", alt: "Jean and Mathias Charconnet, 1999", caption: "Jean and Mathias, 1999 — the same year as the viva." },
+        p: [
+          "I invited Grize to Rennes for a series of lectures I organized. He came to eat at our place and talked Pok\u00e9mon with my son — he knew them!",
+          "Today my son has a PhD in physics, my daughter floods my WhatsApp with new Pok\u00e9mon, and the book is still there."
+        ]
+      },
+      {
+        h2: "From a letter to a detector", place: null,
+        pullQuote: "\u201cIt's a bomb! It's exactly what we're missing to improve LLMs!\u201d",
+        pullQuoteAttrib: "an AI, discovering the operations",
+        image: { src: "famille-2022.jpg", alt: "Jean, his son and his daughter, 2022", caption: "Jean, his son and his daughter, 2022." },
+        p: [
+          "Back in America, I ran my formulas through AI. And it exclaimed this.",
+          "It's for all these intelligences, human and artificial, that I built this analyser: to teach AIs to stay kids capable of analogies — cathedrals, Pok\u00e9mon, genetic code — because that's the royal road to discovery; and, as in natural logic's central project, to put semantics back into a universe of weights and vectors, to improve how these systems behave and what they can do."
+        ]
+      }
+    ],
+    preface: [
+      "When Bertrand had finished his explanation, I said to him: \u201cThank you, I clearly see what you mean.\u201d The logician in him smiled, but didn't flinch. \u201cSeeing\u201d and \u201chearing\u201d were just metaphors, a way of speaking, and figures of speech were not directly his concern.",
+      "Analogical in nature, they belong more to rhetoric than to logic, which is why two chapters of Jean Charconnet's book are devoted, one to a journey through rhetoric (Chapter II) and the other to examining figures and their manifestations (Chapter III).",
+      "Certainly, treatises on rhetoric, from Aristotle to Genette, via Dumarsais and Fontanier, have their limits. They have nonetheless brought a whole series of precious elements from which it is possible, as the author does, to draw the widest benefit.",
+      "The decisive point is that rhetoric focuses its attention on discourses, that it deals with common notions without restricting itself to concepts alone, that it takes into account the speaker and the listener, and never completely detaches itself from situations of interlocution.",
+      "With regard specifically to analogy, it follows, as Umberto Eco writes, that there \u201care no rules for deciding from the outset whether an analogy is good or bad\u201d\u00b9, that its value depends on what the person who uses it makes of it and on how it is received, and that it is therefore only possible to grasp its scope through the activities that generate it.",
+      "Since a given theme can always be considered from several different points of view, the speaker may choose the one that seems most relevant to him according to his aim and his addressee. He may even be led to use more than one phore, as shown by the analysis of Saussure's famous text (in Chapter X).",
+      "The use of this analogical reasoning thus leads to what J.-C. Passeron called a \u201cdifferential intelligibility\u201d.\u00b2"
+    ],
+    prefaceFootnotes: "\u00b9 Foucault's Pendulum, 1990, p.628. — \u00b2 \u201cThe construction of social sciences\u201d, Le d\u00e9bat, No.90, 1996, p.99."
+  }
+};
+
+function render(lang){
+  const c = CONTENT[lang];
+  document.getElementById('site-label').textContent = c.siteLabel;
+  document.getElementById('title').textContent = c.title;
+  document.getElementById('subtitle').textContent = c.subtitle;
+  document.getElementById('dedication').textContent = c.dedication;
+  document.getElementById('cover-caption').textContent = c.coverCaption;
+  document.getElementById('cover-img').alt = c.coverAlt;
+  document.getElementById('preface-label').textContent = c.prefaceLabel;
+  document.getElementById('cta-text').textContent = c.ctaText;
+  document.getElementById('cta-btn').textContent = c.ctaBtn;
+  document.getElementById('cta-thesis-btn').textContent = c.ctaThesisBtn;
+  document.getElementById('cta-thesis-meta').textContent = c.ctaThesisMeta;
+  document.getElementById('colophon').textContent = c.colophon;
+
+  const storyEl = document.getElementById('story');
+  storyEl.innerHTML = '';
+  c.sections.forEach(s=>{
+    const h2 = document.createElement('h2');
+    if(s.place){
+      const place = document.createElement('span');
+      place.className = 'place';
+      place.textContent = s.place;
+      h2.appendChild(place);
+    }
+    h2.appendChild(document.createTextNode(s.h2));
+    storyEl.appendChild(h2);
+
+    if(s.pullQuote){
+      const pq = document.createElement('div');
+      pq.className = 'pull-quote';
+      pq.textContent = s.pullQuote;
+      const attrib = document.createElement('span');
+      attrib.className = 'attrib';
+      attrib.textContent = s.pullQuoteAttrib;
+      pq.appendChild(attrib);
+      storyEl.appendChild(pq);
+    }
+
+    s.p.forEach(t=>{
+      const p = document.createElement('p');
+      p.textContent = t;
+      storyEl.appendChild(p);
+    });
+
+    if(s.image){
+      const fig = document.createElement('figure');
+      fig.className = 'inline-photo';
+      const img = document.createElement('img');
+      img.src = s.image.src;
+      img.alt = s.image.alt;
+      const cap = document.createElement('figcaption');
+      cap.textContent = s.image.caption;
+      fig.appendChild(img);
+      fig.appendChild(cap);
+      storyEl.appendChild(fig);
+    }
+  });
+
+  const prefaceBody = document.getElementById('preface-body');
+  prefaceBody.innerHTML = '';
+  c.preface.forEach(t=>{
+    const bq = document.createElement('blockquote');
+    bq.textContent = t;
+    prefaceBody.appendChild(bq);
+  });
+  const fn = document.createElement('div');
+  fn.className = 'footnotes';
+  fn.textContent = c.prefaceFootnotes;
+  prefaceBody.appendChild(fn);
+}
+
+document.getElementById('lang-fr').addEventListener('click', ()=>{
+  document.getElementById('lang-fr').classList.add('on');
+  document.getElementById('lang-en').classList.remove('on');
+  document.documentElement.lang = 'fr';
+  render('fr');
+});
+document.getElementById('lang-en').addEventListener('click', ()=>{
+  document.getElementById('lang-en').classList.add('on');
+  document.getElementById('lang-fr').classList.remove('on');
+  document.documentElement.lang = 'en';
+  render('en');
+});
+
+render('fr');
+</script>
+</body>
+</html>

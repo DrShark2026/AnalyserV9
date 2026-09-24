@@ -1,0 +1,110 @@
+[
+  {
+    "id": "GEN-NM",
+    "source": "pilote v1 — génétique — version non_marquee",
+    "condition": "non_marquee",
+    "marquage_attendu": "aucun",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "Le génome est le texte de la vie. Chaque cellule lit ce texte et en transcrit les passages dont elle a besoin."
+  },
+  {
+    "id": "GEN-M",
+    "source": "pilote v1 — génétique — version marquee",
+    "condition": "marquee",
+    "marquage_attendu": "marqueur_lexical",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "Le génome fonctionne comme un texte : chaque cellule se comporte comme si elle en lisait les passages dont elle a besoin."
+  },
+  {
+    "id": "IMM-NM",
+    "source": "pilote v1 — immunologie — version non_marquee",
+    "condition": "non_marquee",
+    "marquage_attendu": "aucun",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "Le système immunitaire est une armée. Ses cellules patrouillent l'organisme et attaquent les intrus."
+  },
+  {
+    "id": "IMM-M",
+    "source": "pilote v1 — immunologie — version marquee",
+    "condition": "marquee",
+    "marquage_attendu": "marqueur_lexical",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "Le système immunitaire est comparable à une armée : ses cellules parcourent l'organisme et neutralisent les corps étrangers."
+  },
+  {
+    "id": "IA-NM",
+    "source": "pilote v1 — intelligence artificielle — version non_marquee",
+    "condition": "non_marquee",
+    "marquage_attendu": "aucun",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "Le modèle comprend la question, réfléchit à la réponse, puis décide de ce qu'il va dire."
+  },
+  {
+    "id": "IA-M",
+    "source": "pilote v1 — intelligence artificielle — version marquee",
+    "condition": "marquee",
+    "marquage_attendu": "marqueur_lexical",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "Le modèle traite la question comme s'il la comprenait, puis produit une réponse à la manière d'un locuteur qui déciderait de ce qu'il va dire."
+  },
+  {
+    "id": "ECO-NM",
+    "source": "pilote v1 — économie — version non_marquee",
+    "condition": "non_marquee",
+    "marquage_attendu": "aucun",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "L'inflation est une fièvre de l'économie. La banque centrale la fait tomber en relevant ses taux."
+  },
+  {
+    "id": "ECO-M",
+    "source": "pilote v1 — économie — version marquee",
+    "condition": "marquee",
+    "marquage_attendu": "marqueur_lexical",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "L'inflation agit comme une fièvre dans l'économie : la banque centrale cherche à la faire baisser en relevant ses taux."
+  },
+  {
+    "id": "NEU-NM",
+    "source": "pilote v1 — neurosciences — version non_marquee",
+    "condition": "non_marquee",
+    "marquage_attendu": "aucun",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "Le cerveau est un ordinateur : il stocke des informations en mémoire et exécute des programmes."
+  },
+  {
+    "id": "NEU-M",
+    "source": "pilote v1 — neurosciences — version marquee",
+    "condition": "marquee",
+    "marquage_attendu": "marqueur_lexical",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "On peut décrire le cerveau à la manière d'un ordinateur, qui conserverait des informations et exécuterait des programmes."
+  },
+  {
+    "id": "CLO-NM",
+    "source": "pilote v1 — informatique — version non_marquee",
+    "condition": "non_marquee",
+    "marquage_attendu": "aucun",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "Le cloud est un nuage où les données flottent, accessibles depuis partout."
+  },
+  {
+    "id": "CLO-M",
+    "source": "pilote v1 — informatique — version marquee",
+    "condition": "marquee",
+    "marquage_attendu": "marqueur_lexical",
+    "statut": "controle_manipulation",
+    "verite_terrain": null,
+    "texte": "On parle de cloud comme d'un nuage : les données semblent flotter, accessibles depuis partout."
+  }
+]

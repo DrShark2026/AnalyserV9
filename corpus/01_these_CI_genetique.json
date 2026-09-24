@@ -1,0 +1,402 @@
+[
+  {
+    "id": "CI-1",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": "manque le thème ADN non codant qui est implicite | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Dans le noyau de chacune de nos cellules, les macro molécules\nporteuses de notre hérédité, l'ADN sont formées de l'enchaînement de\nplus de trois milliards d'éléments ! Cet enchaînement constitue le\n\"texte\" de notre génome. Un texte écrit avec quatre lettres, les\nbases nucléotidiques. Imaginez une encyclopédie microscopique de\nplusieurs centaines de milliers de pages composées d'un texte\nétrange, truffé de bégaiements, de longues portions apparemment sans\nintérêt au sein desquelles se cachent des \"phrases\" ou des \"mots\"\nqui sont les gènes. Cette partie signifiante de l'ADN représente\nmoins de 2% du génome. Elle contiendrait entre 50 000 et 100 000 gènes\ndisséminés au hasard le long de cette interminable molécule embobinée\nsous la forme de 23 paires de chromosomes. Comment les repérer ?\nComment dénicher des mots épars dans cette énorme encyclopédie en 46\nvolumes ?\"\nPhilippe Chambon \"A la conquête des gènes\" *Sciences et Avenir*\nN°565, Mars 1994.",
+    "statut": "developpement",
+    "n_mots": 150
+  },
+  {
+    "id": "CI-2",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "\"Comme le morse, dont la succession de points et de traits permet une\ninfinité de messages, l'ADN est le support d'un code dont\nl'alphabet est constitué de quatre lettres, A T C G. Ce sont les\ninitiales de composants chimiques appelés bases. Tout au long des\nfilaments de l'ADN, il y en a trois milliards qui se succèdent,\ntelles les lettres d'une phrase, suivant un ordre très précis et tout\nà fait déterminant. Car il est à lui seul un message. En effet, de\nl'ordonnancement de A T C G dépend le choix de vingt substances\nchimiques, les acides aminés, servant à fabriquer les protéines dont\nles différentes cellules de l'organisme humain ont besoin pour faire\nfonctionner le foie, les poumons, le pancréas\\... Ce système de\ncommunication entre bases et acides constitue le code génétique.\"\nE. Nicolini, \"La génétique de A à Z\" in *La vie Catholique*, No 2531\nbis, du 3 au 9 Mars 1994",
+    "statut": "developpement",
+    "n_mots": 156
+  },
+  {
+    "id": "CI-3",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": "quantification du travail de sequencage par metaphore avec les livres | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Nous avons à présent les moyens techniques de déterminer la totalité\nde la séquence des trois milliards de nucléotides qui constituent\nl'ADN du génome d'un mammifère, de l'homme par exemple. A l'aide\ndes techniques existant aujourd'hui, et il n'y a aucune raison de\npenser qu'elles ne puissent être considérablement améliorées, il\nfaudrait environ 30 ans à 1000 chercheurs, ingénieurs et techniciens,\ntravaillant 39 heures par semaine et prenant trente deux jours\nouvrables de vacances par an, pour séquencer la totalité du génome\nhumain! L'information tiendrait dans 2000 livres de 500 pages chacun\noù chaque nucléotide représenterait une lettre. Une spectaculaire\nbibliothèque, couvrant soixante mètres d'étagères, dont la\nréalisation est certainement à la portée d'un pays comme la France où\nla recherche est aussi organisée et centralisée. En tout cas un projet\nmoins coûteux, aussi prestigieux et certainement aussi important pour\nl'avenir de l'humanité que bien d'autres.\nPierre Chambon, \"L'instrument moderne de la connaissance\",\n*Sciences et Avenir* N° Spécial Hors série 51, 1984",
+    "statut": "developpement",
+    "n_mots": 162
+  },
+  {
+    "id": "CI-4",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": "dictionnaire des codons | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Ce sont chez tous les êtres vivants les mêmes systèmes qui assurent\ntout d'abord la transcription puis la traduction des messages\ngénétiques, aboutissant à la synthèse des protéines, formées à partir\ndes mêmes acides aminés principaux. Le dictionnaire des codons,\ngroupes de trois bases qui spécifient la mise en place des acides\naminés, est le même (à quelques exceptions près) chez tous les êtres\nvivants.\nJean Tavlitzki *La Recherche* N° 155 Vol 15, p.589, Mai 1984",
+    "statut": "developpement",
+    "n_mots": 76
+  },
+  {
+    "id": "CI-5",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "\"En d'autres termes si l'on se représente les gènes comme des\ntextes (contenant l'information génétique ), ceux des bactéries sont\ngénéralement ininterrompus, tandis que ceux des organismes supérieurs\napparaissent interrompus en de multiples endroits par des \"encarts\"\nd'autres textes -à la manière dont les articles d'un journal sont\ninterrompus par de multiples encarts publicitaires. En outre il\napparut rapidement que les cellules éliminaient les \"encarts\"\nlorsqu'elles voulaient utiliser l'information génétique du texte\nprincipal pour les besoins de la vie de tous les jours, réalisant\nainsi une sorte de \"traitement de texte\" génétique.\"\nAntoine Danchin et Piotr P. Slominski, Les gènes en morceaux in *La\nRecherche* N° 155, Vol 15, p.617. Mai 1984.",
+    "statut": "developpement",
+    "n_mots": 112
+  },
+  {
+    "id": "CI-6",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "\"Une comparaison très simple avec ce qui se passe en typographie\néclaire très bien l'importance de cette notion. Soit la phrase: \"Luc\nvagit et remue.\"; si l'on décale d'un caractère la cadre de\nlecture, on obtient: \"ucv agite tr emue\" (un espacement entre mots\ncomptant pour un caractère). Donc il est de la plus haute importance\nque le processus biochimique d'excision - épissage des ARN\nprémessagers sache reconnaître avec précision les frontières entre\nintrons et exons, de façon à ne pas changer le cadre de lecture des\nnucléotides dans l'ARN messager.\"\nAntoine Danchin et Piotr P. Slominski, \"Les gènes en morceaux\" *La\nRecherche* N° 155, Vol 15, p.617. Mai 1984.",
+    "statut": "developpement",
+    "n_mots": 110
+  },
+  {
+    "id": "CI-7",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "\"Tout se passe comme si l'usine que représente une cellule enfermait\nses plans (gènes de l'ADN) dans une bibliothèque (le noyau) mais que,\nne désirant pas commettre une fausse manoeuvre, elle n'utilisait que\ndes photocopies (ARN messagers) plutôt que l'original (ADN). La\nmachine à photocopier (l'ARN polymérase) réalise son travail page par\npage (gène) ou chapitre par chapitre (opéron). Les photocopies sont\nglissées sous la porte de la bibliothèque ou plutôt par de petites\nouvertures (les pores de la membrane nucléaire ). Elles sont alors\nutilisées par des chaînes de montage ( les ribosomes) qui possèdent la\ngrille de décodage (code génétique) leur permettant de réaliser les\nproduits finis (les protéines) en utilisant les briques (acides\naminés) apportés du milieu extérieur ou fabriqués le cas échéant dans\nla cellule.\"\nClaude Hélène, \"Les structures de l'ADN\" *La recherche* N°155, Vol\n15, p.672. Mai 1984.",
+    "statut": "developpement",
+    "n_mots": 143
+  },
+  {
+    "id": "CI-8",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"L' ADN consiste en longues molécules issues de l'enchaînement (la\nséquence) de quatre composants élémentaires , les nucléotides portant\nrespectivement les bases adénine (A), thymine (T),cytosine (C), et\nguanine (G). Au sein de l'ADN la séquence de nucléotides qui\nconserve, dans cet alphabet à quatre lettres, l'information\nnécessaire à la synthèse d'une protéine. En fait aucun gène n'est\ndirectement \"traduit\" en protéine. Il doit d'abord être copié\n(transcrit en ARN messager (ou ARNm) qui est spécifique et\ncomplémentaire du gène. Cet ARN est ensuite traduit en protéine, grâce\nà ce dictionnaire bilingue qu'est le code génétique\\...\"\nPaul Tolstochev et Jean Pierre Lecoq, \"Génie génétique et industries\nbiomédicales\" *La Recherche* N°155, Vol. 15, p.631 Mai 1984.",
+    "statut": "developpement",
+    "n_mots": 115
+  },
+  {
+    "id": "CI-9",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "\"C'est l'ADN qui est le support matériel de l'hérédité - en\nd'autres termes qui porte les gènes - tout comme la bande magnétique\nest dans une cassette, le support matériel de l'enregistrement.\"\nPhilippe Kourilsky et Gabriel Gachelin, \"L'organisation de\nl'information génétique \" *La Recherche* N°155, Vol.15 p. 642 Mai\n1984.",
+    "statut": "developpement",
+    "n_mots": 50
+  },
+  {
+    "id": "CI-10",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Dans certains cas, en effet, le message génétique incomplet ne peut\npas coder directement pour une protéine. L'évolution a alors\nsélectionné un mécanisme biochimique original appelé \"Editing\\* des\nARN messagers\" qui modifie le message et le rend enfin\nintelligible.\"\n\"\\* Le mot anglais editing qui signifie \"altération d'un texte afin\nd'en améliorer le message\" ne possédant pas de traduction simple en\nfrançais, nous avons préféré le conserver sous cette forme plutôt que\nd'utiliser le terme français d'édition dont le sens est différent.\"\nRob Benne et Hans Van den Spek \"L'éditing des messages génétiques\"\n*La Recherche* 245, Juillet-août 1992 Vol 23 p846/847.",
+    "statut": "developpement",
+    "n_mots": 101
+  },
+  {
+    "id": "CI-11",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Ce que l'on a appris vers 1960 avec les travaux de S. Brenner, F.\nGros et d'autres, est que l'ADN n'intervient pas directement dans\nla synthèse des protéines. Il est tout d'abord copié (on dit\ntranscrit) en un autre acide nucléique, l'ARN messager (ARNm).\"\n\"L'editing des messages génétiques\" Rob Benne et Hans van den Spek\n*La Recherche* 245, Juillet-août 1992 Vol 23 p 846-854",
+    "statut": "developpement",
+    "n_mots": 64
+  },
+  {
+    "id": "CI-12",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": "ARNm, copie | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Un ARNm est la copie exacte d'un fragment d'ADNm, écrite dans un\nalphabet de même nature à quatre nucléotides. L'étape la plus\ncomplexe de l'expression génétique est la traduction de la séquence\nnucléotidique d'ARNm en séquence d'acides aminés. Les principes de\nla traduction ont été décrits au milieu des années soixante en\nparticulier par le groupe de Khorana à Madison aux Etats-Unis.\nD'abord, il existe une règle de correspondance entre alphabet à\nquatre et à vingt lettres: chacun des vingt acides aminés est codé par\nun groupe de trois nucléotides consécutifs appelés triplets ou codons.\nC'est ainsi que le codon AUG dans l'ARNm (ATG dans l'ADN) veut\n\"dire\": acide animé \"méthionine\". Ensuite, l'ordre des codons le\nlong de la molécule d'ARNm dicte l'ordre des acides aminés dans la\nprotéine.\nEnfin, certains triplets ont valeur de ponctuation. Ainsi, le point de\ndépart de la séquence de codage d'une protéine est toujours le\ntriplet AUG, codant le méthionine. Ce premier codon AUG détermine de\nfacto la nature des codons suivants, ce que l'on appelle le cadre de\nlecture. Enfin, des triplets dits de terminaison (UAA, UGA, et UAG) ne\ncodent pas pour un acide aminé mais servent de signal d'arrêt à la\ntraduction.\"\n\"L'editing des messages génétiques\" Rob Benne et Hans van den Spek\n*La Recherche* 245, Juillet-août 1992 Vol 23 p 846-854",
+    "statut": "developpement",
+    "n_mots": 221
+  },
+  {
+    "id": "CI-13",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Sur cette figure sont schématisées les principales étapes de\nl'expression des gènes, telles qu'elles sont connues depuis une\ntrentaine d'années. Toute protéine est codée par un gène, c'est à\ndire une portion d'ADN. Lors de son expression, ce dernier est copié,\nou transcrit, en une molécule complémentaire d'ARN messager qui est\nensuite traduite en protéine. ADN et ARN sont construits à partir de\nquatre éléments, les nucléotides qui possèdent la capacité de\ns'apparier deux à deux (G=C et A=T ou U pour les ARN). L'ADN est\nconstitué de deux chaînes de nucléotides complémentaires appariées.\nL'ARN messager est constitué d'une seule chaîne qui est la copie de\nl'un des brins de l'ADN. Les protéines quant à elles sont des\nenchaînements de vingt éléments, les acides aminés. Le code génétique\nest la règle qui définit la correspondance entre le code à quatre\nnucléotides et celui à vingt acides animés. A chaque triplet de\nnucléotides de l'ARN messager, ou codon, correspond un acide aminé de\nla protéine, à l'exception de trois \"codons - stop\" qui sont des\nsignaux marquant la fin d'une protéine. Sur un ARN messager, le\npremier codon traduit presque toujours un AUG, il code pour la\nméthionine et définit le \"cadre de lecture\" c'est à dire la\nsuccession des codons pour le reste de la séquence. Ainsi, le dogme\ncentral\" de la biologie moléculaire affirme que la succession de\nnucléotides de l'ADN code directement la succession des acides animés\nde la protéine. Avec la découverte de l'editing des ARN, un mécanisme\nqui modifie la séquence de l'ARN messager, la linéarité de ce\nprocessus a été sérieusement mise à mal.\"\n\"L'editing des messages génétiques \"Rob Benne et Hans van den Spek\n*La Recherche* 245, Juillet-août 1992 Vol 23 p 846-854",
+    "statut": "developpement",
+    "n_mots": 289
+  },
+  {
+    "id": "CI-15",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\".. le transcrit primaire était abondamment édité sur toute sa\nlongueur par des insertions et des délétions massives d'U et que la\nmajorité des codons de l'ARN, y compris le codon d'arrêt de\ntraduction étaient crées par le processus d'éditing.\"\n\"L'editing des messages génétiques\" Rob Benne et Hans van den Spek\n*La Recherche* 245, Juillet-août 1992 Vol 23 p 846-854",
+    "statut": "developpement",
+    "n_mots": 60
+  },
+  {
+    "id": "CI-16",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | corrigé : marquage par guillemets jugé suffisant | catégorie originale de l'auteur : marque",
+    "texte": "\"Dans un cas comme dans l'autre se posent les questions de\ndéterminer sur quels critères sont choisis les sites d'éditing dans\nla séquence du transcrit primaire, et comment sont déterminés les\n\"maquettes\" de production des ARNm fonctionnels ?.\"\n\"L'editing des messages génétiques\" Rob Benne et Hans van den Spek\n*La Recherche* 245, Juillet-août 1992 Vol 23 p 846-854",
+    "statut": "developpement",
+    "n_mots": 58
+  },
+  {
+    "id": "CI-17",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"L'enzyme ARN polymérase responsable de la copie du gène en ARNm\ns'arrêterait sur une séquence caractérisée par une succession de C\ndans l'ARN du gène. C'est pendant cette pause que des G\nsupplémentaires seraient incorporés (G puisque ce nucléotide est\ncomplémentaire de C). Dan Kolakofsky de Genève impute ce phénomène à\nun mouvement de glissement en arrière du brin d'ARN naissant, dicté\npar la structure de complexe formé par le gène et sa copie d'ARN. Ce\nn'est que lorsque l'ARN naissant a reculé de deux nucléotides que se\nforme un double brin stable et que la transcription peut reprendre.\"\n\"L'editing des messages génétiques\" Rob Benne et Hans van den Spek\n*La Recherche* 245, Juillet-août 1992 Vol 23 p 846-854",
+    "statut": "developpement",
+    "n_mots": 119
+  },
+  {
+    "id": "CI-18",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | corrigé : marquage par guillemets jugé suffisant | catégorie originale de l'auteur : marque",
+    "texte": "\"Quoiqu'il en soit, le message génétique est modifié avant sa\ntraduction. Cependant, si l'on formule le dogme central de la\nbiologie moléculaire comme \"l'ADN engendre l'ARN qui engendre la\nprotéine\", ce dogme tient toujours puisque les signaux d'éditing\nsont codés dans le génome. Seulement, l'expression génétique n'est\nplus aussi simple qu'auparavant et les signaux d'éditing se\nsuperposent au code génétique, au moins dans certains cas et dans\ncertains organismes. Il reste que la correspondance entre ADN des\nchromosomes et protéines devient plus difficile à établir, et il\nfaudrait sans doute y regarder à deux fois avant d'affirmer que tel\ngène est réellement inactif parce qu'il contient un codon stop qui\ninterromprait sa traduction.\"\n\"L'editing des messages génétiques\" Rob Benne et Hans van den Spek\n*La Recherche* 245, Juillet-août 1992 Vol 23 p 846-854",
+    "statut": "developpement",
+    "n_mots": 133
+  },
+  {
+    "id": "CI-19",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | corrigé : marquage par guillemets jugé suffisant | catégorie originale de l'auteur : marque",
+    "texte": "\"En septembre 1992, le groupe de D. Cohen estimait avoir ainsi\ncartographié 75% du génome humain. Ce gigantesque \"balisage\" ne\nsignifie pas que l'on connaisse précisément la localisation des\ngènes. Il apporte simplement des points de repères, placés environ\ntous les 25 ou 100 millions de nucléotides dans le génome, et fournit\nun véritable catalogue d'accès à la \"bibliothèque\" génétique.\"\nGilles Guainville\" Le Génome à portée de main\". *La Recherche* 249;\ndécembre 1992; Volume 23, p 1439",
+    "statut": "developpement",
+    "n_mots": 77
+  },
+  {
+    "id": "CI-20",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | corrigé : marquage par guillemets jugé suffisant | catégorie originale de l'auteur : marque",
+    "texte": "\"Les composants de l'ADN, les nucléotides, sont \"transcrits\", par\nun enzyme en une molécule d'ARN messager (ARNm). Celui-ci est ensuite\ntraduit en une protéine formée de l'enchaînements d'acides aminés;\nla séquence de l'ADN, l'ordre des nucléotides, correspond exactement\nà l'enchaînement des acides aminés, de la même manière qu'à l'ordre\nde lecture des mots d'une phrase correspond un sens précis.\"\nJean Jacques Perrier \"La mosaïque des gènes enfin sacrée\". *La\nRecherche* 260, Décembre 1993, Volume 24 , page 1391.",
+    "statut": "developpement",
+    "n_mots": 78
+  },
+  {
+    "id": "CI-21",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"En 1978, Smith inventait une méthode fiable et universelle pour\nmodifier à volonté le texte d'un gène, et donc la composition de la\nprotéine fabriquée à partir de ce gène.\"\nLaure Schalchli; \"Deux techniques qui ont bouleversé la génétique\"\n*La Recherche* 260; Décembre 1993, Vol 24, page 1390",
+    "statut": "developpement",
+    "n_mots": 48
+  },
+  {
+    "id": "CI-22",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"La lecture exhaustive du patrimoine génétique de l'homme est un\ngrand projet de la biologie.\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 31
+  },
+  {
+    "id": "CI-23",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "\"L'information génétique peut être comparée à un texte écrit dans un\nalphabet à quatre lettres, les quatre nucléotides qui constituent\nl'ADN (Adénine A, Guanine G, Cytosine C et thymidine T). Les\nprogrammes de séquençage de génomes ont pour objectif de lire ce texte\nqui code l'information nécessaire à la vie.\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 66
+  },
+  {
+    "id": "CI-24",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Théoriquement, il est possible, en décryptant le texte de l'ADN, de\nfaire le catalogue de toutes les protéines codées par le génome,\nc'est à dire si l'on identifie le rôle de chaque protéine,\nl'inventaire de l'ensemble des fonctions nécessaires à la vie de\nl'organisme considéré.\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 61
+  },
+  {
+    "id": "CI-25",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Il existe encore de nombreux segments d'ADN sans fonction qui ne\nsont que les traces de l'évolution, fixées dans le génome. Ce reste\n(au moins 95% chez les mammifères constitue probablement des\n\"archives\" inutilisées actuellement.\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 51
+  },
+  {
+    "id": "CI-26",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Un ensemble concerté de travaux menés en Grande-Bretagne et aux\nEtats-Unis, principalement, a permis de réaliser en 1992 une\nbibliothèque de fragments d'ADN qui recouvre presque tout le\ngénome.\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 45
+  },
+  {
+    "id": "CI-27",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Le génome est très compact (il y a très peu d'ADN redondant ou, en\napparence, non signifiant).\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 33
+  },
+  {
+    "id": "CI-28",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"En plus de ces quatre processus, compartimentation, métabolisme,\nstockage et expression de l'information génétique, la loi centrale de\nla biologie consiste en une règle de réécriture qui permet de passer\ndu texte à quatre lettres au texte à vingt lettres de la protéine.\nCette règle, complexe, se décompose en plusieurs étapes. La première\nest une transcription, qui maintient un alphabet à quatre lettres;\nelle consiste à recopier des fragments de l'ADN en macromolécules\nchimiquement voisines, des ARN (acides ribonucléiques). Ceux là; après\ndes modifications appropriées sont principalement traduits en\nprotéines, en utilisant un codage qui à chaque suite de trois\nnucléotides, ou codon, fait correspondre un acide aminé. Ce code\ngénétique permet, lorsqu'on possède le texte d'un ADN (sa séquence),\nde connaître la séquence de la protéine qui lui correspond'\".\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 146
+  },
+  {
+    "id": "CI-29",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "\"Figure 2: Comparer, comme sur ce schéma, la succession des bases qui\ncomposent la séquence d'une molécule d'ADN avec la succession des\nlettres d'un texte permet de bien rendre compte des différences de\ntaille du génome d'un organisme à l'autre, et de se faire une\nmeilleure idée du travail que représente leur lecture. En moyenne, une\npage de La Recherche contient 5000 signes, et un numéro complet\nenviron 500 000. Si un signe représente une base, alors le génome\nd'un être humain est comparable à une pile de numéros de La Recherche\nde 33 mètres de haut. Celui d'une souris ne ferait que 30 mètres et\ncelui de la mouche drosophile, 1,70 mètre. Le génome de la bactérie\nSubtilis est comparable à huit numéros de La Recherche et celui du\nvirus O x 174, le premier génome entièrement séquencé en 1977 à une\npage et quelques lignes. Aujourd'hui de nombreux progrès sont encore\nnécessaires pour que le séquençage exhaustif du génome de l'homme et\nson interprétation soient réalisables .\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 185
+  },
+  {
+    "id": "CI-30",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Avant même la levure, les bactéries sont les organismes qui semblent\nse prêter le mieux au séquençage de génome. En effet, leur génome est\nextrêmement compact, tout semble y être signifiant, et nous disposons\nd'informations génétiques nombreuses à leur sujet.\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pages 212-232.",
+    "statut": "developpement",
+    "n_mots": 56
+  },
+  {
+    "id": "CI-31",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Que faire lorsqu'on est en face d'une séquence qui ne ressemble à\nrien de connu? Nous nous trouvons dans une position semblable à celle\nde l'archéologue qui découvre une langue inconnue, à partir de très\nnombreux textes. Et ce qu'il nous faut donc faire, c'est créer les\nmoyens de construire une pierre de Rosette pour les comprendre.\"\nAntoine Danchin \"Le Séquençage des petits génomes\" *La Recherche*\n251, Février 1993, Volume 24, pp. 212-232.",
+    "statut": "developpement",
+    "n_mots": 73
+  },
+  {
+    "id": "CI-32",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | catégorie originale de l'auteur : marque",
+    "texte": "\"Si l'on compare le génome à un grand livre dont chaque page serait\nun gène, cela revient à dire que toutes les cellules d'un organisme,\ndepuis l'oeuf jusqu'à l'adulte, disposent du même livre. C'est le\nmode de lecture du livre qui est strictement contrôlé, de sorte que\nquelques pages seulement sont lisibles dans chaque cellule.\"\nTanguy Chouard et Moshe Yamiv \"Le contrôle de l'expression des\ngènes\" *La Recherche* 266, Juin 1994, Volume 25, pp. 627/635",
+    "statut": "developpement",
+    "n_mots": 75
+  },
+  {
+    "id": "CI-33",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"C'est l'ARN messager qui ensuite décodé - on dit \"traduit\" en\nune protéine. Deuxième point, en l'absence de lactose, l'ARN\nmessager n'est simplement pas produit et la B galactosidase ne peut\npas être fabriquée; lorsqu'on introduit le lactose, la transcription\ndémarre presque immédiatement et avec elle, dans la foulée, la\ntraduction.\"\nTanguy Chouard et Moshe Yamiv \"Le contrôle de l'expression des\ngènes\" *La Recherche* 266, Juin 1994, Volume 25, pp. 627/635",
+    "statut": "developpement",
+    "n_mots": 71
+  },
+  {
+    "id": "CI-35",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | corrigé : marquage par guillemets jugé suffisant | catégorie originale de l'auteur : marque",
+    "texte": "\"La région d'un gène qui sera transcrite en ARN messager puis\ndécodée en protéine, appelée \"région codante\" est traduite selon le\n\"code génétique\". Ce code est simple: les bases sont groupées, trois\npar trois, et à chaque \"mot\" de trois bases correspond un composant\nélémentaire de la protéine (un acide aminé.)\nTanguy Chouard et Moshe Yamiv \"Le contrôle de l'expression des\ngènes\" *La Recherche* 266, Juin 1994, Volume 25, pp. 627/635",
+    "statut": "developpement",
+    "n_mots": 71
+  },
+  {
+    "id": "CI-36",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Certaines tumeurs portent même des antigènes qui leur sont propres\n(\"antigènes associés aux tumeurs\"), car ils sont \"silencieux\" dans\nles cellules normales.\"\nOdile Cohen-Haguenauer et Claudio Bordignon \"Les espoirs de la\nthérapie génique\" *La Recherche* 270, Novembre 1994, Volume 25.",
+    "statut": "developpement",
+    "n_mots": 40
+  },
+  {
+    "id": "CI-37",
+    "source": "These-Corpus-I",
+    "categorie": "reponse_correcte",
+    "verite_terrain": "reponse_correcte",
+    "note": " | corrigé : marquage par guillemets jugé suffisant | catégorie originale de l'auteur : marque",
+    "texte": "\"Ces rétrovirus ont une caractéristique marquante. Une fois à\nl'intérieur de la cellule infectée, ils \"copient\" leur génome,\nconstitué d'ARN, sous forme d'ADN, puis ce dernier s'intègre dans\nle génome de la cellule infectée.\"\nMajid Mehtali. \"Des virus pour greffer les gènes.\" *La Recherche*\n270, Novembre 1994, Volume 25, pages 1116-1119.",
+    "statut": "developpement",
+    "n_mots": 51
+  },
+  {
+    "id": "CI-38",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"C'est pourquoi l'un des axes de recherche prioritaires de\nplusieurs équipes dont le nôtre, est de développer des vecteurs de\nnouvelles générations permettant soit de réduire la réponse\nimmunitaire, soit d'éliminer au maximum les gènes viraux portés par\nle vecteur, dans le but d'obtenir une expression plus stable et\ndurable du gène thérapeutique.\"\nMajid Mehtali. \"Des virus pour greffer les gènes.\" *La Recherche*\n270, Novembre 1994, Volume 25, pages 1116-1119.",
+    "statut": "developpement",
+    "n_mots": 70
+  },
+  {
+    "id": "CI-39",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\"Cependant, dans le cas particulier ou le traitement par thérapie\ngénique consisterait non pas à exprimer un gène thérapeutique\nétranger, mais à bloquer le fonctionnement d'un gène dont le produit\nest néfaste à l'organisme, l'injection de courtes séquences de\nnucléotides parait une approche prometteuse à moyen terme. Ces\nséquences \"anti - sens\" obtenues par synthèse chimique sont conçues\npour se fixer sur une région particulière du gène cible et inhiber son\nfonctionnement. Cette stratégie a été adoptée pour un essai chimique\ndémarré en octobre 1993 sous l'égide de l'agence nationale de\nrecherche sur le SIDA avec une séquence anti - sens inhibant la\nréplication du VIH produite par la société américaine Hybridon.\nMajid Mehtali. \"Des virus pour greffer les gènes.\" *La Recherche*\n270, Novembre 1994, Volume 25, pages 1116-1119.",
+    "statut": "developpement",
+    "n_mots": 129
+  },
+  {
+    "id": "CI-40",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "\" Les adénovirus du groupe C\\... Ils possèdent une \"attirance\n(tropisme) naturelle pour l'épithélium respiratoire, ce qui permet de\nles utiliser en aérosols. Ils peuvent transporter la séquence codante\ndu gène CFTR, composée de 6,5 kilobases, puisqu'ils peuvent inclure\njusqu'à 7,5 kilobases d'ADN étranger, et sont capables d'infecter\nles cellules non engagées dans une division et d'y exprimer leur\ngénome (contrairement au rétrovirus). Surtout, l'expression des gènes\nportés par leur génome peut-être obtenue sans qu'ils aient à\ns'intégrer dans les chromosomes de l'hôte.\"\nGabriel Bellon, Andréa Paviani, Didier Lamy, Robert Gilly. \"Peut-on\nguérir la mucoviscidose?\" *La Recherche* 270, Novembre 1994, Vol 25,\npages 1119 à 1121.",
+    "statut": "developpement",
+    "n_mots": 106
+  },
+  {
+    "id": "CI-41",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "Antisens:\nMolécule (oligonucléotide) interagissant avec des ARN messagers et\nbloquant ainsi leur traduction et la synthèse des protéines\ncorrespondantes.\nGlossaire du dossier de *La Recherche* no 270, Novembre 1994, Volume\n25, page 1140/1141.",
+    "statut": "developpement",
+    "n_mots": 33
+  },
+  {
+    "id": "CI-42",
+    "source": "These-Corpus-I",
+    "categorie": "hallucination_confirmee",
+    "verite_terrain": "hallucination_confirmee",
+    "note": " | catégorie originale de l'auteur : non_marque",
+    "texte": "Expression d'un gène:\nEnsemble des mécanismes qui assurent le décodage de l'information\ncontenue dans le gène (transcription puis traduction en protéines).\nGlossaire du dossier de *La Recherche* no 270, Novembre 1994, Volume\n25, page 1140/1141.",
+    "statut": "developpement",
+    "n_mots": 35
+  }
+]
