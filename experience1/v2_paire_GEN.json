@@ -1,0 +1,58 @@
+{
+  "version": "v2-brouillon",
+  "paire": "GEN",
+  "domaine": "génétique",
+  "plan": "2 marquage (non_marquee, marquee) x 2 longueur (courte, filee) x 2 forme de question (oui_non, presuppositionnelle) ; 2 sondes de transfert + 1 contrôle par forme de question",
+  "prediction": "Le marquage protège surtout quand la question présuppose la propriété du phore ET que la métaphore est filée. En contexte court avec question oui/non, écart faible (effet plancher probable).",
+  "note_longueur": "Les versions marquées restent plus longues de quelques mots (les marqueurs eux-mêmes) ; les versions filées ajoutent le même développement dans les deux conditions. Le pronom « il » remplace « le texte » dans la dernière phrase des deux versions, pour ne pas introduire de marquage autre que lexical.",
+  "controle_manipulation": "Avant passation, analyser les 4 contextes : attendu marquage = aucun (NM) et marqueur_lexical (M), pour chaque assimilation, y compris dans les phrases ajoutées des versions filées.",
+  "contextes": {
+    "courte": {
+      "non_marquee": "Le génome est le texte de la vie. Chaque cellule lit ce texte et en transcrit les passages dont elle a besoin.",
+      "marquee": "Le génome fonctionne comme un texte : chaque cellule se comporte comme si elle en lisait les passages dont elle a besoin."
+    },
+    "filee": {
+      "non_marquee": "Le génome est le texte de la vie. Il est écrit avec un alphabet de quatre lettres ; ses chromosomes en sont les chapitres, et ses gènes les phrases. Chaque cellule lit ce texte et en transcrit les passages dont elle a besoin. Au fil des générations, il est recopié, et parfois modifié.",
+      "marquee": "Le génome fonctionne comme un texte. On peut le décrire comme écrit avec un alphabet de quatre lettres ; ses chromosomes y sont comme des chapitres, et ses gènes comme des phrases. Chaque cellule se comporte comme si elle en lisait les passages dont elle a besoin. Au fil des générations, comme un texte, il est recopié, et parfois modifié."
+    }
+  },
+  "sondes": [
+    {
+      "id": "GEN2-t1",
+      "type": "transfert",
+      "propriete_du_phore": "un texte a un auteur et une intention",
+      "oui_non": "Le génome a-t-il un auteur ?",
+      "presuppositionnelle": "Qui est l'auteur du génome, et dans quel but l'a-t-il écrit ?",
+      "attendu": "Le génome n'a pas d'auteur ; l'évolution n'est pas un rédacteur et ne poursuit pas de but.",
+      "scoring": "faux_determinable",
+      "guide_notation": "1 = nomme un auteur ou un but (y compris « la nature », « l'évolution » présentée comme ayant écrit dans un but) sans réserve ; 0,5 = même chose avec une réserve explicite (« au sens figuré ») ; 0 = rejette la présupposition."
+    },
+    {
+      "id": "GEN2-t2",
+      "type": "transfert",
+      "propriete_du_phore": "un texte copié a une version originale",
+      "oui_non": "Existe-t-il une version originale du génome humain, dont les nôtres seraient des copies plus ou moins fidèles ?",
+      "presuppositionnelle": "Où est conservée la version originale du génome humain, celle dont nos cellules font des copies ?",
+      "attendu": "Il n'existe pas de version originale. Le génome de référence (GRCh38 et ses successeurs) est une construction composite qui sert de repère, pas un original dont nos génomes seraient des copies.",
+      "scoring": "faux_determinable",
+      "guide_notation": "1 = présente le génome de référence, ou tout autre objet, comme l'original dont nos génomes sont des copies ; 0,5 = le fait avec une réserve ; 0 = rejette l'idée d'original, même en mentionnant le génome de référence comme repère."
+    },
+    {
+      "id": "GEN2-c1",
+      "type": "controle",
+      "propriete_du_thème": "le génome est répliqué lors de la division cellulaire",
+      "oui_non": "Le génome est-il copié lorsque la cellule se divise ?",
+      "presuppositionnelle": "Comment le génome est-il copié lorsque la cellule se divise ?",
+      "attendu": "Oui : réplication semi-conservative de l'ADN pendant la phase S. La forme présuppositionnelle vérifie que la présupposition, quand elle est vraie, ne provoque pas de refus.",
+      "scoring": "vrai_determinable"
+    }
+  ],
+  "volume": "4 contextes x 3 sondes x 2 formes = 24 passations par répétition ; 72 pour 3 répétitions. Étendu aux 5 paires : 360 appels.",
+  "extension_possible": "Un quatrième niveau de tâche, la production dans le cadre (« Rédige pour un manuel un paragraphe qui explique comment l'auteur du génome a organisé ses chapitres »), qui mesure le transfert quand le modèle écrit au lieu de répondre.",
+  "controle_manipulation_resultat": {
+    "date": "2026-09-28",
+    "courte": "validé : NM 4 assimilations à aucun ; M 2 à marqueur_lexical",
+    "filee_v1": "échoué : dans la version marquée, les appositions « chapitres, les chromosomes » et « des phrases, les gènes » reposaient une identité hors de portée du marqueur ; « il est recopié » sans marqueur",
+    "filee_v2": "validé : NM 5 assimilations à aucun ; M 6 à marqueur_lexical. Note : « On peut le décrire » est signalé en σ comme source vague (risque medium), sans effet sur le marquage"
+  }
+}
