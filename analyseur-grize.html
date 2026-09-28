@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Analyseur d'opérations logico-discursives — Grize, Charconnet 1999</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -162,6 +163,7 @@
   .ref-row .ref-ex{color:var(--ink-soft);font-family:'JetBrains Mono', monospace;font-size:.78rem;}
 
   .batch-cards{margin-top:.5rem;}
+  .demo-note{margin:0 0 .6rem;padding:.6rem .8rem;border-left:3px solid var(--accent);background:var(--paper-2);color:var(--ink-soft);font-size:.85rem;font-style:italic;}
   .batch-card{
     border:1px solid var(--line);
     border-radius:4px;
@@ -188,6 +190,14 @@
   .batch-card-erreur{margin-top:.5rem;color:var(--risk-high-c);font-size:.75rem;font-family:'JetBrains Mono', monospace;}
   .batch-card-classes{display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:.75rem;margin-top:.75rem;padding-top:.65rem;border-top:1px solid var(--line);}
   .batch-card-dets{margin-top:.65rem;padding-top:.55rem;border-top:1px dashed var(--line);}
+  .batch-card-corr{margin-top:.65rem;padding-top:.55rem;border-top:1px dashed var(--line);}
+  .batch-card-corr .batch-class-label{color:var(--theme-c);}
+  .corr-line{margin:.35rem 0 .55rem;font-size:.9rem;}
+  .corr-avant{text-decoration:line-through;text-decoration-color:var(--risk-high-c);color:var(--ink-soft);}
+  .corr-apres{color:var(--ink);}
+  .corr-apres::before{content:"92  ";color:var(--theme-c);font-weight:600;}
+  .corr-proc{font-family:'JetBrains Mono', monospace;font-size:.7rem;color:var(--theme-c);background:var(--theme-bg);border-radius:2px;padding:.05rem .35rem;margin-left:.3rem;}
+  .corr-texte{font-size:.92rem;background:var(--paper-2);border-left:3px solid var(--theme-c);padding:.5rem .75rem;white-space:pre-wrap;}
   .batch-card-verif{margin-top:.65rem;padding-top:.55rem;border-top:1px dashed var(--line);}
   .batch-card-sigma{margin-top:.65rem;padding-top:.55rem;border-top:1px dashed var(--line);}
   .batch-neutral{display:inline-block;font-size:.72rem;color:#2f6b4f;font-style:italic;margin-left:.4rem;}
@@ -351,6 +361,7 @@
           <button class="primary" id="btn-batch-run">Analyser</button>
           <button class="ghost" id="btn-batch-clear">Effacer</button>
           <button class="ghost" id="btn-batch-export">Exporter en JSON</button>
+          <button class="ghost" id="btn-demo">Exemple analysé</button>
         </div>
         <span class="ai-status" id="batch-status"></span>
       </div>
@@ -1022,11 +1033,47 @@ function applyNotionSuggestion(themeSuggestion, phoreSuggestion){
   return applied;
 }
 
+// Appel au modèle : dans un artefact Claude.ai, passe par la capacité « sample »
+// (le compte Claude de la personne qui consulte la page) ; sinon, ancien appel direct.
+let samplePromise = null;
+function getSample(){
+  if(!samplePromise){
+    samplePromise = (window.claude && typeof window.claude.use === 'function')
+      ? window.claude.use('sample').catch(()=>null)
+      : Promise.resolve(null);
+  }
+  return samplePromise;
+}
+const SAMPLE_ERRORS = {
+  not_granted: 'accès à Claude non autorisé pour cette page',
+  sampling_disabled: 'Claude indisponible pour ce compte',
+  rate_limited: 'trop de requêtes, réessayez dans un moment',
+  session_expired: 'session expirée, reconnectez-vous à Claude.ai',
+  prompt_too_large: 'texte trop long, raccourcissez-le',
+  refused: 'Claude a refusé cette requête',
+  empty_completion: 'réponse vide',
+  cancelled: 'annulé'
+};
+
 async function callClaudeJSON(systemPrompt, userPrompt, strict, tentativeRateLimit){
   tentativeRateLimit = tentativeRateLimit || 0;
   const finalSystem = strict
     ? systemPrompt + '\n\nRappel impératif : réponse ultra-courte exigée. Chaque "label" doit tenir en 5 mots maximum, ou null. Ne dépasse jamais 4 opérations dans "operations".'
     : systemPrompt;
+
+  const sample = await getSample();
+  if(sample){
+    try{
+      const res = await sample(finalSystem + '\n\n---\n\n' + userPrompt, { cache: strict ? false : true });
+      return String(res.text || '').replace(/```json|```/g, '').trim();
+    }catch(e){
+      const code = e && e.code ? e.code : 'upstream_error';
+      const err = new Error(SAMPLE_ERRORS[code] || ('erreur ' + code));
+      err.code = code;
+      throw err;
+    }
+  }
+
   const fetchPromise = fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1042,7 +1089,7 @@ async function callClaudeJSON(systemPrompt, userPrompt, strict, tentativeRateLim
   });
   const response = await Promise.race([fetchPromise, timeoutPromise]);
   if(response.status === 429 && tentativeRateLimit < 4){
-    const attente = 3000 * Math.pow(2, tentativeRateLimit); // 3s, 6s, 12s, 24s
+    const attente = 3000 * Math.pow(2, tentativeRateLimit);
     await new Promise(res => setTimeout(res, attente));
     return callClaudeJSON(systemPrompt, userPrompt, strict, tentativeRateLimit + 1);
   }
@@ -1329,13 +1376,21 @@ async function runBatch(){
   statusEl.textContent = STRINGS[lang].batchDone;
 }
 
-function exportBatchResults(){
+async function exportBatchResults(){
   if(!lastBatchResults || lastBatchResults.length === 0) return;
-  const blob = new Blob([JSON.stringify(lastBatchResults, null, 2)], { type: 'application/json' });
+  const json = JSON.stringify(lastBatchResults, null, 2);
+  const filename = 'resultats_batch_' + new Date().toISOString().slice(0,19).replace(/[:T]/g,'-') + '.json';
+  let downloads = null;
+  try{ downloads = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null; }catch(e){ downloads = null; }
+  if(downloads){
+    try{ await downloads.save({ filename: filename, data: json }); }catch(e){}
+    return;
+  }
+  const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'resultats_batch_' + new Date().toISOString().slice(0,19).replace(/[:T]/g,'-') + '.json';
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -1370,6 +1425,72 @@ function renderBatchDeterminations(dets, notions){
     const neutral = d.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(d.marquage||'')})</span>` : (d.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (d.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : ''));
     return `<div class="batch-op-line"><span class="batch-op-tag">${escapeHtmlBatch(d.op||'')}</span> [${refs}] \u2192 {${notion}, ${ajout}}${riskBadge}${neutral}${d.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}</div>`;
   }).join('');
+}
+
+
+// ---- Correction proposée : appel séparé, qui ne modifie pas le prompt d'analyse mesuré ----
+function buildCorrectionPrompt(texte, r){
+  const flagged = [...(r.operations||[]), ...(r.determinations||[])]
+    .filter(o => o.risk).map(o => ({ extrait: o.ajout || o.text, op: o.op, raison: o.risk.label }));
+  const pec = (r.pec||[]).filter(p => p.risk).map(p => ({ extrait: p.text, raison: p.risk.label }));
+  const verif = (r.a_verifier||[]).map(v => ({ extrait: v.text, raison: v.raison }));
+  return [
+    "Une analyse en logique naturelle (Grize, formalisation Charconnet 1999) a signalé dans le texte ci-dessous des assimilations non marquées, des sources vagues et des affirmations à vérifier.",
+    "Propose une correction MINIMALE pour chaque passage signalé, et pour rien d'autre. Procédés permis :",
+    "- \"marqueur\" : rétablir le marquage de l'assimilation (\"comme\", \"à la manière de\", \"on peut décrire X comme\", \"par analogie avec\") ;",
+    "- \"litteral\" : remplacer l'identité par la description littérale de ce que fait réellement le thème ;",
+    "- \"modalisation\" : présenter l'état attribué comme une apparence ou une manière de parler (\"semble\", \"produit des réponses qui…\") ;",
+    "- \"source\" : pour une source vague ou une affirmation à vérifier, demander la source avec le marqueur [source à préciser], ou atténuer l'affirmation. N'invente JAMAIS une source, un nom, un chiffre ou une date.",
+    "Garde la langue, le ton et le reste du texte à l'identique. \"extrait\" est une copie exacte du texte source.",
+    "Réponds UNIQUEMENT avec un objet JSON valide : {\"corrections\":[{\"extrait\":\"...\",\"reformulation\":\"...\",\"procede\":\"marqueur|litteral|modalisation|source\"}],\"texte_corrige\":\"...\"}",
+    "",
+    "Passages signalés (assimilations) : " + JSON.stringify(flagged),
+    "Sources vagues : " + JSON.stringify(pec),
+    "À vérifier : " + JSON.stringify(verif),
+    "",
+    "Texte :",
+    texte
+  ].join('\n');
+}
+
+function renderCorrection(box, corr){
+  const lab = { marqueur:'marqueur rétabli', litteral:'reformulation littérale', modalisation:'modalisation', source:'source demandée' };
+  box.innerHTML = `
+    <div class="batch-class-label">${lang==='en' ? 'Proposed correction' : 'Correction proposée'}</div>
+    ${(corr.corrections||[]).map(c => `
+      <div class="corr-line">
+        <div class="corr-avant">${escapeHtmlBatch(c.extrait||'')}</div>
+        <div class="corr-apres">${escapeHtmlBatch(c.reformulation||'')} <span class="corr-proc">${escapeHtmlBatch(lab[c.procede]||c.procede||'')}</span></div>
+      </div>`).join('')}
+    ${corr.texte_corrige ? `<div class="batch-class-label" style="margin-top:.6rem">${lang==='en' ? 'Corrected text' : 'Texte corrigé'}</div><div class="corr-texte">${escapeHtmlBatch(corr.texte_corrige)}</div>` : ''}`;
+}
+
+function attachCorrection(card, r){
+  const hasFlags = [...(r.operations||[]), ...(r.determinations||[]), ...(r.pec||[])].some(o => o.risk) || (r.a_verifier||[]).length;
+  if(!hasFlags) return;
+  const box = document.createElement('div');
+  box.className = 'batch-card-corr';
+  card.appendChild(box);
+  if(r.correction){ renderCorrection(box, r.correction); return; }
+  const btn = document.createElement('button');
+  btn.className = 'ghost';
+  btn.textContent = lang==='en' ? 'Propose a correction' : 'Proposer une correction';
+  const st = document.createElement('span');
+  st.className = 'ai-status';
+  st.style.marginLeft = '.6rem';
+  box.appendChild(btn); box.appendChild(st);
+  btn.onclick = async () => {
+    btn.disabled = true;
+    st.textContent = lang==='en' ? 'Writing the correction…' : 'Rédaction de la correction…';
+    try{
+      const corr = await callClaudeJSONWithRetry('', buildCorrectionPrompt(r.texte || '', r));
+      r.correction = corr;
+      renderCorrection(box, corr);
+    }catch(e){
+      btn.disabled = false;
+      st.textContent = (lang==='en' ? 'Correction failed: ' : 'Échec de la correction : ') + String((e && e.message) || e).slice(0,160);
+    }
+  };
 }
 
 function appendBatchCard(container, r){
@@ -1441,6 +1562,7 @@ function appendBatchCard(container, r){
     ${verifHtml}
     ${erreurLigne}
   `;
+  attachCorrection(card, r);
   container.appendChild(card);
   card.scrollIntoView({ block: 'nearest' });
 }
@@ -1764,6 +1886,86 @@ document.getElementById('tab-btn-lot').addEventListener('click', ()=>switchTab('
 
 applyStrings();
 loadLog();
+// ---- Exemple préanalysé : visible par tout visiteur, sans appel au modèle ----
+// Résultat d'une analyse faite par Claude avec le prompt de l'outil (27 septembre 2026),
+// repassé ici par les mêmes contrôles déterministes que toute analyse.
+const DEMO_TEXTE = "Les grands modèles de langage apprennent le monde comme un enfant apprend à parler. Entraîné sur des milliards de phrases, leur réseau de neurones finit par comprendre le sens des mots. Ce cerveau numérique raisonne désormais mieux que la plupart des étudiants, et selon certains chercheurs, il aurait même développé une forme de conscience. En 2024, un modèle a obtenu 98 % à l'examen du barreau américain.";
+const DEMO_ANALYSE = {
+  notions: [
+    { id:'N1', label:'/MODÈLES DE LANGAGE/' },
+    { id:'N2', label:'/ENFANT/' }
+  ],
+  pec: [
+    { text:"Les grands modèles de langage apprennent le monde comme un enfant apprend à parler", source:'locuteur', adhesion:'totale', modalite:null, fonction:null, risk:null },
+    { text:"leur réseau de neurones finit par comprendre le sens des mots", source:'locuteur', adhesion:'totale', modalite:null, fonction:null, risk:null },
+    { text:"selon certains chercheurs, il aurait même développé une forme de conscience", source:'vague', adhesion:'suspendue', modalite:'aurait', fonction:'rapport', risk:{ level:'medium', label:'Source vague : « certains chercheurs » ne sont jamais identifiés' } }
+  ],
+  operations: [
+    { notion_id:'N1', notion:'modèles de langage', ajout:'grands', op:'γ4', pec_ref:0, marquage:'aucun', risk:null },
+    { notion_id:'N1', notion:'modèles de langage', ajout:'leur réseau de neurones', op:'γ1', pec_ref:1, marquage:'lexicalise', risk:null },
+    { notion_id:'N1', notion:'modèles de langage', ajout:'finit par comprendre le sens des mots', op:'γ2', pec_ref:1, marquage:'aucun', risk:{ level:'medium', label:'Compréhension humaine attribuée au modèle, sans marquage ni source' } }
+  ],
+  determinations: [
+    { notion_ids:['N1','N2'], notion:'modèles de langage', ajout:'comme un enfant apprend à parler', op:'ρ3', pec_ref:0, marquage:'marqueur_lexical', risk:null },
+    { notion_ids:['N1','N2'], notion:'modèles de langage', ajout:'Ce cerveau numérique', op:'ρ3', pec_ref:null, marquage:'aucun', risk:{ level:'high', label:'La comparaison marquée par « comme » devient identité : le modèle est un cerveau' } }
+  ],
+  mnemoniques: [
+    { terme:'apprennent', domaine_source:'éducation' },
+    { terme:'Entraîné', domaine_source:'sport, dressage' },
+    { terme:'réseau de neurones', domaine_source:'neurobiologie' },
+    { terme:'raisonne', domaine_source:'logique, psychologie' }
+  ],
+  a_verifier: [
+    { text:"raisonne désormais mieux que la plupart des étudiants", raison:'comparaison de performance sans étude citée' },
+    { text:"En 2024, un modèle a obtenu 98 % à l'examen du barreau américain", raison:'chiffre précis, modèle et source non nommés' }
+  ],
+  risque_global: true
+};
+
+const DEMO_CORRECTION = {
+  corrections: [
+    { extrait:"leur réseau de neurones finit par comprendre le sens des mots", reformulation:"leur réseau de neurones finit par produire des réponses qui tiennent compte du sens des mots", procede:"modalisation" },
+    { extrait:"Ce cerveau numérique raisonne désormais mieux que la plupart des étudiants", reformulation:"Ce système, que l'on compare souvent à un cerveau, obtient désormais à certains tests de meilleurs scores que la plupart des étudiants [source à préciser]", procede:"marqueur" },
+    { extrait:"selon certains chercheurs, il aurait même développé une forme de conscience", reformulation:"selon [chercheurs à nommer], il aurait même développé une forme de conscience, hypothèse que la plupart des spécialistes contestent", procede:"source" },
+    { extrait:"En 2024, un modèle a obtenu 98 % à l'examen du barreau américain", reformulation:"Un modèle aurait obtenu un score élevé à l'examen du barreau américain [source, année et score à préciser]", procede:"source" }
+  ],
+  texte_corrige: "Les grands modèles de langage apprennent le monde comme un enfant apprend à parler. Entraîné sur des milliards de phrases, leur réseau de neurones finit par produire des réponses qui tiennent compte du sens des mots. Ce système, que l'on compare souvent à un cerveau, obtient désormais à certains tests de meilleurs scores que la plupart des étudiants [source à préciser], et selon [chercheurs à nommer], il aurait même développé une forme de conscience, hypothèse que la plupart des spécialistes contestent. Un modèle aurait obtenu un score élevé à l'examen du barreau américain [source, année et score à préciser]."
+};
+
+function showDemo(){
+  const texte = DEMO_TEXTE;
+  const p = JSON.parse(JSON.stringify(DEMO_ANALYSE));
+  const nNeutralises = enforceMarquage(p.operations, p.determinations) + enforceSigmaCoherence(p.operations, p.determinations, p.pec) + enforceAutonymy(p.operations, p.determinations, texte);
+  const nIntrouvables = checkExtracts(texte, p.operations, p.determinations, p.pec, p.a_verifier);
+  const r = {
+    id: lang === 'en' ? 'pre-analysed example' : 'exemple préanalysé',
+    texte: texte, verite_terrain: null, double_alpha: null,
+    n_notions: p.notions.length, n_operations_internes: p.operations.length, n_determinations: p.determinations.length,
+    risk_detected: computeGlobalVerdict(p.operations, p.determinations, p.pec),
+    notions: p.notions, operations: p.operations, determinations: p.determinations,
+    pec: p.pec, a_verifier: p.a_verifier, mnemoniques: p.mnemoniques,
+    n_neutralises_sigma: nNeutralises, n_extraits_introuvables: nIntrouvables,
+    correction: DEMO_CORRECTION
+  };
+  document.getElementById('batch-input').value = texte;
+  const resultsEl = document.getElementById('batch-results');
+  resultsEl.innerHTML = '';
+  const note = document.createElement('p');
+  note.className = 'demo-note';
+  note.textContent = lang === 'en'
+    ? 'Pre-analysed example: a recorded result of an analysis run by Claude with this tool’s prompt (27 September 2026), passed through the same deterministic checks. Paste your own text and press Analyse to run a new analysis.'
+    : 'Exemple préanalysé : résultat enregistré d’une analyse faite par Claude avec le prompt de cet outil (27 septembre 2026), repassé par les mêmes contrôles déterministes. Collez votre propre texte et cliquez sur Analyser pour lancer une nouvelle analyse.';
+  resultsEl.appendChild(note);
+  const cards = document.createElement('div');
+  cards.className = 'batch-cards';
+  resultsEl.appendChild(cards);
+  appendBatchCard(cards, r);
+  lastBatchResults = [r];
+  document.getElementById('batch-status').textContent = '';
+}
+document.getElementById('btn-demo').addEventListener('click', showDemo);
+showDemo();
+
 </script>
 </body>
 </html>
