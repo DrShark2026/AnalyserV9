@@ -256,6 +256,7 @@
     <p class="cta-meta"><a href="analyseur-grize.html" id="cta-offline">Version hors ligne (détection par règles seulement)</a></p>
     <a class="cta-btn ghost" href="these-charconnet-1999.pdf" id="cta-thesis-btn">Télécharger la thèse (PDF)</a>
     <p class="cta-meta" id="cta-thesis-meta">383 pages — Paris VIII, 1999</p>
+    <p class="cta-meta"><a href="cv.html" id="cta-cv">Curriculum vitae (en anglais)</a></p>
   </div>
 
   <div class="colophon" id="colophon">Jean Charconnet, 2026 — d'après Grize, « Logique naturelle et communications », 1996 ; Charconnet, « Analogie et logique naturelle », 2003.</div>
@@ -274,6 +275,7 @@ const CONTENT = {
     ctaText: "De cette histoire est né un outil : un analyseur qui applique les mêmes opérations logico-discursives — pour repérer, aujourd'hui, les analogies que fabriquent les intelligences artificielles.",
     ctaBtn: "Ouvrir l'analyseur",
     ctaOffline: "Version hors ligne (détection par règles seulement)",
+    ctaCv: "Curriculum vitae (en anglais)",
     ctaThesisBtn: "Télécharger la thèse (PDF)",
     ctaThesisMeta: "383 pages — Paris VIII, 1999",
     colophon: "Jean Charconnet, 2026 — d'après Grize, « Logique naturelle et communications », 1996 ; Charconnet, « Analogie et logique naturelle », 2003.",
@@ -349,6 +351,7 @@ const CONTENT = {
     ctaText: "This story gave rise to a tool: an analyser applying the same logico-discursive operations — to catch, today, the analogies artificial intelligence produces.",
     ctaBtn: "Open the analyser",
     ctaOffline: "Offline version (rule-based detection only)",
+    ctaCv: "Curriculum vitae",
     ctaThesisBtn: "Download the thesis (PDF)",
     ctaThesisMeta: "383 pages — Paris VIII, 1999",
     colophon: "Jean Charconnet, 2026 — after Grize, \u201cLogique naturelle et communications\u201d, 1996; Charconnet, \u201cAnalogie et logique naturelle\u201d, 2003.",
@@ -427,6 +430,7 @@ function render(lang){
   document.getElementById('cta-text').textContent = c.ctaText;
   document.getElementById('cta-btn').textContent = c.ctaBtn;
   document.getElementById('cta-offline').textContent = c.ctaOffline;
+  document.getElementById('cta-cv').textContent = c.ctaCv;
   document.getElementById('cta-thesis-btn').textContent = c.ctaThesisBtn;
   document.getElementById('cta-thesis-meta').textContent = c.ctaThesisMeta;
   document.getElementById('colophon').textContent = c.colophon;

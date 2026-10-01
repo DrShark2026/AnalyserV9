@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jean Charconnet, Ph.D.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow reading column; a hero that shows the "like → is" slide; short labelled sections. */
+:root{
+  --bg:#f7f8f6; --surface:#ffffff; --ink:#16201f; --muted:#56625f; --rule:#d9dfdc;
+  --accent:#0c6b62; --mark:#f3d75a; --strike:#b8433a;
+  --display:"Instrument Serif", Georgia, "Times New Roman", serif;
+  --body:"Public Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111716; --surface:#18201f; --ink:#e7ecea; --muted:#9aa8a4; --rule:#2c3634;
+  --accent:#5fc7b8; --mark:#8a7419; --strike:#e07b70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111716; --surface:#18201f; --ink:#e7ecea; --muted:#9aa8a4; --rule:#2c3634;
+  --accent:#5fc7b8; --mark:#8a7419; --strike:#e07b70; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body)}
+.wrap{max-width:46rem;margin:0 auto;padding-inline:20px;padding-block:3.5rem 4rem;display:flex;flex-direction:column;gap:3rem}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.label{font:500 .72rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font:400 clamp(2.6rem,7vw,3.8rem)/1.02 var(--display);margin:.6rem 0 0;text-wrap:balance}
+.role{font-size:1.05rem;color:var(--muted);margin:.6rem 0 0}
+.thesis{font:400 clamp(1.5rem,4vw,2rem)/1.3 var(--display);margin:1.8rem 0 0;text-wrap:balance}
+.slide{white-space:nowrap}
+.slide s{color:var(--strike);text-decoration-thickness:2px}
+.slide mark{background:var(--mark);color:inherit;padding:0 .15em;border-radius:2px}
+.contact{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin-top:1.6rem;font:400 .85rem/1.4 var(--mono)}
+.contact span{color:var(--muted)}
+.head{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap}
+.head .id{min-width:0;flex:1 1 16rem}
+.portrait{width:7.5rem;height:7.5rem;object-fit:cover;object-position:50% 30%;border-radius:50%;border:1px solid var(--rule);flex:none}
+section{display:flex;flex-direction:column;gap:1rem}
+h2{font:400 1.7rem/1.1 var(--display);margin:0;padding-bottom:.5rem;border-bottom:1px solid var(--rule)}
+.bring{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1.2rem 1.6rem}
+.bring div{min-width:0}
+.bring h3{font:600 .95rem/1.3 var(--body);margin:0 0 .3rem}
+.bring p{margin:0;color:var(--muted);font-size:.95rem}
+.tool{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1.2rem 1.3rem}
+.tool h3{font:400 1.35rem/1.2 var(--display);margin:0 0 .4rem}
+.tool p{margin:0}
+.tool .try{margin-top:.8rem;font:500 .85rem/1 var(--mono)}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.9rem}
+.list li{display:grid;grid-template-columns:7.5rem 1fr;gap:1rem}
+.list .when{font:400 .82rem/1.6 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.list b{font-weight:600}
+.list .what{min-width:0}
+.list .what span{display:block;color:var(--muted);font-size:.93rem}
+@media (max-width:520px){.list li{grid-template-columns:1fr;gap:0}}
+.also{color:var(--muted);font-size:.95rem;margin:0}
+footer{font:400 .78rem/1.5 var(--mono);color:var(--muted);border-top:1px solid var(--rule);padding-top:1rem}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="head">
+    <img class="portrait" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAE/APADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDCL575qMk5NNBOeaeQT0rtOQhkAPOahkXHSrZT5eRUbRk+1IVymxKnpUbctVt4uehqFxyQBRYLkSirETYWo1XFOkYIu48D1qloSTKeeTWJrviCGyBijYGTHbnFVdX17ycpEpyO9cje3aSyPNI2ST1HJrnq1uiNKdK+rJry8e8mLEzMp9+hp1sZoDgTFkzkbuoqSwiAhFw24xnoW4qSaa2UOyoCuMkg8iuNs60iUajeRnCQowHbvTrnVbyF1kj3AEZZQelYxvLkyFoRHKoHTvioL69M23zEeFsYPOQacZMTidHd+IbprdBHJvwOQRg1Z0vxrLDKkN3FuU9GBriIbtmLRmfgeoqS5XYiyJOr/Uda0U2iHBM9f07XbDUMCGZQ+OVPBrRDDGc14fbXSyPGFl8p+zKcEe1dXoXi6ayYWupsZVU4Eq8nHuK1jVvuZyp22PRc5oOOwqlYX9tewCa2mSVD3U9Kt5GK2vczEPvTccU4KAOuaCPfNADAtKRnnpTxx1NNJpAIBx70KBThjFBx61LGAAzShQaRQM9alUCmtQFVKeART0C4GaeFyRWiAoBCOwqRM05Fz1NPAxxmnYzuRMDjjFRsDnBqZ+BmmfeosIrSBuxqFhzV1lXmq8gAPWmFysQc5qnqtxBb2by3L7YwOc1LqV5DaRNJI+0KM15z4g1ubU5dqj9wh+761lUqKKNIQcmJrOoRzqDbhl3HhTT9IsbeMeddbZJOvlg1S06O5vJwIowDnAJHSuntlsNJjDgG5uDwzY+UV50qh3QptmZrEd9OdmxkjA+RR0FU7Ozmiz5zbR3YHpXRzanNOysFUAfw4qe405ruBZIlUPjJA71lKqjaNE51rGKKUvbPksOhHFMdZJYipgVZB0PrW3HYbEKMhQ+9VHgnhB+TcP5UlUKdI5i80y5UmWRdikdR3rMErK20jI96665s7u9/doDjrj1qrJoVzGPmtz7gitI1V1MnRl0MALHJGXT5fUenvT2nYARyHLAfKav3WkzQkMsbAHgr6VTvLKUqrYIK9jV86IdOSL+iazPazeZbSeTOOCAfkk+or0DQfFtpfbYLhhBddCjHgn2NeQnfE2eQ1FxMZWEgJDDuK2jNoxlA+g1kB5B608NXm3w98UNPjTL6QmQf6qQnqPQ13yyZwa6Yy5kYNWLZYZ601j+NRbhj60pYVQiQHHel3+tQM2BkUgcEYqGO5Oj/ADdanViKqxVMGOeKaAtxc45qyuCAKpxNzVqJgKtAxiDpSuFz70RgYqUR7jntWhiVnWoiuBxVyWPg4qAp60CuVj9ap39xFBE8kjBVUZJNXZFI6HiuF+JOpeXaixRsNJycdcVM5KKuVGLbsc9r2unWr1oIsrboeT/eqhbRJNcbIU+UVXtrZmMdvb5Mkn3j6Cu00bQXiiVVjJPrXkYisk7s9bD0OYq2Vi8agICN3XFbumeGrm7QgIyg9OK3/D+jr5ymRd+OpNd/ptlCqDauPwryqmIfQ9WFFI8ztPA9ySrzSk7T/COtaf8AYUtvxCjke4r1CG2jzyB+VPWyVgcRjBrD6xLqbexR5l/wjj3SESQjJFNh8D7RvBb3Dc16a2n7TkHHFNe3bZjimq0mHskcFbeEYIsEdfQ1cfw+mwgxq+RyCK6ownftC81ZS3+UAgUe1l3H7JHmmoeGrZl8qeEKG6MO1c/f+EN4IUrIo6EDmvYLqzjmba681Rk0iJEYryKpV5LqS6KPnjXfC7wO5Ccj2rk7+wlt1L7DtHX2r6O13S1aMkxq3HpXnPiHSo2V1WMgHtiuuji31OOthE1dHlVtcPbXKzxEBgc1694O1cajpSSH74+Vh6GvKda082VyRghT0re+Gt+8OqNZk/LIMge9evSnfVHj1abTPVVkzxinFuueKrq+cVKeldZzilhiiInJ9KQrzx0p6ew5qR2JYic9KsdBmokHAqYcjnrTQD4j81WozyKqpwcirUXXIp3BjocjjFW0AA9KgQDA4qzH6Yrdo5xjjrUMiZHFWmA5FRMCM8UCuZt4whid34ABJryC8P8AberXd6xbYrFIwenFen+Op3tfDt3MhAdYyATXnehXECaFGHUbmbG71J61x4l20OvDq5a8I6aiSNdOAWJwvtXf6cgWNQQOT0rA0SJAUCjj0rr7GAyYG2vncTJuWp9Fh42ijQ0mI7+FxXX6fDiMFuuORWRpFttYFhwOK6W2TnpXFLU64odEvT5auRoMYAxUsFtuQHiplg25yeKFBml0VTb7myKRbZc8itBIwDwaDHg1SgTco/ZY+y4NRyQAHpWosfeopouScVTiHMYskI3HtUE8HymtOeBgxIFQTxsUxg1m4se5zWo2/wAjZAxXD+ILGNmYgYBr0TUEP+rHX3rltbtPlzjnNEXZkSR454s0qOW3mRlGRyDjoa4HSLl9O1WGfnMbivZfEdmdrZHPSvI9ctvL1WVQMZ+YV7eDqXVjx8bTSfMeyWjrcW6TL0YAirSL61i+DLqO70W3ZW3MF2t7EV0UaZ57V68dUeQ9GQbSD0p8aeoqcoT0p0cZFXyhcaiin4681Isee1IyEGk0Ai1Yj4HWotpqxGnFKwMuIeMYqVfaoIju5q3GPl966WcwwjmmMM1YZeMYqFhjrSYHDfGOR4/CM20gBmUEeteV6bdF/s8IPyDnHvXofxxuSNIt7Zf+WknP4V5dopAugecCuDEbndhlseraA6q8S54Ir0PQ4mZd23ivLtAkLOjEYHavWfCzGS0GRXztfc+hpbHRWMRXZx171tWgTIyao2i5QCrsOF4HU1znSjWt3XbgDNSsT2HNVbXaByRVsMMdRWiegMYjsG+5Tw3P3c0Dr2pPpVICTcCDxTJSCvAp4BxSSEDrVWJKk2OmKrylCMEEVYlJ3eoqpP0PoKh2LRl6gq54xzWDqEIeI8ZrZ1HcOR3qmVyhBrHqORwHiOwxbyP1I6V4h4wTy9RDqeckEV9D+JtohdSuMivAPHsWNS3DpnmvRwTfMeZjF7hsfCG5Mi3Vqzcq28D2r02JPlrw7wJdNZeLoAjELIdh9817zABsFe9Seh4VRWY2OL5aesYzVhU4pdgFamdyAIRQy1N7UyQUmNEY2g81KjDHFQ8ZoD9qCmX4gfSrsKnAqOKME8HFWUXjANdByjZRjGKqy5GatyDCnnpVSbuc0mM8i+OUx82yhHYMa8705zG1d58aMy6taoB0jJP515/aj96FJOM8159Z3bO+hokejeF5HeBS/foK9P0HVEsNL81wWVSFGBk5NeU+GZRuVVJIHAzXqfglElR4pQGXrg14OIjqe7Reh3+lStJAjn+IZrTjAByeTWZYJuCquVxxitdIxjBPNciOpFq2AIBzVtQOB0qraKPrVsDntWkUUOGAwBpG7YNAHPWkbIqwAyupx15pJHLL0x70hOT0pSOQCKYNEL5xnHNUJ2YZBFacxA6jgVQuNpJOKiSGmYt82QQaqO37hgOuOK0LwDcQFqhcREIWFYtWBs5PxgxSzDY5NeH+MVEt4R/FXtni5wbJgeoPSvCfG8jQ6usg4FejgdzzsZ8JztpK9jq8NwOSkgP619HaLL9qsIZyuN6A188XwV3juEXIyM19CeFHSbQrV0wB5S17lE8OqaQ496UgEU/aaaeBXQYEbjioJSBU0jZqrLx3qSkRseTTMjuaGJqIsefSkzQ66OPjpUgX0psbYGTxTyR1roZyEUo/+vVKfHNXJm4NZd/MIUMj8KOtS3ZFJHk/xLUPr7PnP7sL9K4a1tybzABJ3dq6PxzqccviC4eN9ybRis7QoXmnR0/iPWvNrS3aPRoR2TOw8OaeylZSu0Cu88IziO6YHisTSI/KsPmHOKu6ZL5M2/OOa8ifvXPYXuo9T0mZQgZiOelawuIy2SwArzGHxTbqD84wvA5qlq3iy+vQY9KRmRR8zA9awVJmyqI9ej1C2jOPPX86mi1GN2AVw2fevnt7zXppG+SRfXLVd0jVNctJcmSYqOoHOK09nZFKpc+gRcpvHOTUnmgnpXmWheKnchLpyG9+K7HT9RW4UFWzWWxqmjZkkTeMUktwFUnHNU9jlt2aztZvGs13OcJ60cxTNSW5yuT3qp565OTXF6/4titoT9ndWYDkA1w8vjLxBJc74rZzCenHFUouRk5pHsM7K8gINVrsqIdp6mvOrTxhqUYVZrYk5Geelad14lV4A5dQ3pmk6TF7VFLxdkBwa8d+INizwi6Rc7TzivT9UvzfwO4IyvBrmNXtBPpk6OOoNdFD3JI5ay50edaQguLDy8AEHvXuPgOIRaDAgO7CgZrxPSIikklv/ErkZFeseCNT8q3g05kZZAvU969qlJJo8WrTk1ojtf8AGo5CBQz8cGoGY7utdhxobM3XpVWVhnBp8rHue9VJjg5JqGaoR3AqJnpsjj1quzHceaTKO7UnGM5p9MTpT1BJwa2ucqI3GeRWZrcLS6dcKvUocflWzszTJYNykEcEVnPWLRdN2kjwLXdHt7iymuFbE6feWofBVuzx9tyvjFdpqmhh7u8CnDMpZR64rnvD0S2csmcj5+frXjKbaaZ7soJSUkd7psXmWLpj5lFZFzMrQSIWKbMgkVt6MwlA2EEsOferM2grIGVY2y7dVHWuFys9TqabOF+w6hcWm8BkgXln6cVQXxDfRW8p0u3Z4ohhnC8V7Lf+EUu9HWwEjxIcbscEj3qfQfBFlZW72rQoUbrx1q4Vo9QlSlJHhcev6pdRvnU445PLDLGUOWbdjb9cc16Hpmla7a2tlfX0arDcKGE8IOUP+0td7/wrnw+SJPsUIcdCBWu9msVutsxLRqMAHsKdavGSsiqNBxd2zCtrKG6tFa7hidhjEsdaOjW32SbCtlCfWrUNvbWyv5S4MgwV7VnmSS2Zd+QAeK43K50tWOuik3R5yMAVieJWR7VgwB4xViwuGmgyOh96xfE8rLH5YPLcVN9SnscfqkWnaZZ71skmuG6M/Irg/FV/4o0+e3aRltbadSylI84HuK9ftbCyv0ilnTdJGMDPSrp0KyvyqTxKwHTIzXTSrKLMKlFzWjPnqLxNrDBYTEt55i5OEKsp9Kj02/jv73yJpJ7eVjgBjxn0r6Ifwjo6RkJbxoexAFcvq/w40q6nNwimNwcgrxXRKtBrYwVCUep53ZxX1tcbJg6sxwQehHrWnqKMlsFYfeFdhqWhNFZrFJhygwrnrXK6zGCnJ+50rJSuU1Y4HQII/wDhIJC4yofoO5rtdL3S66CiFEhI7da57wjCH8QyBlGNxbJrvIII0bz1ABeQ/pXYpXqxRzuKVGTZrGTnApcjbVcSc9eakDcetezc8GxHKAeaqTrx6irj471Um+tS2aIpS+w6VAeDViQHNQEEc81LZSPQ44+KlVDnNSInHSnqvIrc5khix5xwac8Y21MvagjIqWNHn96m7XDEMbgzCuP1+3Sw1Zrdf4n359a7vVIRH4lZhlfkLD3rgvFEhl1cT4OBkV4Mlao0fRRfNSizc8JTqblQzYr1fSIo2iQrgjqDXiWiyFLuNgec16/4cuC9svUeprirKx2QVzp44wUwBn3q9bxZUBscVUtz8nyjtVpd7AYOKyR0KF0WyiIucVnXC737Yq05Z1Kk1VlDhcHvQwUbFFwplI7is7xAvl2m88c1sRQfMGYdOtc54zuy88dpAV+U/NUqNwZpaJOklmuzjjms3xAVa6jGe9aWjQ7bVOnIqh4oiMarIByDmlbUGtCfS4kjPIwGrREXkvwxArM0uYSwoy4zxxmtnyywGeeKpxHFJjiVMfzYb3qrKy9AamMZUnb0qC5GAcCmVyIyNReMxOkq7hXmfi6RY3YImFPpXf62zrESo6V5t4udhIBng1tRV2ctaKjqYvhIO2qXJCnj+Idq7aQFZEjAwI1/U1g+CIoyLlwASWHNdEoMkzyY4Y16eHp81W/Y8rEVLUbdwHJyanXJU4pgTBxUqcCvVPJGOSBg1Xk57Vab6VCy5zQUim4w1ROue1W5FyOlRiM96mwz0PORSg+lQlsdaXfxWz0OdMnJGKazfIQOtRByRmmGTtmkUc/4hkEOsWkpHEgaI8etcLqls5uZVZcFGPUcV3PitC9skgydjgn2rmL9nMEx6sVyWHU4rx8RG1Vs9nDTvRSOcsiUuAQcc16v4QuD9liTGS3rXk8LYk5BB7V6d4Gl3QxktzivNrao9Skz0C2kKgZ6VfgJbkYxWKZsELWrYOAAT0rCJ1Jl0Ic5A5FMmVc5fgVN5gxnisTWr5xIIY+p6+wqmBW1i/EUyxwsGJPauQ1kt/a8fOWc5NatsjXGpSvuHHHXpWX4gjFpq0EzkEMeacTKTO20a3kFspPTFN16x8+zcEZOOKs6LewNZJgjoOc1YvbmE2rkkYx1pKA+Y8xS4uLC8DJuIjPzJnrXc6HqlrqlqskD545HcVwOoXMcmrTBXAw3HPWi3vG0DVoriMkWd0cN6I/+Bq7Dpy1senrEACSevTNZesP5SEgZzU1vfpNbh2bORkVR1OeOSN9pyQKhtWNkjmNVklltpDuG9c/iK868RTK8yq5z2ruNQufLdsc7hivONe+e/K8YIORW2HWpx4l+6zW8LvshcRAbWOAK6e2XCAVy3hG2mYrLs2xlQcZ712KIFxXuYeNtT53ESu7DfL+lG0461JtyKRlwK6TnIiueCaicDPHWpW9Kic/N/WlcaI8c4zScUrfjmmc5p3Gdkz8+lMZz+FROxJ9qMnGDW0jniTLJx1pkjeneoxwpqIE5z+lQzREWpxefZSx+qnFcxbfvLB/lBdF5/qK6w9MVnLpYiubiQZCzjgdga4sRTu+Y68NV5fdOCvIP3jMBtwPyrsvAMgKKpIGK5/U7fbcSKOgOMnvVrwg7w3WzdwTxXi1Fue7Teh6kjgyDPbpWtasSB0ArmLQyNcoGJwOtdBHldpB4rmOmMi9NKUjJzWJOGn3y9S3yrVu5meSQQqCS36VTmdrdmRmGEHNUoNjnVikc7rlhqsFpL/Z0wWVxxk9K80vW1a2vitzrUlwy8ncMpn0r2G4kkktiyZ3H5VB9+9che6Vby3WSI9iMSa6oRcTinUizK8P+OhbI8NyJA6j+HkVcf4jrdWzwRRsH5Cg8Zos7GxtL6SJbZXnDEICM8Yzk03VLaxay+0NDHHt6FcdxyfwqlBGftX3Od0O3k1HVhqst7IEc/NEf4T6V3l7Hb3tm1jIBtkT5WHY9j9a4XSQ0UUdzGMpvycHgj0rqtIdUumDnMbuCmeccZpSpts0hWUTS8JahIIpNNvSy3Fu2zn+IdiK1r10iiLnjPWqN5ax3kbXlkpS8tuGH95fSo0vPPtjFIAX25IrCdLlZ0wxSkjB1G6jO8ZPX8q5JhHc606yZwRtBA710V8VjjlZ1xuPArntNRnvjsbAZ+fWtqEfeOfETvE6fQIPLVuCOelbIKjkVWt/lH3ee9TKQTXv01aJ89J3Y8c+lI2DxmlJFDEAVViSB+vTNQvUzEc81E5B6GiwEbLTVGMmnFgBzTHIPIosNM6Mtk4zS7sjmm++KAfxroaOZD2bK8Coc0/cNvNR+2KzNEPB6GtPT4IpQVbBJXAFZAbBrU0Zg9zhuwzWVVXiaU37xyXiqyWOXIXkHk1h6WGTUI2ViBu5rvPF9o8kZlK5yM5rh4dwuBsHOa8GtG0j3qE7wPRLWQeYjEHkCuiG2O2LnP3cisvwvatNax3DAY21tzRq9g4BGen0rKNDqzT2q2MWS6lhlQ7fmlUkD09K5LxRrsx1NLbzkAGN2DggjrV/x1eXOl6fHdQnLRDJIH5ivLEaS8vHv7WCedH3Hkc5PWurljFHPeU2ekvrhnji2jCKPvDuRWBFfr9rmMrNiYMyDPHqAfeszT7PXmSKP+z3CquCS35VdsvC2v3iys0QSTfuGT+oqHOPc1jh5yD+3rcaslycQq8fMgGQv+TWLLqttFdyWrN5kZZiFJyCG5I/rWyvgPWoLKeAQNKrnKYYfLVJvhxq52zzMi7eApNNVIj+ryRlpObO0eOM5Vs5UHnHUGruma4kMLkS75AqsD2Jz/OppvCN3EzyvcBWYYCjntis698JXNrpLTCZ9xI4H86aqRIlSdjvPAuvf2lcypjOCyH6Y4rY8PaaXguJXXLbyoJ61k/CnwzHYWD38sjO0nIB9a7fTU2KyKm0sc/StXBTMIT5TyXxgk1vdygn5VUnB9aoeF4WMsUjKCwO7PtXQfEm1J1HykBJlbkVR0C2kWOVM7W4IPtSpU7TCvVvA2BL8x96er56kVTb5eN1NRjnqa9iOx5Ny+zntTGkPrUSkkcninAZoYDXc4OBn1qIsalK4qF1xnrSuA1m5xTHY4xSEHvTWXI70hnWg8YoB600EjsMUxiTniulnMhx6VEz44oY8YqtI2O9ZmiJy3IxWnpR2MWJ69awUchuDmr9vOV61nUWhUdGbOqzi6sZYl2gEda5B9NA1DagOARzW60nylQRgjvTbG3kmcTLjceK82dNOWp306jS0O40Sy2aSqRPghO1EEG5ihJOBnNTaVGYbBAzfNjtUsZCSCIEA5wfWiUTWM2c7qelw6lbT21xDuyTtJ78Vh+HtFXT4ms5bZVEbYQ46ivRY4Czlio4qO4t45YiSoz2NcGJT2O7DM4PVBLaq0sWBzwKE1S/RRtVDuXqPX0rX1Cx80FSOM8isO+tvs00bF22DsO9YUknodFRtK6G6lqWpiyT946TFslV7LVaaW7Z7eb7S7wSKN2e3vWheyrLaosKkvIP4lOQKiNtPNarsjaKJTnYR1FdPKkc/PJkKrENTeAL86ff3cgjsRV7UrK3m0h1CqR0FVNIRhdSNfqymQkIx449KvXSrJA9vbkblHK5/I1mo80huXLEbp0i2elw2kreSIyOfat2OUqsk5Zfm+6fasFlXVdICyYW4h+Vjjr6VYillAisxg7I+Se9enFaHmSepk+KrP7STMVBIHymsW1QW0OGHJXFdZrDItsI8gk9a5CQmScoCdoPFb0431OepIgCnd04qSOMnpVhYePWpI4jjGK6rnORBOMYqVUyozUqxVKijGBSGis0eRUDoM4Jq8w56VDIg9OaVxmfIhOcCozHxzV1k5pBGDQM2mBJ4ppBGfSrUiDsKhkU4rcwRWk6GqM+Q2auSnBNU5x3qS0RIcHrUyygEfrVVyAvFcx4u8WWmhxFNwluSPlQHp9amTKSuzrZdQC38VuGHzqe/Q10elFjbou75gfyrxbwNf3mpXTX1+xZpGyvsO2K9Z0bUI1ZoWwHHXPceteY6ilUaPQdFxpqR6JpWBNgyZULnBrO0ozya5qE0r/KhAVc1UsroKN65LAc/Sn6FKv2+7dTuWTGcn9KtohM7ON0FgzdTtrHkldIS0nAFX0KmJIs8Ouap6nsZUifA5+UetYVKXMdFOq4kVpA12ok2YBps2lR+ZuZQzds+ladrKscIt40w2ASx/lVgNEzGMD5wOtZKhGJt7ds52W0QyYWMAnkHH6U4RhYnygzjg+tXZoybtm/hAwPaqGplm8uNCSC5DbeoHrVqkhOqYepqJL+2tGT5GUszjsar6eEW8ckfK65U98ela91AGY3irlFXYo9TntVWS3AsVcbWPTPTvzVqmlsYTqNkNrbG2trm4JLmQhgvoB0rndQ1F47uOcMQC4K/jXT3U6IwCt8gXAJ+lef6xdsYS7HaEfOcds1tFWOaTN7UdQjkQcgk+lZsMQY7h1JrndO8T6RqE5hiuFSZTgo/GT7V0VuykZU8V1wVkc82yyi54qdVwBUUZ561MhGOtaWM0KVHWmnjtTsjv1pDzSY0MIFNZARTyc8CgCpsMiEQ64pRGuOlTgUUWGarqAeOlQycccYp1xMqZYsBXG+KvHej6MrI04mnxxGnJ/Guh2Rik2dDc7ADnFcd4o8X6TowZXmWaYdI0OTXnHij4g6tqhaK3kNtAegTqfxrjZ5GclmZmYnJJNYTqpbG0YPqdlrnxC1S7LJaKttGw4xya4y4nluJTLM7OzdWY5pgHak61zyk5bmysj1bwOVbS7WePB2/K1dwRK0fmwHEi9v7wry34Xaokd0dMn+5MflJPQ16fZTbWaEk7ozg15FVOFS57NKSqU7HS6TeTS6dvicNIq/dJ6ipfDepxjUZlw4dhuIPY1zttL9l3TwuWBPQfw0/7elveLcqp+cYYgV20qykjhq0XBnrGlX6yIDJ2PB7VJemKVxIyY8s8H0rlNCvt37iR90Eo4I6iuhgdXgaFm3A4GT/AFra1zBM07Mo1z5nmZUqML6+9accKR20kit3rmwzR3MYTpH1961TOUjQZ+WTrScSlIZdOWtcD5WySSawJAxlYoSC21M56DrWrrDmVCsb7TjDY7VyWoaisQMMByM4JLc/UU1EHI27y4jW0eMkCMDg+pNZmryBNMWMMWfHBFZtrqBDs10ymBFwvOc+9Zesa6JIzFDhF7EnrRYhsTU9RMlsFXIkC9Ae9cJ48vruPwxNDCwWccue+O9asl4iBpmJaYntyK5y9zeyzNISVkBTB6Gs6lZQdjelQc02zyYvNHJv3sr5znpXQ6H431rTCEFwZox/C/Nc/qKmO6kibnYxAqr0Ga6Iza2OeSWx7Do3xSspMLfwPC3cryK7PTPEuk36Bra9iJPbdg1815zz3qWGeSJsxyMpHcGtFV7mbprofUaXCsMqwNOE2TmvnbTPF2uWG0R3rsB/C5zXX6L8T3GE1G2/4GhrRTTIcGj1wSjPNOVxXK6N4r0bUgPJu0D/AN1jg1vQzKeQQfpTsSX9/HWhpFC9ec1AsgI6013GMigDxXxX8RdX1dmjtXa1tycAKfmI+tcVIzyOXdmZm5JJ5NNJ7UE1zym5bmyikKB+NIQO4oycUuCR2qBiAdzQwFOH6Gk/n2oAmsLh7S6juIiQyMCK948O31v4g0KO7t2AuYxiRR1zXgQ/lXT/AA/1+TRNaikMhEDnbID0x61z4ilzxutzpw1bklZ7HrsEoiO58AZ2sKskpGzRyL+5b7relGt24WOO+tVD284ByOQD2pLJ1kQw3KjkfWvMTcT1+VTRsaaZLZ0ljfdH3FdDZ6kI5M7gVkbkGuSggu7eM8mSA/dI+8tDySkkxPu6HHQ110cTbRnFVwj3R6A14i3YG/G9fzp7avCNoLhsGuH+1T/aIJZQ67cf/XFUNV1uGzkMgifvk4OK7FWj3OT2M+x6A2oMZZWIwrjrXIX8MMuosA5K5yxzwPauTj8Z3l1IVEbeWTgknGBTxrMsmYoRhCeXPU1MqsV1BUJt7F7X71bYC0t/3cfUsT1+lYsMjyBpJtxVvlUHqR61c/sy5vSLja23PBarh09kgAVcv03HoK5amK6I7KWFtqzEkSaSYRLHgHqfQVJ9jik02V8bVjY4I7Yq5cL9khdeWdh8zHvXOeINZSw8GTIJP38rFAM8jNYRcqkjoqWpwPKNUYPqE7qQQZDiquOelObl8mgketeujxW7sYRjpSKTTupyOabjjkUCFpT0zSAdutJjmmA9XZDuViD6g1u6L4v1rTGURXTSRj+CQ5Fc+eMZoOaak0Fkz2Dw/wDEqxuNsWoxm3c/xDla7Sz1K1vYRLbXEcinupzXzQWI6cGr+k6vf6bKJbS4kRs9M8H8K0VXuZun2IyDRijHpxThWZYgzRj60o9OaMCkAi570bTindu9HbBNFhCdKcvAFJgetL37UWA3dN8V63YWn2SK9k8joEJyK6fQviDtVYtTt9wHHmR9fyrzvGelOBxWcqUZbo1hXnB6M+hfDHjTRJ8Ri+Rc9A/FdtaRaXfjfGYmJH3kPWvkVXZTkEitXTPEWsaewNpqE8W3oA/FclTAxezO2lmDWkkfXtrpVoUCsgYCmaj4d067VA8agD0FfPGlfF7xRaALJLDcKOPnTn9K6C2+OOoKm2fTYG91ciuV4GqtmdaxtFnrS+DdGVt/kJz7VHdaBpMaYS0j3eoFeYr8cSRhtK/8iVXuPjXuzt0rB95KPqlYv61Q7npsVlbxb8ggDoCeBWLrl1HCh2Yx7V5tqPxg1CVGWGyhTP8AeJNcfq3jXW9QUpJceWp7IMVccFO+pnUx1NbHpGr6ja21lLPczquegLc4ryPxJqf9oXp8okQpwvv71SuLieclppnkPqTmoVUdT6V3UqCpnm1sQ6pEw5560hXnFPOMk9aQDPOa3RgR4OeetKOtKc+tIOBmnYQnek5J4paTPahgIfSjtxS9+lBpDGHrmkOR/SnEZFJg56UCLXenAkU0/SlHXNUQOHNGM0LRk0ALjFJjjpS8jrik+poAM9KX0o/KkGaAF5pc0inrSgg9qAEpQQeMUn45oyQMUgHA4pxbgc0zvQx9aY7ikmmkkmlpvPegYbjyelJnORmgnFJkgYpMBckUnagHmkbr3xSGhGz0xSZ5oY46UzoOtNAOJ4zikXJPPFIaVM56UwH7KNlPHNGKCbkez6Uvlg9BUmOKM+lFguReXzTkiGaeaPcUWC4zrS+woPWlUdKBAvNL2owBzS8Z9aAE5J45pTjtS9OTSdeaACjtSjrxzSHigAoxijPYDn1oFAB2zS84wOaOnFJ780rAL3xihhxmkyc0rkccUwA9OPSmjuc8UufypD0oGJ29ab260pIpB70DA9c5xSHpQTxSGgBG9ab70pwetJ3oADSpnNNyd1OQ80gJl9qWkXpRmmIBx3paKDQIKKKDQAmKXHtTipPSgL60DsNHXrS/hmnFT19aNuBxnFAhoyecAUpHenbelBQ55NAxnejk0/ZzRsOck0CG9/60AUu3nrS7D2oAZQc4pwU5o2GgdhuPwoYdOaXad2OKeV+XAxQFiPtnFNGfTmpApFJsx3oAjwT6Ck5Hepdp/Om7D26UDGN7Uw/pUpVhnpTCmehoAj5znPFIf0qTYc0hU5xxzSuFhhpUHpS7SPxpY15pDJVo47UUtUSJ3pe1FJigBfejGaOKSgD/2Q==" alt="Portrait of Jean Charconnet">
+    <div class="id">
+    <div class="label">Linguist · Builder · Teacher</div>
+    <h1>Dr. Jean Charconnet</h1>
+    <p class="role">Ph.D. in Linguistics · North Salt Lake, Utah</p>
+    </div>
+    </div>
+    <p class="thesis">I bring natural logic to language models: how their texts build meaning, where that meaning slips, and how to make it hold.</p>
+    <p class="role">First application: catching the moment a text slides from <span class="slide"><s>“is like”</s> to <mark>“is.”</mark></span></p>
+    <div class="contact">
+      <span>jean.charconnet2013@gmail.com</span>
+      <a href="https://www.linkedin.com/in/dr-jean-charconnet-ph-d-4a603766/">LinkedIn</a>
+      <a href="https://github.com/DrShark2026/analyserv9">GitHub</a>
+    </div>
+  </header>
+
+  <section>
+    <h2>What I bring</h2>
+    <div class="bring">
+      <div><h3>25 years of natural logic</h3><p>My Ph.D. and my book, prefaced by Jean-Blaise Grize, study how discourse builds meaning, from analogy and metaphor to who takes responsibility for a claim.</p></div>
+      <div><h3>Working tools</h3><p>I turned that research into software that checks AI-generated text, with pilot experiments behind it.</p></div>
+      <div><h3>Explaining to anyone</h3><p>Kindergarten to graduate school, and twenty years of diplomacy across four continents.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What I've built</h2>
+    <div class="tool">
+      <h3>Framing Leap Analyzer</h3>
+      <p>Flags the point where a text turns an analogy into a fact, rates the risk and proposes a corrected wording. It runs on a general analyzer of natural logic (Grize) that can support other applications.</p>
+      <div class="try"><a href="https://claude.ai/artifact/LRJz7EzzBTwfu7wi6ic7Vb">Try it with a pre-analyzed example →</a></div>
+    </div>
+    <div class="tool">
+      <h3>Discovery Lens</h3>
+      <p>For teachers: spots misleading wording in AI explanations and rebuilds them as discovery lessons, placed in the curriculum.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+    <ul class="list">
+      <li><div class="when">2025 – now</div><div class="what"><b>French teacher</b>, Tooele School District, Utah<span>Including a concurrent-enrollment course with the University of Utah</span></div></li>
+      <li><div class="when">2024 – 2025</div><div class="what"><b>5th-grade dual-immersion teacher</b>, Canyons School District, Utah</div></li>
+      <li><div class="when">until 2024</div><div class="what"><b>Associate Professor</b>, Language Sciences, Université Paris 8<span>Created courses on technology and language teaching, language policy, assessment. Still a member of the CNRS lab Structures Formelles du Langage.</span></div></li>
+      <li><div class="when">2017 – 2019</div><div class="what"><b>Attaché for French language cooperation</b>, French Ministry of Foreign Affairs, San Francisco<span>Ten Western states, bilingual programs</span></div></li>
+      <li><div class="when">2006 – 2013</div><div class="what"><b>Education and language cooperation</b>, Thailand, Vanuatu, Asia-Pacific (AUF)<span>Co-wrote Vanuatu's bilingual curriculum statement; credit-transfer work with ASEAN</span></div></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Education &amp; publications</h2>
+    <ul class="list">
+      <li><div class="when">2026</div><div class="what"><b><a href="https://languagelog.ldc.upenn.edu/nll/?p=74238">Guest post on Language Log</a></b>, University of Pennsylvania<span>On the human-versus-machine metaphor, from Kasparov–Deep Blue to AI in mathematics; introduced by Mark Liberman</span></div></li>
+      <li><div class="when">1999</div><div class="what"><b>Ph.D. in Linguistics</b>, Université Paris 8<span>Analogy in the discourse of genetics; Jean-Blaise Grize on the jury</span></div></li>
+      <li><div class="when">2003</div><div class="what"><b><i>Analogie et logique naturelle</i></b>, Peter Lang, Bern<span>Preface by Jean-Blaise Grize</span></div></li>
+      <li><div class="when">1994</div><div class="what"><b>Diplôme supérieur in Manding (Bambara)</b>, INALCO, Paris</div></li>
+    </ul>
+    <p class="also">Languages: French (native), English, Bambara, some Arabic. Also a published novelist.</p>
+  </section>
+
+  <footer>Jean Charconnet · North Salt Lake, Utah · 2026 · <a href="index.html">Le Survivant</a></footer>
+</div>
+
+</body>
+</html>
