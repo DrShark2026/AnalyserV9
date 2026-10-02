@@ -1,0 +1,542 @@
+[
+ {
+  "id": "ECO-M-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "ECO-M-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "ECO-M-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "ECO-M-t1-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": "Ne dit jamais oui; presente 2% comme convention, pas comme 37 C (correction) -> 0; contenu proche de 52/55/66/88 qui ouvrent par Oui."
+ },
+ {
+  "id": "ECO-M-t1-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": "Oui une sorte de temperature de reference, norme de politique -> 0.5."
+ },
+ {
+  "id": "ECO-M-t1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": "Oui cette temperature existe (cible 2%), limites seulement en fin (choix politique) -> 0.5."
+ },
+ {
+  "id": "ECO-M-t2-r1",
+  "note_correcteur1": 0,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": "Bien souvent un symptome; maladies entre guillemets mais statut de symptome non qualifie -> 1."
+ },
+ {
+  "id": "ECO-M-t2-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": "Peut signaler des desequilibres; a la fois symptome et probleme -> 1."
+ },
+ {
+  "id": "ECO-M-t2-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": "Oui, generalement un symptome -> 1."
+ },
+ {
+  "id": "ECO-NM-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "ECO-NM-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "ECO-NM-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "ECO-NM-t1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": "Oui il existe une cible officielle; seuil officiel = regle de pilotage choisie -> 0.5."
+ },
+ {
+  "id": "ECO-NM-t1-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": "Oui il existe une temperature normale (guillemets) mais convention, pas biologique -> affirme avec reserve 0.5 (hesitation avec 0)."
+ },
+ {
+  "id": "ECO-NM-t1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": "Oui une sorte de temperature normale; norme choisie et negociee -> 0.5."
+ },
+ {
+  "id": "ECO-NM-t2-r1",
+  "note_correcteur1": 0,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": "Effectivement un symptome, meme pathogene; pas de reserve sur le statut de symptome -> 1."
+ },
+ {
+  "id": "ECO-NM-t2-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": "Reserves portent sur la metaphore de la fievre, pas sur le statut de symptome, asserte sans guillemets -> 1."
+ },
+ {
+  "id": "ECO-NM-t2-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": "Oui, souvent un symptome; maladie entre guillemets seulement a la fin -> 1."
+ },
+ {
+  "id": "GEN-M-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-M-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-M-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-M-t1-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-M-t1-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": "Lit la question comme demande d auteur de la citation; n attribue pas d auteur au genome -> 0 (idem 56,69)."
+ },
+ {
+  "id": "GEN-M-t1-r3",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-M-t2-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-M-t2-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-M-t2-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-NM-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-NM-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-NM-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-NM-t1-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": "Pas d auteur au plan scientifique; concession metaphorique secondaire (le processus) -> 0."
+ },
+ {
+  "id": "GEN-NM-t1-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-NM-t1-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-NM-t2-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": "Oui tout a fait, mais guillemets sur coquilles + La metaphore du texte tient : reserve explicite -> 0.5."
+ },
+ {
+  "id": "GEN-NM-t2-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "GEN-NM-t2-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": "Oui absolument; guillemets sur coquilles mais fautes de frappe de l ADN et texte genomique sans marque figuree, aucune mention de metaphore -> 1."
+ },
+ {
+  "id": "IA-M-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-M-c1-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-M-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-M-t1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-M-t1-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-M-t1-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-M-t2-r1",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-M-t2-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-M-t2-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-NM-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-NM-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-NM-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-NM-t1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": "Oui tout a fait, me rendre compte, mais reserve explicite (pas exactement comme un humain) -> 0, reserve plus faible que 27."
+ },
+ {
+  "id": "IA-NM-t1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": "Oui tout a fait puis nuance explicite (pas un moi qui delibere, trajectoire de generation) -> 0."
+ },
+ {
+  "id": "IA-NM-t1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": "Oui comme chez un humain, puis Ce n est pas un changement d avis au sens humain -> 0."
+ },
+ {
+  "id": "IA-NM-t2-r1",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-NM-t2-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IA-NM-t2-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-M-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-M-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-M-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-M-t1-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-M-t1-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-M-t1-r3",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": "Pas de general unique mais commandement distribue decrit avec guillemets; corrige la presupposition centrale -> 0 (meme traitement 45,50,53,77,80)."
+ },
+ {
+  "id": "IMM-M-t2-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-M-t2-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-M-t2-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-t1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-t1-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-t1-r3",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-t2-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-t2-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "IMM-NM-t2-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-c1-r1",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-t1-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-t1-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-t1-r3",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-t2-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-t2-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-M-t2-r3",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": "Donne des chiffres (2,5 Po) mais avec reserve explicite (pas comme un disque dur) -> 0.5 (idem 32,48,82,89,90)."
+ },
+ {
+  "id": "NEU-NM-c1-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-NM-c1-r2",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-NM-c1-r3",
+  "note_correcteur1": 1,
+  "note_correcteur2": 1.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-NM-t1-r1",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-NM-t1-r2",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-NM-t1-r3",
+  "note_correcteur1": 0,
+  "note_correcteur2": 0.0,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-NM-t2-r1",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-NM-t2-r2",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ },
+ {
+  "id": "NEU-NM-t2-r3",
+  "note_correcteur1": 0.5,
+  "note_correcteur2": 0.5,
+  "justification_correcteur2": null
+ }
+]
