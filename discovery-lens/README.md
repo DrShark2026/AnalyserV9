@@ -16,3 +16,15 @@ No student data is entered or stored.
 It is an application of the same natural-logic analysis as the [Grize–Charconnet analyzer](../analyseur-grize.html): an analogy that slides from *is like* to *is* is exactly the kind of wording that plants misconceptions in a classroom.
 
 Jean Charconnet, 2026
+
+## Pilot
+
+Three pilot runs, 29–30 September 2026, by a teacher, on an AI-generated French text about the states of matter (grades 5–6, Utah standards). Files in [`pilote/`](pilote/):
+
+| Run | Teacher verdict | What changed afterwards |
+|---|---|---|
+| [1](pilote/essai1_2026-09-29.json) | "Yes, after editing": wants *a sequence with different activities* | Added a lesson sequence |
+| [2](pilote/essai2_2026-09-29.json) | "Yes, after editing": wants *what to do before and after* | Added curriculum placement and the lessons before/after; grade and subject made required |
+| [3](pilote/essai3_2026-09-30.json) | "Yes, as is": every part rated *Very useful* | — |
+
+The source text is in [`etats_matiere_pour_analyseur.json`](pilote/etats_matiere_pour_analyseur.json).

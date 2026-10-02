@@ -1,0 +1,100 @@
+{
+  "tool": "Discovery Lens",
+  "version": 2,
+  "saved_at": "2026-09-30T17:10:52.967Z",
+  "is_example": false,
+  "input": {
+    "text": "Les états de la matière correspondent aux différentes formes que peut prendre une substance dans l'Univers. La matière change d'état principalement en fonction de la température et de la pression. En général, on distingue quatre états principaux. À l'état solide, les particules sont très proches les unes des autres et fortement liées entre elles. Elles ne peuvent pas se déplacer, mais elles vibrent sur place. Le solide a une forme propre et un volume propre (il est incompressible). À l'état liquide, les particules sont proches, mais les liens qui les unissent sont plus faibles. Le liquide n'a pas de forme propre, mais il a un volume propre. Sa surface au repos est toujours plane et horizontale. À l'état gazeux, les particules sont très éloignées les unes des autres. Un gaz n'a ni forme propre, ni volume propre. Exemple : la vapeur d'eau (invisible). L'état plasma est l'état le plus répandu dans l'Univers. Le plasma ressemble à un gaz, mais il est tellement chaud que les atomes se brisent : les électrons se séparent de leur noyau. On obtient une « soupe » de particules chargées électriquement. L'eau est l'élément parfait pour comprendre les trois premiers états : un glaçon sorti du congélateur (en dessous de 0 °C) fond et devient de l'eau liquide (entre 0 °C et 100 °C) ; chauffée dans une casserole, elle bout (à 100 °C) et se transforme en vapeur d'eau.",
+    "grade": "Grades 5–6",
+    "subject": "physics",
+    "context": "5th grade canyons district",
+    "curriculum": "Utah Core Standards (SEEd for science)"
+  },
+  "result": {
+    "summary": "L'explication donne une structure claire et progressive des quatre états de la matière avec l'exemple concret de l'eau, mais elle contient des formulations qui peuvent créer de fausses idées, notamment sur le point d'ébullition donné sans condition d'altitude et sur l'eau présentée comme un « élément ».",
+    "analogies": [
+      {
+        "quote": "Sa surface au repos est toujours plane et horizontale",
+        "kind": "overgeneralization",
+        "risk": "medium",
+        "misconception": "L'élève pourrait croire que la surface d'un liquide est toujours plate en toute situation, sans comprendre que cela dépend de la gravité.",
+        "rewrite": "Sur Terre, au repos, la surface d'un liquide est plane et horizontale à cause de la gravité."
+      },
+      {
+        "quote": "les atomes se brisent : les électrons se séparent de leur noyau",
+        "kind": "figurative",
+        "risk": "high",
+        "misconception": "L'élève pourrait croire que l'atome se casse physiquement comme un objet qu'on brise, en perdant de la matière.",
+        "rewrite": "Avec une très forte chaleur, les électrons reçoivent assez d'énergie pour se détacher du noyau de l'atome : on dit que l'atome est ionisé."
+      },
+      {
+        "quote": "chauffée dans une casserole, elle bout (à 100 °C)",
+        "kind": "missing_condition",
+        "risk": "high",
+        "misconception": "L'élève pourrait croire que l'eau bout toujours exactement à 100°C partout, même à l'altitude de notre région, alors que la pression de l'air (liée à l'altitude) change ce point d'ébullition.",
+        "rewrite": "Chauffée dans une casserole, elle bout : au niveau de la mer, cela se produit à 100 °C, mais en altitude, comme dans notre région, l'eau peut bouillir à une température un peu plus basse."
+      },
+      {
+        "quote": "L'eau est l'élément parfait pour comprendre les trois premiers états",
+        "kind": "technical_word",
+        "risk": "high",
+        "misconception": "L'élève pourrait croire que l'eau est un élément chimique (comme l'oxygène ou l'hydrogène), alors qu'elle est composée de plusieurs éléments.",
+        "rewrite": "L'eau est un exemple parfait pour comprendre les trois premiers états."
+      }
+    ],
+    "discovery": {
+      "clues": [
+        {
+          "clue": "Un glaçon sorti du congélateur, posé sur la table, se met à fondre et devient liquide.",
+          "question": "Qu'est-ce qui a changé autour du glaçon pour qu'il devienne liquide ?"
+        },
+        {
+          "clue": "Une casserole d'eau chauffée sur le feu commence à bouillir et de la vapeur s'échappe.",
+          "question": "Que devient l'eau quand on continue à lui apporter de la chaleur après qu'elle bout ?"
+        },
+        {
+          "clue": "Dans un solide, les particules serrées vibrent sur place ; dans un liquide, elles glissent les unes contre les autres ; dans un gaz, elles sont très éloignées et libres.",
+          "question": "Qu'est-ce qui rapproche ou éloigne les particules d'un état à l'autre ?"
+        },
+        {
+          "clue": "Si on chauffe un gaz à une température extrêmement élevée, les électrons des atomes peuvent se détacher du noyau.",
+          "question": "Comment appelle-t-on ce nouvel état, fait de particules chargées électriquement ?"
+        }
+      ],
+      "landing": "La matière change d'état (solide, liquide, gazeux, plasma) principalement selon la chaleur qu'elle reçoit, et parfois selon la pression : plus on chauffe, plus les particules s'écartent et bougent librement, jusqu'à ce que, à très haute température, les atomes eux-mêmes se séparent en électrons et noyaux dans le plasma."
+    },
+    "doors": {
+      "example": {
+        "title": "L'eau dans notre région",
+        "text": "Un glaçon sorti du congélateur fond et devient de l'eau liquide. Si on la chauffe, elle finit par bouillir, mais chez nous, en altitude, cela peut arriver un peu avant 100 °C. C'est l'eau qui nous permet de bien voir les trois premiers états de la matière.",
+        "question": "Selon toi, pourquoi l'eau bout-elle à une température un peu différente en altitude qu'au niveau de la mer ?"
+      },
+      "experiment": {
+        "title": "Observer la surface d'un liquide au repos",
+        "materials": "Un verre transparent, de l'eau froide (du robinet), une règle ou un objet fin",
+        "steps": [
+          "Verse de l'eau froide dans le verre jusqu'à environ la moitié.",
+          "Pose le verre sur une table bien stable et attends quelques secondes que l'eau soit immobile.",
+          "Observe la surface de l'eau de côté, au niveau de tes yeux.",
+          "Incline légèrement le verre puis repose-le droit : regarde à nouveau la surface."
+        ],
+        "safety": "Utiliser uniquement de l'eau froide du robinet, aucune flamme ni plaque chauffante ; rester attentif à ne pas renverser le verre.",
+        "question": "Que remarques-tu sur la forme de la surface de l'eau une fois qu'elle est immobile, et pourquoi selon toi ?"
+      },
+      "theory": {
+        "title": "Les états de la matière et leurs particules",
+        "text": "Dans un solide, les particules sont très proches et vibrent sur place, ce qui donne une forme et un volume propres. Dans un liquide, les particules sont proches mais peuvent glisser les unes sur les autres, ce qui donne un volume propre mais pas de forme propre. Dans un gaz, les particules sont très éloignées et se déplacent librement, sans forme ni volume propres.",
+        "question": "En comparant ces trois états, comment expliquerais-tu la différence entre un solide et un liquide à partir de la position des particules ?"
+      }
+    },
+    "sequence": null
+  },
+  "teacher_feedback": {
+    "wording": "Very useful",
+    "discovery": "Very useful",
+    "ways_in": "Very useful",
+    "sequence": "Very useful",
+    "would_use": "Yes, as is",
+    "comments": null
+  }
+}

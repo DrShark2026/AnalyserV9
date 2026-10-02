@@ -1,0 +1,173 @@
+{
+  "tool": "Discovery Lens",
+  "version": 2,
+  "saved_at": "2026-09-29T17:15:43.485Z",
+  "is_example": false,
+  "input": {
+    "text": "Les états de la matière correspondent aux différentes formes que peut prendre une substance dans l'Univers. La matière change d'état principalement en fonction de la température et de la pression. En général, on distingue quatre états principaux. À l'état solide, les particules sont très proches les unes des autres et fortement liées entre elles. Elles ne peuvent pas se déplacer, mais elles vibrent sur place. Le solide a une forme propre et un volume propre (il est incompressible). À l'état liquide, les particules sont proches, mais les liens qui les unissent sont plus faibles. Le liquide n'a pas de forme propre, mais il a un volume propre. Sa surface au repos est toujours plane et horizontale. À l'état gazeux, les particules sont très éloignées les unes des autres. Un gaz n'a ni forme propre, ni volume propre. Exemple : la vapeur d'eau (invisible). L'état plasma est l'état le plus répandu dans l'Univers. Le plasma ressemble à un gaz, mais il est tellement chaud que les atomes se brisent : les électrons se séparent de leur noyau. On obtient une « soupe » de particules chargées électriquement. L'eau est l'élément parfait pour comprendre les trois premiers états : un glaçon sorti du congélateur (en dessous de 0 °C) fond et devient de l'eau liquide (entre 0 °C et 100 °C) ; chauffée dans une casserole, elle bout (à 100 °C) et se transforme en vapeur d'eau.",
+    "grade": "Grades 9–10",
+    "subject": "Biology",
+    "context": "grantsville elementary Utah",
+    "curriculum": "Utah Core Standards (SEEd for science)"
+  },
+  "result": {
+    "summary": "L'explication présente clairement les quatre états de la matière avec des propriétés bien organisées, mais elle contient plusieurs formulations trop absolues (température de fusion/ébullition sans condition de pression/altitude, 'incompressible', 'toujours plane') qui pourraient faire croire aux élèves que ces valeurs sont universelles.",
+    "analogies": [
+      {
+        "quote": "chauffée dans une casserole, elle bout (à 100 °C)",
+        "kind": "missing_condition",
+        "risk": "high",
+        "misconception": "L'élève pourrait croire que l'eau bout toujours exactement à 100°C partout, alors qu'à Grantsville (Utah), en altitude, la pression atmosphérique plus basse fait bouillir l'eau à une température inférieure.",
+        "rewrite": "Chauffée dans une casserole, l'eau bout autour de 100 °C au niveau de la mer ; cette température change avec la pression atmosphérique, donc avec l'altitude."
+      },
+      {
+        "quote": "les atomes se brisent : les électrons se séparent de leur noyau",
+        "kind": "figurative",
+        "risk": "high",
+        "misconception": "L'élève pourrait imaginer que l'atome se casse physiquement comme un objet solide, plutôt que de comprendre qu'il s'agit d'une ionisation où les électrons sont arrachés par l'énergie thermique.",
+        "rewrite": "Sous l'effet d'une très forte chaleur, les électrons sont arrachés du noyau des atomes : ce phénomène s'appelle l'ionisation."
+      },
+      {
+        "quote": "L'eau est l'élément parfait pour comprendre",
+        "kind": "technical_word",
+        "risk": "medium",
+        "misconception": "L'élève pourrait confondre ce sens courant du mot 'élément' avec le sens scientifique précis (élément chimique comme l'hydrogène ou l'oxygène), et croire que l'eau est elle-même un élément chimique.",
+        "rewrite": "L'eau est un exemple idéal pour comprendre les trois premiers états de la matière."
+      },
+      {
+        "quote": "Sa surface au repos est toujours plane et horizontale",
+        "kind": "overgeneralization",
+        "risk": "medium",
+        "misconception": "L'élève pourrait croire que cette propriété est vraie dans toutes les conditions, sans réaliser qu'elle dépend de la gravité (par exemple, elle ne serait pas vraie en apesanteur).",
+        "rewrite": "Sur Terre, au repos, la surface d'un liquide est plane et horizontale à cause de la gravité."
+      },
+      {
+        "quote": "il est incompressible",
+        "kind": "overgeneralization",
+        "risk": "low",
+        "misconception": "L'élève pourrait croire qu'un solide ne peut jamais être comprimé du tout, plutôt que de comprendre qu'il est très difficile à comprimer dans des conditions normales.",
+        "rewrite": "Dans des conditions normales, un solide est très difficile à comprimer."
+      }
+    ],
+    "discovery": {
+      "clues": [
+        {
+          "clue": "Quand on chauffe un glaçon, il devient d'abord liquide, puis vapeur.",
+          "question": "Qu'est-ce qui change dans l'arrangement des particules d'eau pendant cette transformation ?"
+        },
+        {
+          "clue": "La température à laquelle l'eau se transforme en vapeur peut varier selon la pression de l'air, donc selon l'altitude du lieu.",
+          "question": "Pourquoi l'eau pourrait-elle bouillir à une température différente de 100°C à Grantsville qu'au niveau de la mer ?"
+        },
+        {
+          "clue": "Le plasma est fait de particules chargées électriquement, obtenues quand une très grande quantité d'énergie sépare les électrons du noyau des atomes.",
+          "question": "Quel lien peut-on faire entre la quantité d'énergie apportée à la matière et son état ?"
+        },
+        {
+          "clue": "Chaque état de la matière a une organisation différente des particules : très liées, peu liées, ou très éloignées.",
+          "question": "Comment cette organisation des particules explique-t-elle si la matière garde ou non sa forme et son volume ?"
+        }
+      ],
+      "landing": "Les changements d'état de la matière dépendent de la température et de la pression, et résultent de la façon dont les particules sont arrangées et liées entre elles."
+    },
+    "doors": {
+      "example": {
+        "title": "L'eau qui bout à Grantsville, Utah",
+        "text": "Grantsville se trouve à une altitude d'environ 1 340 mètres, ce qui abaisse légèrement la pression atmosphérique par rapport au niveau de la mer. Chauffée dans une casserole, l'eau y bout donc un peu avant 100 °C, alors qu'au niveau de la mer elle bout autour de 100 °C.",
+        "question": "D'après toi, pourquoi la température d'ébullition de l'eau dépend-elle de l'altitude et de la pression atmosphérique ?"
+      },
+      "experiment": {
+        "title": "Observer l'eau changer d'état",
+        "materials": "Une casserole, de l'eau, une plaque chauffante, un thermomètre de cuisine, des glaçons",
+        "steps": [
+          "Placer des glaçons dans la casserole et noter leur état et leur forme.",
+          "Le professeur fait chauffer l'eau sur la plaque jusqu'à ébullition pendant que les élèves observent à distance.",
+          "Noter la température approximative au moment où l'eau commence à bouillir et à produire de la vapeur.",
+          "Comparer les trois états observés (solide, liquide, gazeux) et leurs caractéristiques (forme, volume)."
+        ],
+        "safety": "Manipulation du chauffage réservée à l'enseignant ; élèves à distance de sécurité de la plaque chauffante et de la vapeur ; lunettes de protection recommandées.",
+        "question": "En comparant les trois étapes observées, quelles différences remarques-tu entre la forme et le volume de l'eau selon son état ?"
+      },
+      "theory": {
+        "title": "Les quatre états de la matière",
+        "text": "La matière peut exister sous quatre états principaux : solide, liquide, gazeux et plasma, selon la température et la pression. Dans un solide, les particules sont proches et vibrent sur place ; dans un liquide, elles restent proches mais peuvent glisser les unes sur les autres ; dans un gaz, elles sont très éloignées et se déplacent librement. Sous l'effet d'une très forte chaleur, les électrons sont arrachés du noyau des atomes : ce phénomène s'appelle l'ionisation, et donne naissance au plasma.",
+        "question": "En te basant sur la disposition et le mouvement des particules, comment expliquerais-tu pourquoi un solide garde sa forme alors qu'un liquide ou un gaz n'en gardent pas ?"
+      }
+    },
+    "sequence": {
+      "placement": {
+        "curriculum": "Utah Core Standards (SEEd for science)",
+        "standards": [
+          {
+            "code": "",
+            "text": "Les élèves doivent pouvoir modéliser les changements d'état de la matière en lien avec l'énergie thermique et le mouvement des particules (contenu généralement rattaché aux standards SEEd de sciences physiques sur la matière et l'énergie).",
+            "confidence": "check"
+          }
+        ],
+        "before": "Les élèves savent déjà que la matière est composée de particules (atomes/molécules) et connaissent les trois états courants (solide, liquide, gaz) de façon descriptive.",
+        "after": "La classe abordera ensuite l'énergie thermique et les transferts d'énergie lors des changements d'état (chaleur latente, courbes de chauffage).",
+        "beyond": "L'état plasma et le phénomène d'ionisation dépassent le programme habituel de ce niveau, qui se concentre surtout sur solide/liquide/gaz."
+      },
+      "title": "Pourquoi l'eau change-t-elle de forme ? À la découverte des états de la matière",
+      "duration": "50 minutes",
+      "steps": [
+        {
+          "phase": "Question déclenchante",
+          "minutes": 5,
+          "activity": "Le professeur montre trois objets/images : un glaçon, un verre d'eau, de la vapeur qui s'échappe d'une bouilloire (image), et demande : « Qu'est-ce qui différencie ces trois formes de la même substance ? »",
+          "students_do": "Les élèves proposent oralement ou sur ardoise leurs premières hypothèses.",
+          "teacher_does": "Le professeur note les hypothèses au tableau sans les valider ni les corriger.",
+          "check": "Au moins trois hypothèses différentes apparaissent au tableau (forme, volume, mouvement...)."
+        },
+        {
+          "phase": "Observation guidée",
+          "minutes": 10,
+          "activity": "En petits groupes, les élèves observent la fonte d'un glaçon et le chauffage progressif d'eau jusqu'à ébullition dans un bécher, en notant à quel moment la forme et le volume changent. Consigne de sécurité : lunettes de protection obligatoires, manipulation de l'eau chaude uniquement avec gants isolants et sous supervision, précautions standard de laboratoire pour ce niveau.",
+          "students_do": "Les élèves observent, chronomètrent et notent leurs observations sur une fiche (forme, volume, aspect).",
+          "teacher_does": "Le professeur circule, supervise la sécurité, relance par des questions (« Est-ce que l'eau garde sa forme ? Son volume ? »).",
+          "check": "Chaque groupe a rempli un tableau d'observations distinguant les trois états observés."
+        },
+        {
+          "phase": "Travail en binômes",
+          "minutes": 10,
+          "activity": "Les binômes reçoivent des cartes représentant des arrangements de particules (très serrées et fixes, proches mais mobiles, très éloignées) et doivent les associer à l'état correspondant en justifiant leur choix à partir de leurs observations précédentes.",
+          "students_do": "Les élèves discutent, classent les cartes et écrivent une justification courte.",
+          "teacher_does": "Le professeur passe entre les binômes, pose des questions pour faire émerger le lien entre arrangement des particules et propriétés observées (forme, volume).",
+          "check": "Les binômes associent correctement au moins deux des trois cartes à leur état."
+        },
+        {
+          "phase": "Modélisation individuelle",
+          "minutes": 8,
+          "activity": "Chaque élève dessine sur une fiche les particules dans les trois états (solide, liquide, gaz) puis répond à la question : à Grantsville, en altitude, l'eau boura-t-elle exactement à 100 °C comme au niveau de la mer ?",
+          "students_do": "Les élèves dessinent leurs schémas et formulent une réponse en s'appuyant sur la notion de pression atmosphérique.",
+          "teacher_does": "Le professeur apporte l'information corrigée : la température d'ébullition dépend de la pression atmosphérique, donc de l'altitude, et qu'à Grantsville (altitude d'environ 1340 m) l'eau bout un peu en dessous de 100 °C.",
+          "check": "Les schémas montrent une différence correcte de densité/mouvement des particules entre les trois états."
+        },
+        {
+          "phase": "Synthèse collective",
+          "minutes": 10,
+          "activity": "La classe reconstitue ensemble, au tableau, la règle générale : les changements d'état dépendent de la température et de la pression, et résultent de l'arrangement et des liens entre particules. Le professeur ajoute une ouverture courte sur l'état plasma (le plus répandu dans l'Univers) sans entrer dans le calcul d'ionisation.",
+          "students_do": "Les élèves participent en proposant des phrases pour compléter la synthèse, votent par « pouce levé/baissé » pour valider chaque affirmation.",
+          "teacher_does": "Le professeur guide la formulation finale et corrige les formulations imprécises (ex. surface plane et horizontale due à la gravité, solide difficile à comprimer plutôt qu'incompressible).",
+          "check": "La phrase de synthèse au tableau contient les mots température, pression et arrangement/liens des particules."
+        },
+        {
+          "phase": "Billet de sortie",
+          "minutes": 5,
+          "activity": "Chaque élève répond individuellement à deux questions sur une fiche : 1) Pourquoi un solide garde-t-il sa forme et pas un liquide ? 2) Pourquoi l'eau ne bout-elle pas forcément à 100 °C partout sur Terre ?",
+          "students_do": "Les élèves rédigent une réponse courte et la remettent en sortant.",
+          "teacher_does": "Le professeur ramasse les fiches pour évaluer la compréhension avant la prochaine séance.",
+          "check": "Au moins 80 % des élèves relient correctement l'état de la matière à l'arrangement des particules et/ou à la pression."
+        }
+      ]
+    }
+  },
+  "teacher_feedback": {
+    "wording": "Very useful",
+    "discovery": "Very useful",
+    "ways_in": "Very useful",
+    "sequence": "Somewhat useful",
+    "would_use": "Yes, after editing",
+    "comments": "interresting but i would like what to do before and after"
+  }
+}

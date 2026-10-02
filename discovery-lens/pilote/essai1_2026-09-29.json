@@ -1,0 +1,79 @@
+{
+  "tool": "Discovery Lens",
+  "version": 1,
+  "saved_at": "2026-09-29T15:45:51.774Z",
+  "is_example": false,
+  "input": {
+    "text": "[\n {\n  \"id\": \"DL-FR-etats-matiere\",\n  \"texte\": \"Les états de la matière correspondent aux différentes formes que peut prendre une substance dans l'Univers. La matière change d'état principalement en fonction de la température et de la pression. En général, on distingue quatre états principaux. À l'état solide, les particules sont très proches les unes des autres et fortement liées entre elles. Elles ne peuvent pas se déplacer, mais elles vibrent sur place. Le solide a une forme propre et un volume propre (il est incompressible). À l'état liquide, les particules sont proches, mais les liens qui les unissent sont plus faibles. Le liquide n'a pas de forme propre, mais il a un volume propre. Sa surface au repos est toujours plane et horizontale. À l'état gazeux, les particules sont très éloignées les unes des autres. Un gaz n'a ni forme propre, ni volume propre. Exemple : la vapeur d'eau (invisible). L'état plasma est l'état le plus répandu dans l'Univers. Le plasma ressemble à un gaz, mais il est tellement chaud que les atomes se brisent : les électrons se séparent de leur noyau. On obtient une « soupe » de particules chargées électriquement. L'eau est l'élément parfait pour comprendre les trois premiers états : un glaçon sorti du congélateur (en dessous de 0 °C) fond et devient de l'eau liquide (entre 0 °C et 100 °C) ; chauffée dans une casserole, elle bout (à 100 °C) et se transforme en vapeur d'eau.\"\n }\n]",
+    "grade": "Grades 9–10",
+    "subject": "Biology"
+  },
+  "result": {
+    "summary": "L'explication décrit clairement les propriétés des quatre états de la matière au niveau particulaire, mais la métaphore de la 'soupe' pour le plasma risque de faire croire aux élèves qu'il s'agit d'un mélange culinaire réel plutôt que d'un état physique de particules chargées.",
+    "analogies": [
+      {
+        "quote": "On obtient une « soupe » de particules chargées électriquement",
+        "risk": "medium",
+        "misconception": "L'élève pourrait croire que le plasma est un mélange liquide comme une vraie soupe, avec des ingrédients distincts, plutôt qu'un état de la matière où les électrons sont séparés des noyaux.",
+        "rewrite": "On obtient un mélange de particules chargées électriquement (électrons et noyaux séparés) ; le mot « soupe » n'est qu'une image pour dire que ces particules sont mélangées de façon désordonnée, pas qu'il s'agit d'un liquide."
+      },
+      {
+        "quote": "L'eau est l'élément parfait pour comprendre les trois premiers états",
+        "risk": "low",
+        "misconception": "L'élève pourrait croire que l'eau est un cas universel représentant exactement le comportement de toutes les substances, alors que les températures de changement d'état varient selon la matière.",
+        "rewrite": "L'eau est un bon exemple pour illustrer les trois premiers états, mais les températures de changement d'état (0 °C, 100 °C) sont propres à l'eau et diffèrent pour d'autres substances."
+      }
+    ],
+    "discovery": {
+      "clues": [
+        {
+          "clue": "Un glaçon sorti du congélateur a une forme fixe et ne coule pas, même si on le pose dans un bol.",
+          "question": "Comment les particules doivent-elles être organisées et liées entre elles pour expliquer que le solide garde sa forme et ne peut pas être compressé ?"
+        },
+        {
+          "clue": "Quand le glaçon fond, l'eau liquide prend la forme du récipient mais son volume ne change pas.",
+          "question": "Que peut-on en déduire sur la force des liens entre les particules à l'état liquide par rapport à l'état solide ?"
+        },
+        {
+          "clue": "Quand on chauffe l'eau à 100 °C, elle se transforme en vapeur invisible qui se répand dans toute la pièce.",
+          "question": "Que doit-il se passer entre les particules pour qu'un gaz n'ait ni forme propre ni volume propre ?"
+        },
+        {
+          "clue": "Le plasma représente l'état le plus répandu dans l'Univers, mais il est très rare sur Terre à l'état naturel.",
+          "question": "Si le plasma ressemble à un gaz mais qu'on y ajoute énormément de chaleur, que pourrait-il arriver aux atomes eux-mêmes, au-delà de leur simple écartement ?"
+        }
+      ],
+      "landing": "Les changements d'état dépendent de la distance et de la force des liens entre particules : plus elles sont proches et liées, plus la substance a une forme et un volume propres, et à très haute température, les particules du plasma se séparent au point que les électrons quittent leur noyau."
+    },
+    "doors": {
+      "example": {
+        "title": "Le glaçon qui disparaît",
+        "text": "Un glaçon posé sur la table à température ambiante fond peu à peu et forme une flaque d'eau liquide. Si on laisse cette flaque plusieurs jours, elle finit par disparaître complètement sans laisser de trace.",
+        "question": "Qu'est devenue l'eau qui composait le glaçon, et qu'est-ce que cela nous apprend sur les particules qui la constituent ?"
+      },
+      "experiment": {
+        "title": "Observer les trois états de l'eau",
+        "materials": "Un glaçon, une casserole, une source de chaleur (plaque ou bec électrique), un couvercle froid ou une vitre froide",
+        "steps": [
+          "Placer le glaçon dans la casserole et observer sa forme et son volume avant chauffage.",
+          "Chauffer doucement jusqu'à ce que le glaçon devienne liquide, puis noter la forme prise par le liquide dans la casserole.",
+          "Continuer à chauffer jusqu'à ébullition et approcher un couvercle froid au-dessus de la vapeur pour observer ce qui s'y forme.",
+          "Comparer la forme, le volume et le comportement de l'eau à chacune des trois étapes."
+        ],
+        "question": "À chaque étape, la forme et le volume de l'eau changent-ils de la même façon, et pourquoi ?"
+      },
+      "theory": {
+        "title": "Le modèle particulaire des états de la matière",
+        "text": "Toute matière est constituée de particules dont l'arrangement et la liberté de mouvement définissent son état. Dans un solide, les particules sont proches et fortement liées, vibrant sur place. Dans un liquide, elles restent proches mais glissent les unes sur les autres, tandis que dans un gaz, elles sont très éloignées et se déplacent librement.",
+        "question": "Comment l'arrangement des particules explique-t-il pourquoi un solide garde sa forme alors qu'un liquide ou un gaz n'en gardent pas ?"
+      }
+    }
+  },
+  "teacher_feedback": {
+    "analogies": "Somewhat useful",
+    "discovery": "Very useful",
+    "ways_in": "Very useful",
+    "would_use": "Yes, after editing",
+    "comments": "i would like to have a sequence with differnet activities"
+  }
+}

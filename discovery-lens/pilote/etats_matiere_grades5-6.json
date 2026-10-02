@@ -1,0 +1,80 @@
+{
+  "id": "DL-FR-etats-matiere",
+  "source": "Réponse d'un mode de recherche IA (« AI Mode »), version resserrée : émojis, listes, exemples énumérés et coquille retirés",
+  "niveau": "Grades 5–6",
+  "matiere": "Sciences",
+  "texte": "Les états de la matière correspondent aux différentes formes que peut prendre une substance dans l'Univers. La matière change d'état principalement en fonction de la température et de la pression. En général, on distingue quatre états principaux. À l'état solide, les particules sont très proches les unes des autres et fortement liées entre elles. Elles ne peuvent pas se déplacer, mais elles vibrent sur place. Le solide a une forme propre et un volume propre (il est incompressible). À l'état liquide, les particules sont proches, mais les liens qui les unissent sont plus faibles. Le liquide n'a pas de forme propre, mais il a un volume propre. Sa surface au repos est toujours plane et horizontale. À l'état gazeux, les particules sont très éloignées les unes des autres. Un gaz n'a ni forme propre, ni volume propre. Exemple : la vapeur d'eau (invisible). L'état plasma est l'état le plus répandu dans l'Univers. Le plasma ressemble à un gaz, mais il est tellement chaud que les atomes se brisent : les électrons se séparent de leur noyau. On obtient une « soupe » de particules chargées électriquement. L'eau est l'élément parfait pour comprendre les trois premiers états : un glaçon sorti du congélateur (en dessous de 0 °C) fond et devient de l'eau liquide (entre 0 °C et 100 °C) ; chauffée dans une casserole, elle bout (à 100 °C) et se transforme en vapeur d'eau.",
+  "analyse_de_reference": {
+    "summary": "Une explication claire et bien illustrée, qui annonce que la pression compte puis l'oublie, et dont le vocabulaire (« les atomes se brisent », « l'élément ») peut installer deux idées fausses durables.",
+    "analogies": [
+      {
+        "quote": "elle bout (à 100 °C) et se transforme en vapeur",
+        "risk": "high",
+        "misconception": "Que l'eau bout toujours à 100 °C. Dans l'Utah, à 1 300 mètres, elle bout vers 95–96 °C, et les élèves peuvent le constater.",
+        "rewrite": "Au niveau de la mer, l'eau bout à 100 °C. Plus on monte en altitude, plus l'air pèse peu sur l'eau, et plus elle bout tôt : vers 95 °C à Salt Lake City."
+      },
+      {
+        "quote": "tellement chaud que les atomes se brisent",
+        "risk": "high",
+        "misconception": "Que l'atome est cassé en morceaux, alors que son noyau reste entier : il perd seulement des électrons.",
+        "rewrite": "Il est tellement chaud que les atomes perdent certains de leurs électrons. Le noyau, lui, reste entier."
+      },
+      {
+        "quote": "L'eau est l'élément parfait pour comprendre",
+        "risk": "medium",
+        "misconception": "Que l'eau est un élément chimique. Les élèves retrouveront ce mot au collège, où il a un sens précis : l'eau est faite de deux éléments, l'hydrogène et l'oxygène.",
+        "rewrite": "L'eau est la substance idéale pour comprendre les trois premiers états."
+      },
+      {
+        "quote": "Sa surface au repos est toujours plane et horizontale",
+        "risk": "low",
+        "misconception": "Que la surface d'un liquide est toujours parfaitement plate, alors qu'elle se courbe sur les bords d'un verre étroit.",
+        "rewrite": "Au repos, la surface d'un liquide est horizontale, sauf tout près des bords du récipient, où elle se courbe un peu."
+      }
+    ],
+    "discovery": {
+      "clues": [
+        {
+          "clue": "On bouche le bout d'une seringue remplie d'air, puis on appuie sur le piston. On recommence avec une seringue remplie d'eau.",
+          "question": "Dans quel cas le piston s'enfonce-t-il ? Qu'est-ce que ça nous dit sur la place entre les particules ?"
+        },
+        {
+          "clue": "On verse la même quantité d'eau dans un verre haut, puis dans une assiette creuse.",
+          "question": "La forme a changé. La quantité d'eau a-t-elle changé ? Comment le vérifier ?"
+        },
+        {
+          "clue": "Un glaçon posé dans une assiette garde sa forme tant qu'il ne fond pas.",
+          "question": "Qu'est-ce qui distingue le solide du liquide, d'après ces deux expériences ?"
+        },
+        {
+          "clue": "À Salt Lake City, l'eau des pâtes bout vers 95 °C ; au bord de la mer, à 100 °C.",
+          "question": "Qu'est-ce qui change entre les deux endroits, à part la température ?"
+        }
+      ],
+      "landing": "Dans un gaz, les particules sont éloignées : on peut le comprimer. Un liquide garde son volume mais prend la forme du récipient ; un solide garde sa forme et son volume. Et le changement d'état dépend de la température, mais aussi de la pression : en altitude, l'eau bout plus tôt."
+    },
+    "doors": {
+      "example": {
+        "title": "Les pâtes de Salt Lake City",
+        "text": "Les boîtes de pâtes vendues dans l'Utah indiquent parfois un temps de cuisson plus long qu'ailleurs. À Salt Lake City, l'eau bout vers 95 °C au lieu de 100 °C.",
+        "question": "Pourquoi l'eau bout-elle plus tôt en montagne, et pourquoi faut-il cuire les pâtes plus longtemps ?"
+      },
+      "experiment": {
+        "title": "La seringue bouchée",
+        "materials": "Deux seringues sans aiguille, de l'eau, un doigt pour boucher",
+        "steps": [
+          "Remplis une seringue d'air, bouche le bout avec ton doigt et appuie sur le piston.",
+          "Recommence avec une seringue remplie d'eau.",
+          "Note ce qui se passe dans chaque cas."
+        ],
+        "question": "Pourquoi peut-on écraser l'air et pas l'eau ?"
+      },
+      "theory": {
+        "title": "Le modèle des particules",
+        "text": "Toute matière est faite de minuscules particules. Dans un solide, elles sont serrées et vibrent sur place ; dans un liquide, elles sont serrées mais glissent les unes sur les autres ; dans un gaz, elles sont éloignées et se déplacent vite dans tous les sens.",
+        "question": "Avec ce modèle, explique pourquoi un gaz remplit tout l'espace d'une pièce."
+      }
+    }
+  },
+  "note": "Analyse rédigée par Claude selon la logique de Discovery Lens, pas produite par l'outil lui-même."
+}
