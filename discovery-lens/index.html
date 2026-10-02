@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discovery Lens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F5EF; --sheet:#FFFFFC; --grid:rgba(38,49,43,.055); --ink:#23302A; --ink-soft:#5E6962; --line:#D5D2C4;
+    --accent:#2F5D50; --accent-bg:#DDE9E3; --mark:#F3E3A0; --mark-ink:#5A4A10;
+    --risk:#A63A2E; --risk-bg:#F6DEDA; --mid:#8A6A1E; --mid-bg:#F2E8CB; --ok:#2F6B45; --ok-bg:#DCEDE1;
+    --door1:#3B5B8C; --door1-bg:#E1E8F3; --door2:#8A4A24; --door2-bg:#F1E2D5; --door3:#5E4A87; --door3-bg:#E8E2F1;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --paper:#151A17; --sheet:#1C2320; --grid:rgba(228,230,223,.04); --ink:#E5E7E0; --ink-soft:#A2ABA4; --line:#35403A;
+      --accent:#86C0AE; --accent-bg:#1F3530; --mark:#4A4120; --mark-ink:#F0DE9A;
+      --risk:#EE9A8E; --risk-bg:#3D2320; --mid:#DCC27A; --mid-bg:#382F19; --ok:#8FCB9F; --ok-bg:#1C3324;
+      --door1:#9DB7E0; --door1-bg:#1E2839; --door2:#E0AE8A; --door2-bg:#3A2A1F; --door3:#BBA9E0; --door3-bg:#2A2439;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --paper:#151A17; --sheet:#1C2320; --grid:rgba(228,230,223,.04); --ink:#E5E7E0; --ink-soft:#A2ABA4; --line:#35403A;
+    --accent:#86C0AE; --accent-bg:#1F3530; --mark:#4A4120; --mark-ink:#F0DE9A;
+    --risk:#EE9A8E; --risk-bg:#3D2320; --mid:#DCC27A; --mid-bg:#382F19; --ok:#8FCB9F; --ok-bg:#1C3324;
+    --door1:#9DB7E0; --door1-bg:#1E2839; --door2:#E0AE8A; --door2-bg:#3A2A1F; --door3:#BBA9E0; --door3-bg:#2A2439;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background-color:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg,var(--grid) 1px, transparent 1px);
+    background-size:24px 24px;
+    color:var(--ink);font-family:'Source Serif 4',Georgia,serif;font-size:17px;line-height:1.6;
+    padding-inline:16px;padding-block:2.25rem 4rem;
+  }
+  .wrap{max-width:820px;margin:0 auto;display:grid;gap:1.75rem;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;}
+  .eyebrow{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);}
+  header h1{font-size:clamp(2rem,5vw,2.8rem);font-weight:700;line-height:1.1;margin:.2rem 0 .5rem;text-wrap:balance;letter-spacing:-.01em;}
+  header h1 em{font-style:italic;font-weight:400;color:var(--accent);}
+  header p{margin:0;max-width:62ch;color:var(--ink-soft);}
+  .sheet{background:var(--sheet);border:1px solid var(--line);border-radius:4px;padding:1.4rem;}
+  label{display:block;font-weight:600;font-size:.95rem;margin-bottom:.35rem;}
+  textarea,input,select{width:100%;font:inherit;font-size:.95rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:.6rem .7rem;}
+  textarea{min-height:170px;resize:vertical;line-height:1.55;}
+  textarea:focus,input:focus,select:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem;}
+  .hint{font-size:.82rem;color:var(--ink-soft);margin:.45rem 0 0;}
+  .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:1.1rem;}
+  .btn{font:600 .88rem 'JetBrains Mono',monospace;padding:.6rem 1.1rem;border-radius:3px;border:1px solid var(--ink);background:var(--ink);color:var(--sheet);cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line);}
+  .btn:disabled{opacity:.45;cursor:default;}
+  .status{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--ink-soft);}
+  .status.err{color:var(--risk);}
+  .banner{font-size:.88rem;color:var(--ink-soft);border-left:3px solid var(--accent);padding:.35rem 0 .35rem .8rem;}
+  section h2{font-size:1.35rem;margin:0 0 .25rem;font-weight:700;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;}
+  section h2 .n{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--ink-soft);font-weight:400;}
+  section .lead{margin:0 0 1rem;color:var(--ink-soft);font-size:.95rem;}
+  .summary{font-size:1.1rem;margin:0;}
+  .cards{display:grid;gap:.9rem;}
+  .an{border:1px solid var(--line);border-radius:4px;padding:1rem 1.1rem;background:var(--paper);display:grid;gap:.55rem;}
+  .an .quote{font-style:italic;}
+  .an .quote mark{background:var(--mark);color:var(--mark-ink);padding:.05rem .2rem;border-radius:2px;}
+  .pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:.12rem .45rem;border-radius:2px;}
+  .pill.high{background:var(--risk-bg);color:var(--risk);}
+  .pill.medium{background:var(--mid-bg);color:var(--mid);}
+  .pill.low{background:var(--ok-bg);color:var(--ok);}
+  .an dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.35rem .8rem;font-size:.95rem;}
+  .an dt{font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);padding-top:.2rem;}
+  .an dd{margin:0;}
+  .empty{color:var(--ink-soft);font-style:italic;margin:0;}
+  ol.clues{margin:0;padding-left:1.4rem;display:grid;gap:.7rem;}
+  ol.clues li::marker{font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:600;}
+  .clue{display:block;}
+  .ask{display:block;font-weight:600;color:var(--accent);margin-top:.15rem;}
+  details.land{margin-top:1rem;border-top:1px dashed var(--line);padding-top:.7rem;}
+  details.land summary{cursor:pointer;font-weight:600;font-size:.95rem;}
+  details.land p{margin:.5rem 0 0;}
+  .doors{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;}
+  .door{border-radius:4px;padding:1rem;display:grid;gap:.5rem;align-content:start;border-top:4px solid;}
+  .door.d1{background:var(--door1-bg);border-color:var(--door1);}
+  .door.d2{background:var(--door2-bg);border-color:var(--door2);}
+  .door.d3{background:var(--door3-bg);border-color:var(--door3);}
+  .door .tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;font-weight:600;}
+  .door.d1 .tag{color:var(--door1);} .door.d2 .tag{color:var(--door2);} .door.d3 .tag{color:var(--door3);}
+  .door h3{margin:0;font-size:1.05rem;line-height:1.3;}
+  .door p,.door ul,.door ol{margin:0;font-size:.93rem;}
+  .door ul,.door ol{padding-left:1.1rem;}
+  .door .q{font-weight:600;}
+  .copy{font:600 .72rem 'JetBrains Mono',monospace;background:none;border:1px solid var(--line);color:var(--ink-soft);border-radius:3px;padding:.2rem .5rem;cursor:pointer;margin-left:auto;}
+  .sec-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;}
+  .pill.kind{background:var(--accent-bg);color:var(--accent);text-transform:none;letter-spacing:0;}
+  .safety{font-size:.85rem;border-left:3px solid var(--risk);padding-left:.5rem;}
+  .seq-title{margin:0 0 .8rem;}
+  .place{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:4px;padding:.9rem 1rem;margin-bottom:1.2rem;display:grid;gap:.5rem;font-size:.93rem;}
+  .place h3{margin:0;font-size:1rem;}
+  .place ul{margin:0;padding-left:1.1rem;display:grid;gap:.3rem;}
+  .place .code{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;}
+  .place .verify{font-size:.8rem;color:var(--mid);}
+  .place p{margin:0;}
+  .minis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-top:.3rem;}
+  .mini{background:var(--sheet);border:1px solid var(--line);border-radius:4px;padding:.6rem .7rem;display:grid;gap:.3rem;align-content:start;font-size:.88rem;}
+  .mini.now{border-color:var(--accent);background:var(--accent-bg);}
+  .mini-lab{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);}
+  .mini ul{margin:0;padding-left:1rem;display:grid;gap:.2rem;}
+  @media (max-width:720px){ .minis{grid-template-columns:1fr;} }
+  ol.seq-steps{margin:0;padding-left:1.4rem;display:grid;gap:1rem;}
+  ol.seq-steps li::marker{font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:600;}
+  .seq-h{display:flex;gap:.6rem;align-items:baseline;flex-wrap:wrap;}
+  .seq-phase{font-weight:700;}
+  .seq-min{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-soft);}
+  ol.seq-steps p{margin:.2rem 0 .4rem;}
+  ol.seq-steps dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.25rem .8rem;font-size:.92rem;}
+  ol.seq-steps dt{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);padding-top:.2rem;}
+  ol.seq-steps dd{margin:0;}
+  footer{font-size:.82rem;color:var(--ink-soft);display:grid;gap:.35rem;}
+  footer a{color:var(--accent);}
+  @media (max-width:720px){ .doors{grid-template-columns:1fr;} .fields{grid-template-columns:1fr;} .an dl{grid-template-columns:1fr;} }
+  @media (prefers-reduced-motion:reduce){ *{scroll-behavior:auto!important;} }
+</style>
+</head>
+<body style="margin:0">
+<div style="font:14px/1.5 system-ui,sans-serif;background:#DDE9E3;color:#23302A;padding:10px 16px;text-align:center">
+Offline copy: the examples work here, but new analyses need the live version &rarr;
+<a href="https://claude.ai/artifact/X99SRuquEomuXZ2gw2gHGR" style="color:#2F5D50;font-weight:600">open Discovery Lens</a>
+&middot; <a href="../index.html" style="color:#2F5D50">Le Survivant</a>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">For teachers · pilot</div>
+    <h1>Discovery <em>Lens</em></h1>
+    <p>Paste an explanation written by an AI tool. Discovery Lens flags analogies that may plant a misconception, rewrites the explanation so students infer the idea instead of receiving it, and offers three ways into the same content.</p>
+  </header>
+
+  <div class="sheet">
+    <label for="src">AI-generated explanation</label>
+    <textarea id="src" placeholder="Paste an explanation, a study guide or a lesson summary produced by an AI tool…"></textarea>
+    <p class="hint">Paste AI-generated content only. Do not paste student work, names or any student information.</p>
+    <div class="fields">
+      <div>
+        <label for="grade">Grade level</label>
+        <select id="grade">
+          <option value="" selected>Choose a grade</option>
+          <option>Grades 3–4</option>
+          <option>Grades 5–6</option>
+          <option>Grades 7–8</option>
+          <option>Grades 9–10</option>
+          <option>Grades 11–12</option>
+          <option>College intro</option>
+        </select>
+      </div>
+      <div>
+        <label for="subject">Subject</label>
+        <input id="subject" placeholder="e.g. Science, History, French">
+      </div>
+    </div>
+    <label for="ctx" style="margin-top:1rem">Class context <span style="font-weight:400;color:var(--ink-soft)">(optional)</span></label>
+    <input id="ctx" placeholder="e.g. Grantsville, Utah, 4,300 ft · 50-minute period · low-energy group">
+    <label for="curr" style="margin-top:1rem">Standards to align with <span style="font-weight:400;color:var(--ink-soft)">(your state or framework)</span></label>
+    <input id="curr" list="curr-list" placeholder="Start typing: Utah, NGSS, Common Core, Texas TEKS…">
+    <datalist id="curr-list">
+      <option value="Utah Core Standards (SEEd for science)"></option>
+      <option value="Utah Core Standards (English Language Arts)"></option>
+      <option value="Utah Core Standards (Mathematics)"></option>
+      <option value="NGSS (Next Generation Science Standards)"></option>
+      <option value="Common Core State Standards"></option>
+      <option value="Texas TEKS"></option>
+      <option value="California Content Standards"></option>
+      <option value="Florida B.E.S.T. Standards"></option>
+      <option value="New York State Learning Standards"></option>
+      <option value="ACTFL World-Readiness Standards (languages)"></option>
+      <option value="Programme français, cycle 3"></option>
+    </datalist>
+    <p class="hint">Used to place the lesson sequence in your progression. If left empty, the tool uses NGSS or Common Core and says so.</p>
+    <div class="row">
+      <button class="btn" id="btn-run">Analyze</button>
+      <button class="btn ghost" id="btn-clear">Clear</button>
+      <select id="ex-pick" aria-label="Example" style="width:auto"><option value="0">Example: protein synthesis (EN, grades 9–10)</option><option value="1">Exemple : les états de la matière (FR, grades 5–6)</option></select>
+      <button class="btn ghost" id="btn-example">Show</button>
+      <span class="status" id="st"></span>
+    </div>
+  </div>
+
+  <div class="banner" id="banner"></div>
+
+  <section class="sheet" id="sec-sum">
+    <div class="eyebrow">In one sentence</div>
+    <p class="summary" id="summary"></p>
+  </section>
+
+  <section class="sheet">
+    <div class="sec-head"><h2>Wording to watch <span class="n" id="n-an"></span></h2><button class="copy" data-copy="an">Copy</button></div>
+    <p class="lead">Analogies, image-laden words, everyday words with a technical meaning, overgeneralizations and facts stated without their conditions: what students might wrongly take away, and a safer wording.</p>
+    <div class="cards" id="analogies"></div>
+  </section>
+
+  <section class="sheet">
+    <div class="sec-head"><h2>Discovery version</h2><button class="copy" data-copy="inf">Copy</button></div>
+    <p class="lead">The same content as a sequence of clues and questions, so students build the conclusion themselves.</p>
+    <ol class="clues" id="clues"></ol>
+    <details class="land"><summary>Where students should land</summary><p id="land"></p></details>
+  </section>
+
+  <section class="sheet">
+    <div class="sec-head"><h2>Three ways in</h2><button class="copy" data-copy="doors">Copy</button></div>
+    <p class="lead">Let students choose how to start. Each door leads to the same idea, and each ends with a question for them to answer.</p>
+    <div class="doors" id="doors"></div>
+    <div class="row" id="doors-row" hidden>
+      <button class="btn ghost" id="btn-doors">Generate the three ways in</button>
+      <span class="status" id="st2"></span>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="sec-head"><h2>Lesson sequence</h2><button class="copy" data-copy="seq">Copy</button></div>
+    <p class="lead">Where the lesson fits in the curriculum, then several activities: from a question to the idea, with what students do, what you do, and how you know each step worked.</p>
+    <div id="seq"></div>
+    <div class="row" id="seq-row" hidden>
+      <button class="btn ghost" id="btn-seq">Build a lesson sequence</button>
+      <span class="status" id="st4"></span>
+    </div>
+  </section>
+
+  <section class="sheet" id="sec-fb">
+    <div class="sec-head"><h2>Your verdict</h2></div>
+    <p class="lead">Two minutes that make the pilot useful: tell us what you would actually use, then save the results.</p>
+    <div class="fields">
+      <div><label for="fb-an">Wording to watch</label><select id="fb-an"><option value="">Not rated</option><option>Very useful</option><option>Somewhat useful</option><option>Not useful</option><option>Wrong or misleading</option></select></div>
+      <div><label for="fb-inf">Discovery version</label><select id="fb-inf"><option value="">Not rated</option><option>Very useful</option><option>Somewhat useful</option><option>Not useful</option><option>Wrong or misleading</option></select></div>
+      <div><label for="fb-doors">Three ways in</label><select id="fb-doors"><option value="">Not rated</option><option>Very useful</option><option>Somewhat useful</option><option>Not useful</option><option>Wrong or misleading</option></select></div>
+      <div><label for="fb-seq">Lesson sequence</label><select id="fb-seq"><option value="">Not rated</option><option>Very useful</option><option>Somewhat useful</option><option>Not useful</option><option>Wrong or misleading</option></select></div>
+      <div><label for="fb-use">Would you use it in class?</label><select id="fb-use"><option value="">Not answered</option><option>Yes, as is</option><option>Yes, after editing</option><option>No</option></select></div>
+    </div>
+    <label for="fb-note" style="margin-top:1rem">Comments</label>
+    <textarea id="fb-note" style="min-height:90px" placeholder="What was right, what was off, what you changed…"></textarea>
+    <div class="row">
+      <button class="btn" id="btn-export">Save results (JSON)</button>
+      <span class="status" id="st3"></span>
+    </div>
+  </section>
+
+  <footer>
+    <div>Discovery Lens applies natural logic, a framework from discourse analysis, to classroom explanations. Built by Jean Charconnet, PhD (Université Paris 8), teacher in the Tooele School District.</div>
+    <div id="fb-line" hidden>Tried it? <a id="fb-link" href="#" target="_blank" rel="noopener">Tell us what worked and what didn't</a>. It takes two minutes.</div>
+  </footer>
+</div>
+
+<script>
+const FEEDBACK_URL = ""; // lien du formulaire de retour, à renseigner
+const $ = id => document.getElementById(id);
+let sample = null, current = null;
+
+const EXAMPLE = {
+  text: "DNA is like a recipe book for your body. Each gene is a recipe, and the cell reads the recipe to cook up a protein. First, the cell copies the recipe into a messenger called mRNA, which carries it to the kitchen, the ribosome. The ribosome reads the recipe three letters at a time and adds the right ingredient, an amino acid, for each three-letter word. A mutation is like a typo in the recipe: change one letter and you might end up with a completely different dish.",
+  grade: "Grades 9–10",
+  subject: "Biology",
+  result: {
+    summary: "A clear explanation whose cooking analogy works for the sequence of steps but suggests a cook who reads with intent, a correct original recipe, and mutations that are always mistakes.",
+    analogies: [
+      { quote: "the cell reads the recipe to cook up a protein", risk: "high",
+        misconception: "That someone inside the cell reads and decides, like a cook following instructions on purpose.",
+        rewrite: "The cell uses the gene's sequence as a template, somewhat as a cook uses a recipe; but nothing in the cell reads or chooses: molecules bind and react according to their chemistry." },
+      { quote: "A mutation is like a typo in the recipe", risk: "high",
+        misconception: "That there is a correct, intended version of each gene, and that every mutation is an error to be fixed.",
+        rewrite: "A mutation is a change in the DNA sequence. Unlike a typo, there is no intended correct version: many mutations have no effect, some are harmful, and a few are useful, which is how species change over time." },
+      { quote: "carries it to the kitchen, the ribosome", risk: "low",
+        misconception: "Minor: that the ribosome is a fixed place in the cell, like a room.",
+        rewrite: "carries it to a ribosome, one of millions of small molecular machines in the cell, which work somewhat like a kitchen's workstation." }
+    ],
+    discovery: {
+      clues: [
+        { clue: "A gene is a stretch of DNA written in four chemical letters: A, T, C and G.", question: "If proteins are built from 20 different amino acids, how many letters would you need to name each one? Is one letter enough? Two?" },
+        { clue: "Before a protein is built, the gene's sequence is copied into mRNA, which leaves the nucleus.", question: "Why might the cell send out a copy instead of the DNA itself?" },
+        { clue: "At the ribosome, each group of three mRNA letters matches one amino acid.", question: "With four letters in groups of three, how many combinations are possible? What does that tell you about the 20 amino acids?" },
+        { clue: "Change one letter in a gene, and a different amino acid can end up in the protein.", question: "Would every single-letter change necessarily harm the protein? What would you need to know to decide?" }
+      ],
+      landing: "Genes are sequences that the cell uses, through an mRNA copy and three-letter codons, to assemble proteins. Because 4 letters in groups of 3 give 64 combinations for 20 amino acids, several codons can code for the same amino acid, so some mutations change nothing, while others change the protein, for better or worse."
+    },
+    doors: {
+      example: { title: "Start from a real case", text: "Sickle cell anemia comes from a single-letter change in the gene for hemoglobin. One amino acid changes, and red blood cells can fold into a crescent shape. In regions with malaria, carrying one copy of this variant also protects against the disease.", question: "How can one letter change both cause a disease and protect against another?" },
+      experiment: { title: "Try it yourself", materials: "Codon chart, a short mRNA sequence written on the board", steps: ["Translate the sequence into amino acids with the chart.", "Change one letter and translate again.", "Find a letter change that does not change the amino acid."], question: "Why do some changes matter and others not?" },
+      theory: { title: "Build the model", text: "Transcription copies a gene's DNA into mRNA. Translation reads the mRNA in codons of three bases; each codon corresponds to an amino acid or a stop signal. The genetic code is redundant: 64 codons for 20 amino acids.", question: "Using this model, predict what happens if one base is deleted instead of changed." }
+    }
+  }
+};
+
+
+const EXAMPLE_FR = {
+  label: "Exemple : une explication générée par un mode de recherche IA sur les états de la matière, niveau grades 5–6, avec une analyse enregistrée. Collez votre propre texte au-dessus pour l'analyser.",
+  text: "Les états de la matière correspondent aux différentes formes que peut prendre une substance dans l'Univers. La matière change d'état principalement en fonction de la température et de la pression. En général, on distingue quatre états principaux. À l'état solide, les particules sont très proches les unes des autres et fortement liées entre elles. Elles ne peuvent pas se déplacer, mais elles vibrent sur place. Le solide a une forme propre et un volume propre (il est incompressible). À l'état liquide, les particules sont proches, mais les liens qui les unissent sont plus faibles. Le liquide n'a pas de forme propre, mais il a un volume propre. Sa surface au repos est toujours plane et horizontale. À l'état gazeux, les particules sont très éloignées les unes des autres. Un gaz n'a ni forme propre, ni volume propre. Exemple : la vapeur d'eau (invisible). L'état plasma est l'état le plus répandu dans l'Univers. Le plasma ressemble à un gaz, mais il est tellement chaud que les atomes se brisent : les électrons se séparent de leur noyau. On obtient une « soupe » de particules chargées électriquement. L'eau est l'élément parfait pour comprendre les trois premiers états : un glaçon sorti du congélateur (en dessous de 0 °C) fond et devient de l'eau liquide (entre 0 °C et 100 °C) ; chauffée dans une casserole, elle bout (à 100 °C) et se transforme en vapeur d'eau.",
+  grade: "Grades 5–6",
+  subject: "Sciences",
+  context: "Grantsville, Utah, 4,300 ft",
+  curriculum: "Utah Core Standards (SEEd for science)",
+  result: {
+    summary: "Une explication claire et bien illustrée, qui annonce que la pression compte puis l'oublie, et dont le vocabulaire (« les atomes se brisent », « l'élément ») peut installer deux idées fausses durables.",
+    analogies: [
+      { quote: "elle bout (à 100 °C) et se transforme en vapeur", risk: "high",
+        misconception: "Que l'eau bout toujours à 100 °C. Dans l'Utah, à 1 300 mètres, elle bout vers 95–96 °C, et les élèves peuvent le constater.",
+        rewrite: "Au niveau de la mer, l'eau bout à 100 °C. Plus on monte en altitude, plus l'air pèse peu sur l'eau, et plus elle bout tôt : vers 95 °C à Salt Lake City." },
+      { quote: "tellement chaud que les atomes se brisent", risk: "high",
+        misconception: "Que l'atome est cassé en morceaux, alors que son noyau reste entier : il perd seulement des électrons.",
+        rewrite: "Il est tellement chaud que les atomes perdent certains de leurs électrons. Le noyau, lui, reste entier." },
+      { quote: "L'eau est l'élément parfait pour comprendre", risk: "medium",
+        misconception: "Que l'eau est un élément chimique. Les élèves retrouveront ce mot au collège, où il a un sens précis : l'eau est faite de deux éléments, l'hydrogène et l'oxygène.",
+        rewrite: "L'eau est la substance idéale pour comprendre les trois premiers états." },
+      { quote: "Sa surface au repos est toujours plane et horizontale", risk: "low",
+        misconception: "Que la surface d'un liquide est toujours parfaitement plate, alors qu'elle se courbe sur les bords d'un verre étroit.",
+        rewrite: "Au repos, la surface d'un liquide est horizontale, sauf tout près des bords du récipient, où elle se courbe un peu." }
+    ],
+    discovery: {
+      clues: [
+        { clue: "On bouche le bout d'une seringue remplie d'air, puis on appuie sur le piston. On recommence avec une seringue remplie d'eau.", question: "Dans quel cas le piston s'enfonce-t-il ? Qu'est-ce que ça nous dit sur la place entre les particules ?" },
+        { clue: "On verse la même quantité d'eau dans un verre haut, puis dans une assiette creuse.", question: "La forme a changé. La quantité d'eau a-t-elle changé ? Comment le vérifier ?" },
+        { clue: "Un glaçon posé dans une assiette garde sa forme tant qu'il ne fond pas.", question: "Qu'est-ce qui distingue le solide du liquide, d'après ces deux expériences ?" },
+        { clue: "À Salt Lake City, l'eau des pâtes bout vers 95 °C ; au bord de la mer, à 100 °C.", question: "Qu'est-ce qui change entre les deux endroits, à part la température ?" }
+      ],
+      landing: "Dans un gaz, les particules sont éloignées : on peut le comprimer. Un liquide garde son volume mais prend la forme du récipient ; un solide garde sa forme et son volume. Et le changement d'état dépend de la température, mais aussi de la pression : en altitude, l'eau bout plus tôt."
+    },
+    doors: {
+      example: { title: "Les pâtes de Salt Lake City", text: "Les boîtes de pâtes vendues dans l'Utah indiquent parfois un temps de cuisson plus long qu'ailleurs. À Salt Lake City, l'eau bout vers 95 °C au lieu de 100 °C.", question: "Pourquoi l'eau bout-elle plus tôt en montagne, et pourquoi faut-il cuire les pâtes plus longtemps ?" },
+      experiment: { title: "La seringue bouchée", materials: "Deux seringues sans aiguille, de l'eau, un doigt pour boucher", steps: ["Remplis une seringue d'air, bouche le bout avec ton doigt et appuie sur le piston.", "Recommence avec une seringue remplie d'eau.", "Note ce qui se passe dans chaque cas."], question: "Pourquoi peut-on écraser l'air et pas l'eau ?" },
+      theory: { title: "Le modèle des particules", text: "Toute matière est faite de minuscules particules. Dans un solide, elles sont serrées et vibrent sur place ; dans un liquide, elles sont serrées mais glissent les unes sur les autres ; dans un gaz, elles sont éloignées et se déplacent vite dans tous les sens.", question: "Avec ce modèle, explique pourquoi un gaz remplit tout l'espace d'une pièce." }
+    }
+  }
+};
+const EXAMPLES = [EXAMPLE, EXAMPLE_FR];
+
+EXAMPLE_FR.result.analogies.forEach((a,i)=>{ a.kind = ['missing_condition','figurative','technical_word','overgeneralization'][i]; });
+EXAMPLE.result.analogies.forEach(a=>{ a.kind = 'analogy'; });
+EXAMPLE_FR.result.sequence = {
+  placement: {
+    curriculum: "Utah Core Standards, SEEd (aligné sur les NGSS)",
+    standards: [
+      { code: "SEEd 5.1.1", text: "Développer un modèle pour décrire que la matière est faite de particules trop petites pour être vues (NGSS 5-PS1-1).", confidence: "check" },
+      { code: "", text: "Propriétés et transformations de la matière : les changements d'état conservent la quantité de matière.", confidence: "check" }
+    ],
+    before_lesson: { title: "Décrire la matière par ses propriétés", objective: "Classer des objets et des substances selon des propriétés observables.", activities: ["Trier une collection d'objets (bille, eau, sable, pâte à modeler, ballon gonflé) selon qu'ils coulent, gardent leur forme, se tassent.", "Lire un thermomètre : eau froide, eau tiède, glace qui fond.", "Mettre en commun les critères de tri inventés par les groupes."] },
+    after_lesson: { title: "La matière disparaît-elle quand elle change d'état ?", objective: "Montrer par la mesure que la masse se conserve lors d'un changement d'état.", activities: ["Peser un sac fermé contenant des glaçons, puis le repeser une fois la glace fondue.", "Prédire, puis vérifier : un verre d'eau salée pèse-t-il plus que l'eau et le sel séparés ?", "Évaluation de l'unité : expliquer avec le modèle des particules une observation nouvelle (la buée sur une canette froide)."] },
+    beyond: "L'effet de la pression et de l'altitude sur l'ébullition, ainsi que le plasma, dépassent ce niveau : à traiter comme ouverture ou curiosité, pas comme objectif."
+  },
+  title: "Pourquoi les pâtes cuisent-elles plus longtemps à Salt Lake City ?",
+  duration: "50 minutes",
+  steps: [
+    { phase: "Accroche", minutes: 5, activity: "Poser la question du titre. Les élèves proposent des hypothèses, notées au tableau sans les corriger.", students_do: "Proposer une explication, même fausse.", teacher_does: "Noter toutes les hypothèses ; annoncer qu'on y reviendra en fin de séance.", check: "Chaque binôme a au moins une hypothèse." },
+    { phase: "Exploration", minutes: 15, activity: "Trois stations en binômes : la seringue bouchée (air puis eau), l'eau versée du verre dans l'assiette, le glaçon posé dans une assiette.", students_do: "Observer, puis noter pour chaque cas : la forme change-t-elle ? le volume change-t-il ?", teacher_does: "Circuler, poser des questions sans donner les réponses.", check: "La fiche d'observation est remplie pour les trois stations." },
+    { phase: "Mise en commun", minutes: 10, activity: "Construire ensemble le tableau forme propre / volume propre pour le solide, le liquide et le gaz, à partir des observations.", students_do: "Justifier chaque case par une observation.", teacher_does: "Ne valider une case que si elle s'appuie sur une observation.", check: "Le tableau est complet et chaque case est justifiée." },
+    { phase: "Modèle", minutes: 10, activity: "Dessiner les particules dans chacun des trois états, puis comparer les dessins entre binômes.", students_do: "Expliquer avec le dessin pourquoi l'air se comprime et pas l'eau.", teacher_does: "Faire émerger le modèle : particules serrées ou éloignées, liées ou libres.", check: "Le dessin du gaz montre des particules éloignées." },
+    { phase: "Retour à l'accroche", minutes: 5, activity: "Donner le fait : l'eau bout vers 95 °C à Salt Lake City et à 100 °C au bord de la mer. Relire les hypothèses du début.", students_do: "Dire ce qui change entre les deux endroits : l'air qui pèse sur l'eau.", teacher_does: "Relier au texte : le changement d'état dépend aussi de la pression.", check: "Un élève reformule le rôle de l'altitude." },
+    { phase: "Billet de sortie", minutes: 5, activity: "Question individuelle écrite.", students_do: "Expliquer, avec le modèle des particules, pourquoi on peut comprimer l'air mais pas l'eau.", teacher_does: "Relever les billets pour repérer qui a besoin d'un retour.", check: "La réponse mentionne la distance entre les particules." }
+  ]
+};
+
+function esc(s){ return String(s == null ? '' : s); }
+function el(tag, cls, text){ const e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+const KIND = { analogy:'Analogy', figurative:'Figurative word', technical_word:'Everyday vs technical word', overgeneralization:'Overgeneralization', missing_condition:'Missing condition' };
+
+let curInput = null, isExample = true;
+
+function render(r, exampleFlag, label){
+  current = r; isExample = !!exampleFlag;
+  $('banner').textContent = isExample
+    ? (label || 'Example: an AI-generated explanation of protein synthesis for grades 9–10, with a recorded analysis. Paste your own text above to analyze it.')
+    : 'Analysis of your text. Review it before using it in class: the suggestions are a starting point, not a verdict.';
+  $('summary').textContent = esc(r.summary);
+  const an = $('analogies'); an.innerHTML = '';
+  const list = Array.isArray(r.analogies) ? r.analogies : [];
+  $('n-an').textContent = list.length ? list.length + ' found' : '';
+  if(!list.length) an.appendChild(el('p','empty','Nothing likely to mislead students was found.'));
+  list.forEach(a => {
+    const c = el('div','an');
+    const top = el('div'); top.style.display = 'flex'; top.style.gap = '.4rem'; top.style.flexWrap = 'wrap';
+    top.appendChild(el('span','pill ' + (['high','medium','low'].includes(a.risk) ? a.risk : 'medium'), a.risk === 'high' ? 'High risk' : a.risk === 'low' ? 'Low risk' : 'Medium risk'));
+    if(a.kind && KIND[a.kind]) top.appendChild(el('span','pill kind', KIND[a.kind]));
+    c.appendChild(top);
+    const q = el('div','quote'); q.appendChild(el('mark', null, '“' + esc(a.quote) + '”')); c.appendChild(q);
+    const dl = el('dl');
+    dl.appendChild(el('dt',null,'Students may think')); dl.appendChild(el('dd',null,esc(a.misconception)));
+    dl.appendChild(el('dt',null,'Try instead')); dl.appendChild(el('dd',null,esc(a.rewrite)));
+    c.appendChild(dl); an.appendChild(c);
+  });
+  const cl = $('clues'); cl.innerHTML = '';
+  const d = r.discovery || {};
+  (d.clues || []).forEach(x => { const li = el('li'); li.appendChild(el('span','clue',esc(x.clue))); li.appendChild(el('span','ask',esc(x.question))); cl.appendChild(li); });
+  $('land').textContent = esc(d.landing);
+  renderDoors(r.doors);
+  renderSeq(r.sequence);
+  syncRatings();
+}
+
+function renderDoors(doors){
+  const box = $('doors'); box.innerHTML = '';
+  if(!doors){ $('doors-row').hidden = !sample; if(!sample) box.appendChild(el('p','empty','Available when the tool runs inside Claude.')); return; }
+  $('doors-row').hidden = true;
+  [['d1','By example',doors.example],['d2','By experiment',doors.experiment],['d3','By theory',doors.theory]].forEach(([cls,tag,dd]) => {
+    if(!dd) return;
+    const c = el('div','door ' + cls);
+    c.appendChild(el('div','tag',tag)); c.appendChild(el('h3',null,esc(dd.title)));
+    if(dd.text) c.appendChild(el('p',null,esc(dd.text)));
+    if(dd.materials) c.appendChild(el('p',null,'Materials: ' + esc(dd.materials)));
+    if(Array.isArray(dd.steps) && dd.steps.length){ const ol = el('ol'); dd.steps.forEach(s => ol.appendChild(el('li',null,esc(s)))); c.appendChild(ol); }
+    if(dd.safety) c.appendChild(el('p','safety','Safety: ' + esc(dd.safety)));
+    c.appendChild(el('p','q',esc(dd.question)));
+    box.appendChild(c);
+  });
+}
+
+function syncRatings(){
+  const has = { 'fb-an': !!current, 'fb-inf': !!(current && current.discovery), 'fb-doors': !!(current && current.doors), 'fb-seq': !!(current && current.sequence) };
+  Object.keys(has).forEach(id => { const e = $(id); if(!e) return; e.disabled = !has[id]; if(!has[id]) e.value = ''; e.title = has[id] ? '' : 'Generate this part first to rate it'; });
+}
+function renderSeq(seq){
+  const box = $('seq'); box.innerHTML = '';
+  if(!seq){ $('seq-row').hidden = !sample; if(!sample) box.appendChild(el('p','empty','Available when the tool runs inside Claude.')); return; }
+  $('seq-row').hidden = true;
+  const pl = seq.placement;
+  if(pl){
+    const b = el('div','place');
+    b.appendChild(el('h3',null,'Where it fits' + (pl.curriculum ? ' · ' + esc(pl.curriculum) : '')));
+    if(Array.isArray(pl.standards) && pl.standards.length){
+      const ul = el('ul');
+      pl.standards.forEach(x => { const li = el('li'); if(x.code) li.appendChild(el('span','code',esc(x.code) + ' ')); li.appendChild(document.createTextNode(esc(x.text))); if(x.confidence === 'check') li.appendChild(el('span','verify',' (check the exact code)')); ul.appendChild(li); });
+      b.appendChild(ul);
+    }
+    const lesson = (lab, L) => {
+      if(!L || typeof L !== 'object') return;
+      const w = el('div','mini'); w.appendChild(el('div','mini-lab',lab));
+      w.appendChild(el('strong',null,esc(L.title)));
+      if(L.objective) w.appendChild(el('p',null,esc(L.objective)));
+      if(Array.isArray(L.activities) && L.activities.length){ const ul = el('ul'); L.activities.forEach(a => ul.appendChild(el('li',null,esc(a)))); w.appendChild(ul); }
+      return w;
+    };
+    const pair = el('div','minis');
+    const bl = lesson('Lesson before', pl.before_lesson), al = lesson('Lesson after', pl.after_lesson);
+    if(bl) pair.appendChild(bl);
+    const now = el('div','mini now'); now.appendChild(el('div','mini-lab','This lesson')); now.appendChild(el('strong',null,esc(seq.title))); pair.appendChild(now);
+    if(al) pair.appendChild(al);
+    if(bl || al) b.appendChild(pair);
+    if(pl.before){ const p = el('p'); p.appendChild(el('strong',null,'Before: ')); p.appendChild(document.createTextNode(esc(pl.before))); b.appendChild(p); }
+    if(pl.after){ const p = el('p'); p.appendChild(el('strong',null,'Next: ')); p.appendChild(document.createTextNode(esc(pl.after))); b.appendChild(p); }
+    if(pl.beyond){ const p = el('p'); p.appendChild(el('strong',null,'Beyond the standard: ')); p.appendChild(document.createTextNode(esc(pl.beyond))); b.appendChild(p); }
+    box.appendChild(b);
+  }
+  const head = el('p','seq-title'); head.appendChild(el('strong',null,esc(seq.title))); if(seq.duration) head.appendChild(el('span','count',' · ' + esc(seq.duration))); box.appendChild(head);
+  const ol = el('ol','seq-steps');
+  (seq.steps || []).forEach(s => {
+    const li = el('li');
+    const h = el('div','seq-h'); h.appendChild(el('span','seq-phase',esc(s.phase))); if(s.minutes) h.appendChild(el('span','seq-min',esc(s.minutes) + ' min')); li.appendChild(h);
+    li.appendChild(el('p',null,esc(s.activity)));
+    const dl = el('dl');
+    if(s.students_do){ dl.appendChild(el('dt',null,'Students')); dl.appendChild(el('dd',null,esc(s.students_do))); }
+    if(s.teacher_does){ dl.appendChild(el('dt',null,'Teacher')); dl.appendChild(el('dd',null,esc(s.teacher_does))); }
+    if(s.check){ dl.appendChild(el('dt',null,'Check')); dl.appendChild(el('dd',null,esc(s.check))); }
+    li.appendChild(dl); ol.appendChild(li);
+  });
+  box.appendChild(ol);
+}
+
+function textFor(kind){
+  const r = current; if(!r) return '';
+  if(kind === 'an') return (r.analogies||[]).map(a => `"${a.quote}" (${a.risk} risk${a.kind ? ', ' + (KIND[a.kind]||a.kind) : ''})\nStudents may think: ${a.misconception}\nTry instead: ${a.rewrite}`).join('\n\n');
+  if(kind === 'inf'){ const d = r.discovery||{}; return (d.clues||[]).map((x,i)=>`${i+1}. ${x.clue}\n   ${x.question}`).join('\n') + (d.landing ? `\n\nWhere students should land: ${d.landing}` : ''); }
+  if(kind === 'doors'){ const o = r.doors; if(!o) return ''; return [['By example',o.example],['By experiment',o.experiment],['By theory',o.theory]].filter(x=>x[1]).map(([t,d])=>`${t}: ${d.title}\n${d.text||''}${d.materials?'\nMaterials: '+d.materials:''}${(d.steps||[]).length?'\n'+d.steps.map((s,i)=>`${i+1}. ${s}`).join('\n'):''}${d.safety?'\nSafety: '+d.safety:''}\nQuestion: ${d.question}`).join('\n\n'); }
+  if(kind === 'seq'){ const s = r.sequence; if(!s) return ''; const pl = s.placement; const pt = pl ? `Where it fits${pl.curriculum ? ' (' + pl.curriculum + ')' : ''}:\n` + (pl.standards||[]).map(x=>`- ${x.code ? x.code + ' ' : ''}${x.text}${x.confidence === 'check' ? ' (check the exact code)' : ''}`).join('\n') + (pl.before_lesson ? `\nLesson before: ${pl.before_lesson.title}. ${pl.before_lesson.objective||''} ${(pl.before_lesson.activities||[]).join(' / ')}` : '') + (pl.after_lesson ? `\nLesson after: ${pl.after_lesson.title}. ${pl.after_lesson.objective||''} ${(pl.after_lesson.activities||[]).join(' / ')}` : '') + (pl.before ? `\nBefore: ${pl.before}` : '') + (pl.after ? `\nNext: ${pl.after}` : '') + (pl.beyond ? `\nBeyond the standard: ${pl.beyond}` : '') + '\n\n' : ''; return pt + `${s.title}${s.duration ? ' (' + s.duration + ')' : ''}\n\n` + (s.steps||[]).map((x,i)=>`${i+1}. ${x.phase}${x.minutes ? ' — ' + x.minutes + ' min' : ''}\n${x.activity}\nStudents: ${x.students_do||''}\nTeacher: ${x.teacher_does||''}\nCheck: ${x.check||''}`).join('\n\n'); }
+  return '';
+}
+document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', async () => {
+  const t = textFor(b.dataset.copy); if(!t) return;
+  try{ await navigator.clipboard.writeText(t); b.textContent = 'Copied'; }catch(e){ b.textContent = 'Select and copy'; }
+  setTimeout(() => { b.textContent = 'Copy'; }, 1600);
+}));
+
+const ERR = {
+  not_granted: "This page was not allowed to use Claude. Reload the page and allow it to run an analysis.",
+  sampling_disabled: "Claude is not available for this account.",
+  rate_limited: "Too many requests for now. Try again in a few minutes.",
+  session_expired: "Your Claude session expired. Sign in again, then retry.",
+  prompt_too_large: "The text is too long. Paste a shorter excerpt.",
+  refused: "The analysis could not be run on this text.",
+  invalid_json: "The analysis came back incomplete. Try again."
+};
+
+function ctxLine(i){ return i.context ? "Class context: " + i.context + ". Use it when a fact depends on it (altitude, climate, local examples). If it contradicts the grade (for example it says elementary or middle school), follow the younger level for vocabulary and safety." : ""; }
+const SAFETY = "Safety by grade: for grades K-8, no open flame, no hot plate, no boiling water and no sharp or chemical materials in student hands; anything involving heat is a teacher demonstration, stated as such, with a safety line. For grades 9-12, standard lab precautions, stated in a safety line.";
+
+function promptMain(i){
+  return [
+    "You help a " + i.subject + " teacher (" + i.grade + ") check an explanation written by an AI tool before using it in class.",
+    ctxLine(i),
+    "Your analysis draws on natural logic (Grize): a comparison is safe when its limits are marked; wording becomes risky when students can draw a false conclusion from it.",
+    "Tasks:",
+    "1. summary: one plain sentence on the explanation's main strength and main risk.",
+    "2. analogies: every wording that could plant a misconception at this grade level, of five kinds (kind): analogy (a comparison or metaphor treated as an identity, or whose source image lends false properties: intention, a correct original, a fixed place, someone who decides); figurative (an image-laden verb or noun that suggests a false mechanism, e.g. atoms that 'break'); technical_word (an everyday word that has a different technical meaning in the subject, e.g. 'element'); overgeneralization ('always', 'never', 'all', or a single example stated as a rule); missing_condition (a value or fact stated without the condition it depends on, e.g. a boiling point without pressure or altitude).",
+    "Skip images already marked as images (in quotation marks or introduced by 'like') unless they still suggest a false property. Look first for missing conditions and figurative verbs: they are the most often missed. For each: quote (exact words copied from the text, 4 to 15 words), kind, risk (high|medium|low), misconception (what a student might wrongly conclude, one sentence), rewrite (1 or 2 sentences suitable for the grade). Never invent facts, numbers or sources.",
+    "3. discovery: rewrite the content as 3 to 5 clues in logical order; each clue is an observation, a measurement or a fact students can check (never the rule, the model, a definition or the conclusion itself), and each question asks them to find the rule or the next step by reasoning, not to recall or name something. A clue must not contain the answer to its own question. The model is what students build across the clues; it appears only in landing. Use the corrected facts: never repeat in a clue a wording you flagged in step 2. Do not give away the conclusion in the clues. landing: the conclusion students should reach, in 1 or 2 sentences.",
+    "Write every field in the same language as the explanation. Keep the level appropriate for " + i.grade + ".",
+    'Reply with only JSON: {"summary":"...","analogies":[{"quote":"...","kind":"missing_condition","risk":"high","misconception":"...","rewrite":"..."}],"discovery":{"clues":[{"clue":"...","question":"..."}],"landing":"..."}}',
+    "", "Explanation:", i.text
+  ].filter(Boolean).join('\n');
+}
+function flaggedLine(){
+  const a = (current && current.analogies) || [];
+  return a.length ? "Wording already flagged as misleading (do not reuse it, use the corrected version): " + a.map(x => '"' + x.quote + '" -> ' + x.rewrite).join(' | ') : "";
+}
+function promptDoors(i){
+  return [
+    "A " + i.subject + " teacher (" + i.grade + ") wants three ways into the content below, so students can choose how to start. All three lead to the same idea, avoid misleading wording, and end with a question students must answer themselves (do not give the answer).",
+    ctxLine(i), flaggedLine(), SAFETY,
+    "example: a real, concrete case (title, text of 2 to 4 sentences, question).",
+    "experiment: a simple classroom activity or thought experiment with common materials (title, materials, 2 to 4 steps, safety, question).",
+    "theory: the underlying model stated precisely for the grade (title, text of 2 to 4 sentences, question).",
+    "Never invent statistics or sources. Write in the same language as the content.",
+    'Reply with only JSON: {"example":{"title":"...","text":"...","question":"..."},"experiment":{"title":"...","materials":"...","steps":["..."],"safety":"...","question":"..."},"theory":{"title":"...","text":"...","question":"..."}}',
+    "", "Content:", i.text
+  ].filter(Boolean).join('\n');
+}
+function promptSeq(i){
+  const d = (current && current.discovery) || {};
+  return [
+    "A " + i.subject + " teacher (" + i.grade + ") wants one lesson built on the content below: a sequence of 4 to 6 different activities that moves students from a question to the idea, in a discovery approach (students infer, the teacher does not lecture first).",
+    ctxLine(i), flaggedLine(), SAFETY,
+    d.landing ? "Where students should land: " + d.landing : "",
+    "Vary the activity types (hook question, hands-on or observation, pair work, whole-class synthesis, modelling or drawing, individual exit ticket). Use activities that keep low-energy students active: moving, choosing, short timed tasks. Total about 50 minutes unless the content needs less.",
+    "placement: where this lesson fits in the curriculum" + (i.curriculum ? " the teacher follows: " + i.curriculum : ": the teacher did not name one, so use NGSS for science or Common Core for language arts and math, and say so in curriculum") + ". curriculum (its name), standards (1 to 3 items: code and text; give a code only if you are sure of it and set confidence to \"sure\"; if unsure of the exact code, still describe the standard in words and set confidence to \"check\"; never invent a code), before_lesson (the lesson just before this one in the progression: title, objective in one sentence, 2 or 3 short activities), after_lesson (the lesson just after: title, objective, 2 or 3 short activities, ending with how the unit is assessed), beyond (content of the text that goes beyond the standard for this grade, if any, one sentence, else empty).",
+    "For each step: phase (short name), minutes, activity (what happens, 1 or 2 sentences), students_do, teacher_does, check (an observable sign that the step worked).",
+    "Never invent statistics or sources. Write in the same language as the content, with careful spelling and conjugation.",
+    'Reply with only JSON: {"placement":{"curriculum":"...","standards":[{"code":"...","text":"...","confidence":"sure"}],"before_lesson":{"title":"...","objective":"...","activities":["..."]},"after_lesson":{"title":"...","objective":"...","activities":["..."]},"beyond":"..."},"title":"...","duration":"50 minutes","steps":[{"phase":"...","minutes":10,"activity":"...","students_do":"...","teacher_does":"...","check":"..."}]}',
+    "", "Content:", i.text
+  ].filter(Boolean).join('\n');
+}
+
+function readInput(){
+  let text = $('src').value.trim();
+  if(/^[\[{]/.test(text)){
+    try{ const j = JSON.parse(text); const o = Array.isArray(j) ? j[0] : j; const t = o && (o.texte || o.text); if(typeof t === 'string' && t.trim()){ text = t.trim(); $('src').value = text; } }catch(e){}
+  }
+  return { text, grade: $('grade').value, subject: $('subject').value.trim() || 'general', context: $('ctx').value.trim(), curriculum: $('curr').value.trim() };
+}
+
+async function run(){
+  const i = readInput();
+  if(!i.text){ $('st').textContent = 'Paste an explanation first.'; return; }
+  if(!i.grade || !$('subject').value.trim()){ $('st').className = 'status err'; $('st').textContent = 'Choose the grade and the subject first: they decide the level and the safety rules.'; return; }
+  if(!sample){ $('st').textContent = 'Open this page inside Claude to run an analysis.'; $('st').className = 'status err'; return; }
+  $('btn-run').disabled = true; $('st').className = 'status'; $('st').textContent = 'Reading the explanation… this can take up to a minute.';
+  try{
+    const r = await sample.json(promptMain(i), { modelTier: 'default' });
+    if(!r || typeof r !== 'object') throw { code: 'invalid_json' };
+    r.doors = null; r.sequence = null;
+    curInput = i;
+    render(r, false);
+    $('st').textContent = 'Done.';
+    const sec = document.getElementById('sec-sum'); if(sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }catch(e){
+    $('st').className = 'status err'; $('st').textContent = ERR[e && e.code] || 'Something went wrong. Try again.';
+  }finally{ $('btn-run').disabled = false; }
+}
+async function runPart(kind){
+  if(!sample || !curInput || !current) return;
+  const btn = kind === 'doors' ? $('btn-doors') : $('btn-seq'), st = kind === 'doors' ? $('st2') : $('st4');
+  btn.disabled = true; st.className = 'status'; st.textContent = kind === 'doors' ? 'Writing the three ways in…' : 'Building the lesson sequence…';
+  try{
+    const out = await sample.json(kind === 'doors' ? promptDoors(curInput) : promptSeq(curInput), { modelTier: 'default' });
+    if(kind === 'doors'){ current.doors = out; renderDoors(out); } else { current.sequence = out; renderSeq(out); }
+    syncRatings();
+    st.textContent = '';
+  }catch(e){ st.className = 'status err'; st.textContent = ERR[e && e.code] || 'Something went wrong. Try again.'; }
+  finally{ btn.disabled = false; }
+}
+function showExample(){
+  const ex = EXAMPLES[Number($('ex-pick').value) || 0] || EXAMPLE;
+  $('src').value = ex.text; $('grade').value = ex.grade; $('subject').value = ex.subject; $('ctx').value = ex.context || ''; $('curr').value = ex.curriculum || '';
+  curInput = { text: ex.text, grade: ex.grade, subject: ex.subject, context: ex.context || '', curriculum: ex.curriculum || '' };
+  render(JSON.parse(JSON.stringify(ex.result)), true, ex.label); $('st').textContent = '';
+}
+$('btn-run').addEventListener('click', run);
+$('btn-doors').addEventListener('click', () => runPart('doors'));
+$('btn-seq').addEventListener('click', () => runPart('seq'));
+$('btn-example').addEventListener('click', showExample);
+function clearAll(){
+  $('src').value = ''; curInput = null; current = null;
+  $('banner').textContent = 'Paste an AI-generated explanation above, set the grade and subject, then click Analyze.';
+  $('summary').textContent = ''; $('analogies').innerHTML = ''; $('n-an').textContent = '';
+  $('clues').innerHTML = ''; $('land').textContent = ''; $('doors').innerHTML = ''; $('doors-row').hidden = true;
+  $('seq').innerHTML = ''; $('seq-row').hidden = true;
+  ['fb-an','fb-inf','fb-doors','fb-seq','fb-use','fb-note'].forEach(id => { $(id).value = ''; });
+  syncRatings();
+  $('st').textContent = ''; $('st3').textContent = '';
+  $('src').focus();
+}
+let downloads = null;
+async function exportJson(){
+  if(!current){ $('st3').textContent = 'Nothing to save yet: run an analysis first.'; return; }
+  const rec = {
+    tool: 'Discovery Lens', version: 2, saved_at: new Date().toISOString(),
+    is_example: isExample,
+    input: curInput || { text: $('src').value, grade: $('grade').value, subject: $('subject').value, context: $('ctx').value, curriculum: $('curr').value },
+    result: current,
+    generated: { wording: !!current.analogies, discovery: !!current.discovery, ways_in: !!current.doors, sequence: !!current.sequence },
+    teacher_feedback: { wording: $('fb-an').value || null, discovery: $('fb-inf').value || null, ways_in: $('fb-doors').value || null, sequence: $('fb-seq').value || null, would_use: $('fb-use').value || null, comments: $('fb-note').value.trim() || null }
+  };
+  const name = 'discovery-lens_' + new Date().toISOString().slice(0,16).replace(/[:T]/g,'-') + '.json';
+  const data = JSON.stringify(rec, null, 2);
+  if(downloads){
+    try{ await downloads.save({ filename: name, data: data }); $('st3').textContent = 'Saved.'; }
+    catch(e){ $('st3').textContent = 'Not saved.'; }
+    return;
+  }
+  try{ await navigator.clipboard.writeText(data); $('st3').textContent = 'Copied to the clipboard: paste it into a file or an email.'; }
+  catch(e){ $('st3').textContent = 'Saving is not available in this view.'; }
+}
+$('btn-clear').addEventListener('click', clearAll);
+$('btn-export').addEventListener('click', exportJson);
+if(FEEDBACK_URL){ $('fb-link').href = FEEDBACK_URL; $('fb-line').hidden = false; }
+
+showExample();
+(async () => {
+  try{ sample = (window.claude && window.claude.use) ? await window.claude.use('sample') : null; }catch(e){ sample = null; }
+  try{ downloads = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null; }catch(e){ downloads = null; }
+  if(!sample){ $('st').textContent = 'Viewing mode: open this page in Claude to analyze your own texts.'; }
+  else if(current){ renderDoors(current.doors); renderSeq(current.sequence); }
+})();
+</script>
+
+</body>
+</html>
