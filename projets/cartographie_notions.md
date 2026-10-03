@@ -23,3 +23,10 @@ Lié à : coconstruction du sens, détection des ruptures d'énonciation (fiche 
 
 ## Première application envisagée : la notion de « culture »
 Cartographier « culture » dans trois corpus (textes de l'UNESCO, textes de culture générale à la française, quiz) pour montrer, propriété par propriété, les trois définitions relevées par Marion Perrier dans l'article d'INRIA (Mosolova & Seddah). Chaque propriété renvoie à sa phrase source ; vérifier l'extracteur par un second extracteur indépendant et une mesure d'accord.
+
+## Principes issus de la discussion du 2 octobre 2026
+- **Notions et PCC sont virtuels et inachevés**, toujours retravaillés par le discours et élaborés différemment selon les sujets. La carte ne stocke donc pas de définitions mais des **traces** : chaque propriété est un événement (énonciateur, texte, date, prise en charge).
+- **Une carte par sujet ou communauté**, puis un agrégat ; comparer des **trajectoires** plutôt que des états.
+- **Deux couches** : les afférences (Rastier), proches de la connotation et attachées aux mots ; les PCC (Grize), architecture plus large de ce qui va sans dire, à inférer.
+- **Degrés d'appartenance** (logique floue ; centre/frontière, prototypes) calculés à partir des traces : fréquence, marquage, prise en charge, date. Distinguer le vague (flou) de l'incertitude (théorie des possibilités, Dubois & Prade). Tout degré doit rester dépliable jusqu'aux phrases qui le fondent.
+- **Détection des improbables** : rupture d'isotopie (Rastier) + rupture d'énonciation.
