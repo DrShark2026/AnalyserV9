@@ -20,3 +20,6 @@
 3. Comparaison avec des explications du génome générées par des IA.
 
 Lié à : coconstruction du sens, détection des ruptures d'énonciation (fiche « Lexique sécurité des agents »).
+
+## Première application envisagée : la notion de « culture »
+Cartographier « culture » dans trois corpus (textes de l'UNESCO, textes de culture générale à la française, quiz) pour montrer, propriété par propriété, les trois définitions relevées par Marion Perrier dans l'article d'INRIA (Mosolova & Seddah). Chaque propriété renvoie à sa phrase source ; vérifier l'extracteur par un second extracteur indépendant et une mesure d'accord.
