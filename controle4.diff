@@ -1,0 +1,222 @@
+diff --git a/README.md b/README.md
+index 86ae032..5409a58 100644
+--- a/README.md
++++ b/README.md
+@@ -30,10 +30,13 @@ L'analyse se déroule en huit étapes, produites dans cet ordre :
+    d'erreur : seulement le constat qu'une vérification externe serait utile.
+ 8. **Verdict global** — calculé dans le code, non demandé au modèle.
+ 
+-Trois contrôles déterministes s'appliquent ensuite : neutralisation d'un risque porté par un
++Quatre contrôles déterministes s'appliquent ensuite : neutralisation d'un risque porté par un
+ passage que σ tient à distance, neutralisation des mentions autonymiques — un terme entre
+-guillemets est mentionné, pas employé —, et vérification que chaque extrait cité figure bien
+-dans le texte source.
++guillemets est mentionné, pas employé —, vérification que chaque extrait cité figure bien
++dans le texte source, et **cohérence de la prise en charge** : quand σ accorde à une notion une
++adhésion partielle, suspendue, contestée ou réfutée, chaque emploi non marqué de cette notion
++ailleurs dans le texte est signalé, avec sa position avant ou après la réserve. Le texte reconnaît
++un doute, puis se comporte comme s'il n'en avait aucun.
+ 
+ ## Contenu du dépôt
+ 
+@@ -79,9 +82,11 @@ operations; determinations, the only place where ρ and θ5 may appear; wishful
+ Drew McDermott's sense; claims to verify; and a global verdict computed in code rather than
+ asked of the model.
+ 
+-Three deterministic checks follow: a risk borne by a passage σ holds at a distance is
++Four deterministic checks follow: a risk borne by a passage σ holds at a distance is
+ neutralised; so are autonymic mentions — a term in quotation marks is mentioned, not used;
+-and every quoted extract is checked against the source text.
++every quoted extract is checked against the source text; and stance consistency: when σ gives a
++notion partial, suspended, contested or refuted endorsement, every unmarked use of that notion
++elsewhere in the text is flagged, with its position before or after the reservation.
+ 
+ ## Origin
+ 
+diff --git a/analyseur-grize.html b/analyseur-grize.html
+index aeef6a7..29349c8 100644
+--- a/analyseur-grize.html
++++ b/analyseur-grize.html
+@@ -980,8 +980,8 @@ function buildAISystemPrompt(){
+     "Exemples authentiques du corpus de la thèse :",
+     fewshot,
+     "",
+-    "1. NOTIONS (α). Liste toutes les notions que le texte ancre réellement, sans présupposer qu’il y en a deux : un texte peut n’en ancrer qu’une — texte monadique, résultat normal —, deux, ou davantage (θ5 à discours intermédiaire). Identifiant \"N1\", \"N2\"… et étiquette de 1 à 4 mots, style \"/NOTION/\". N’invente jamais une notion que le texte ne pose pas : ce serait commettre le biais que cet outil détecte.",
+-    "2. PRISE EN CHARGE (σ, tableau \"pec\"). Pour les passages significatifs — en priorité ceux qui portent sur une notion empruntée ou une assimilation —, décris l’attitude de l’AUTEUR DU TEXTE ENTIER, jamais celle de la personne citée envers ses propres mots. \"source\" : locuteur (en son nom propre) | nommee | vague (\"on\", \"certains\", \"les experts\", \"des études\") | effacee (tournure impersonnelle qui rend la source introuvable). \"adhesion\" : totale | partielle (concession, restriction) | suspendue (rapporté sans se prononcer) | contestee (mise en cause du point de vue du premier concepteur de la notion) | refutee. \"modalite\" : le marqueur de modalisation, ou null. \"fonction\" : autorite (l’auteur s’appuie sur la source pour étayer SA thèse) | concession | refutation | rapport | null. Un journaliste qui rapporte une citation sans la commenter : adhésion suspendue, fonction rapport. \"risk\" d’une entrée σ : pour une source effacee ou vague, ou locuteur sans appui, risk medium si aucune justification n’apparaît dans la même phrase ou une phrase proche — source nommée, donnée vérifiable, raisonnement explicite (y compris a fortiori ou conditionnel : \"si trois chercheurs ont pu le faire, nous devons supposer…\"), renvoi à un fait établi dans le texte ; une reformulation ou une autre tournure vague ne justifie rien. Signale toujours une autorité invoquée sans source identifiable (\"des études montrent\", \"research shows\") avec adhésion totale : c’est un λ sans source. Sinon risk null.",
++    "1. NOTIONS (α). Liste toutes les notions que le texte ancre réellement, sans présupposer qu’il y en a deux : un texte peut n’en ancrer qu’une — texte monadique, résultat normal —, deux, ou davantage (θ5 à discours intermédiaire). Identifiant \"N1\", \"N2\"… et étiquette de 1 à 4 mots, style \"/NOTION/\". Ajoute \"termes\" : 1 à 6 expressions copiées mot pour mot du texte qui désignent la notion elle-même (groupes nominaux, sigles), jamais un mot isolé et courant. N’invente jamais une notion que le texte ne pose pas : ce serait commettre le biais que cet outil détecte.",
++    "2. PRISE EN CHARGE (σ, tableau \"pec\"). Pour les passages significatifs — en priorité ceux qui portent sur une notion empruntée ou une assimilation —, décris l’attitude de l’AUTEUR DU TEXTE ENTIER, jamais celle de la personne citée envers ses propres mots. \"source\" : locuteur (en son nom propre) | nommee | vague (\"on\", \"certains\", \"les experts\", \"des études\") | effacee (tournure impersonnelle qui rend la source introuvable). \"adhesion\" : totale | partielle (concession, restriction) | suspendue (rapporté sans se prononcer) | contestee (mise en cause du point de vue du premier concepteur de la notion) | refutee. \"modalite\" : le marqueur de modalisation, ou null. \"fonction\" : autorite (l’auteur s’appuie sur la source pour étayer SA thèse) | concession | refutation | rapport | null. Ajoute \"notion_id\" : la notion sur laquelle porte la prise en charge, ou null. Un journaliste qui rapporte une citation sans la commenter : adhésion suspendue, fonction rapport. \"risk\" d’une entrée σ : pour une source effacee ou vague, ou locuteur sans appui, risk medium si aucune justification n’apparaît dans la même phrase ou une phrase proche — source nommée, donnée vérifiable, raisonnement explicite (y compris a fortiori ou conditionnel : \"si trois chercheurs ont pu le faire, nous devons supposer…\"), renvoi à un fait établi dans le texte ; une reformulation ou une autre tournure vague ne justifie rien. Signale toujours une autorité invoquée sans source identifiable (\"des études montrent\", \"research shows\") avec adhésion totale : c’est un λ sans source. Sinon risk null.",
+     "3. MARQUAGE ET RISQUE — règle qui s’applique aux étapes 4 et 5. Principe directeur : une assimilation non marquée est un risque par défaut, même bien établie et souvent répétée en vulgarisation. Pour chaque assimilation candidate (ρ3, θ5, θ4, emprunt de vocabulaire à une autre notion), décide dans cet ordre :",
+     "(a) MENTION OU USAGE — si le texte parle de la métaphore au lieu de l’employer (modalisation autonymique : terme court entre guillemets de distance ; cadre métalinguistique \"X are called Y\", \"referred to as\", \"the term\", \"the Y metaphor\", \"on appelle\", \"le terme\" ; inventaire de métaphores proposées par d’autres) : c’est une mention, risk null. Le même terme repris ensuite hors guillemets dans la voix du locuteur redevient un usage.",
+     "(b) NÉGATION — si le rapprochement est nié ou refusé (\"X, not Y\", \"ne… pas\", \"rather than\", \"contrairement à\") : risk null, c’est un marquage fort.",
+@@ -999,7 +999,7 @@ function buildAISystemPrompt(){
+     "8. VERDICT (\"risque_global\", décidé en dernier). true si une opération ou une détermination de niveau high porte sur l’assimilation centrale du texte, ou si au moins deux risques subsistent, medium compris ; false si les risques éventuels sont isolés et périphériques. En cas de doute réel, true.",
+     "",
+     "SORTIE. Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ou après ni balises markdown, en produisant les sections dans cet ordre exact :",
+-    "{\"notions\":[{\"id\":\"N1\",\"label\":\"...\"}],\"pec\":[{\"text\":\"<extrait exact>\",\"source\":\"locuteur|nommee|vague|effacee\",\"adhesion\":\"totale|partielle|suspendue|contestee|refutee\",\"modalite\":\"<marqueur>\"|null,\"fonction\":\"autorite|concession|refutation|rapport\"|null,\"risk\":{\"level\":\"medium\",\"label\":\"<15 mots maximum>\"}|null}],\"operations\":[{\"notion_id\":\"N1\",\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"determinations\":[{\"notion_ids\":[\"N1\",\"N2\"],\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"ρ3|θ5|...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"mnemoniques\":[{\"terme\":\"...\",\"domaine_source\":\"...\"}],\"a_verifier\":[{\"text\":\"...\",\"raison\":\"<10 mots maximum>\"}],\"risque_global\":true|false}",
++    "{\"notions\":[{\"id\":\"N1\",\"label\":\"...\",\"termes\":[\"...\"]}],\"pec\":[{\"text\":\"<extrait exact>\",\"notion_id\":\"N1\"|null,\"source\":\"locuteur|nommee|vague|effacee\",\"adhesion\":\"totale|partielle|suspendue|contestee|refutee\",\"modalite\":\"<marqueur>\"|null,\"fonction\":\"autorite|concession|refutation|rapport\"|null,\"risk\":{\"level\":\"medium\",\"label\":\"<15 mots maximum>\"}|null}],\"operations\":[{\"notion_id\":\"N1\",\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"determinations\":[{\"notion_ids\":[\"N1\",\"N2\"],\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"ρ3|θ5|...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"mnemoniques\":[{\"terme\":\"...\",\"domaine_source\":\"...\"}],\"a_verifier\":[{\"text\":\"...\",\"raison\":\"<10 mots maximum>\"}],\"risque_global\":true|false}",
+     "Au plus 8 entrées au total entre \"operations\" et \"determinations\", et 6 dans \"pec\". Rédige \"label\" et \"notion\" dans la langue du texte analysé ; \"ajout\" et \"text\" restent des copies exactes du texte source. Le JSON doit toujours être complet et valide, quitte à raccourcir les labels ; aucun raisonnement hors du JSON.",
+   ].join('\n');
+ }
+@@ -1199,7 +1199,8 @@ async function analyzeOneForBatch(texte){
+   const nNeutralises = enforceMarquage(ops, dets) + enforceSigmaCoherence(ops, dets, pec) + enforceAutonymy(ops, dets, texte);
+   const nIntrouvables = checkExtracts(texte, ops, dets, pec, aVerifier);
+   // recomputed rather than trusted: the model states the rule but applies it unevenly
+-  const risqueDetecte = computeGlobalVerdict(ops, dets, pec);
++  const coherence = checkPecConsistency(texte, notions, pec);
++  const risqueDetecte = computeGlobalVerdict(ops, dets, pec, coherence);
+   return {
+     double_alpha: Array.isArray(parsed) ? null : (parsed.double_alpha ?? null),
+     n_notions: notions.length,
+@@ -1212,6 +1213,7 @@ async function analyzeOneForBatch(texte){
+     pec: pec,
+     a_verifier: aVerifier,
+     mnemoniques: mnemoniques,
++    coherence_pec: coherence,
+     n_neutralises_sigma: nNeutralises,
+     n_extraits_introuvables: nIntrouvables
+   };
+@@ -1226,9 +1228,108 @@ function normForMatch(t){
+     .replace(/[.,;:!?()\[\]\u2014\u2013-]/g,' ')
+     .replace(/\s+/g,' ').trim();
+ }
++// Contrôle 4 — cohérence de la prise en charge au fil du texte.
++// Si σ accorde quelque part à une notion une adhésion partielle, suspendue, contestée ou réfutée,
++// chaque emploi non marqué de cette notion ailleurs dans le texte est une incohérence :
++// le texte reconnaît un doute, puis se comporte comme s'il n'en avait aucun.
++// On compte aussi la position : emplois avant la réserve (cadre déjà installé) et après (retour du cadre).
++
++const ADHESION_RESERVEE = ['partielle','suspendue','contestee','refutee'];
++// Marques de distance au niveau de la phrase : si l'une d'elles accompagne l'emploi, il est marqué.
++const DISTANCE_RE = /\b(so-called|supposed(ly)?|alleged(ly)?|debated|contested|disputed|controversial|myth|claim(s|ed)?|believe[sd]?|theory|prétendu(e|s|es)?|soi-disant|supposé(e|s|es)?|contesté(e|s|es)?|discuté(e|s|es)?|débattu(e|s|es)?|mythe|croyance|théorie|selon certains|il paraît)\b/i;
++
++function _norm(t){
++  return String(t||'').toLowerCase()
++    .replace(/[‘’“”«»"'`]/g,' ')
++    .replace(/[.,;:!?()\[\]—–]/g,' ')
++    .replace(/\s+/g,' ').trim();
++}
++function _escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
++
++function _sentences(texte){
++  const out = []; const re = /[^.!?\n]+[.!?]*/g; let m;
++  while((m = re.exec(texte)) !== null){ if(m[0].trim()) out.push({start:m.index, end:m.index+m[0].length}); }
++  return out;
++}
++function _quoteSpans(texte){
++  const spans = []; const re = /[“"«‘][^“”"«»‘’]{1,80}[”"»’]/g; let m;
++  while((m = re.exec(texte)) !== null) spans.push({start:m.index, end:m.index+m[0].length});
++  return spans;
++}
++
++// Rattache une entrée σ à une notion : champ notion_id si le modèle l'a fourni, sinon un terme de la notion dans l'extrait.
++function _notionOfPec(p, notions){
++  if(p.notion_id && notions.some(n => n.id === p.notion_id)) return p.notion_id;
++  const t = ' ' + _norm(p.text) + ' ';
++  const hit = notions.find(n => (n.termes||[]).some(term => { const k = _norm(term); return k && t.includes(' ' + k + ' '); }));
++  return hit ? hit.id : null;
++}
++
++function checkPecConsistency(texte, notions, pec){
++  texte = String(texte||'');
++  const resultats = [];
++  const phrases = _sentences(texte);
++  const guillemets = _quoteSpans(texte);
++  // zones tenues à distance : tout passage σ dont l'adhésion n'est pas totale
++  const locate = p => {
++    const s = texte.toLowerCase().indexOf(String(p.text||'').toLowerCase().slice(0, 40));
++    return s >= 0 ? {start: s, end: s + String(p.text).length} : null;
++  };
++  const zones = (pec||[]).filter(p => ADHESION_RESERVEE.includes(p.adhesion)).map(locate).filter(Boolean);
++  // une seule analyse par notion : la première réserve qui la concerne fait foi
++  const parNotion = new Map();
++  (pec||[]).forEach((p, idx) => {
++    if(!ADHESION_RESERVEE.includes(p.adhesion)) return;
++    const nid = _notionOfPec(p, notions||[]);
++    if(!nid) return;
++    const loc = locate(p);
++    const prev = parNotion.get(nid);
++    if(!prev || (loc && (!prev.loc || loc.start < prev.loc.start))) parNotion.set(nid, {p, idx, loc});
++  });
++  parNotion.forEach(({p, idx, loc}, nid) => {
++    const notion = notions.find(n => n.id === nid);
++    const termes = (notion.termes||[]).filter(Boolean).sort((a,b) => b.length - a.length);
++    if(!termes.length) return;
++    const posReserve = loc ? loc.start : -1;
++    // toutes les occurrences, les plus longues d'abord, sans chevauchement
++    const prises = [];
++    termes.forEach(term => {
++      const re = new RegExp('(^|[^\\p{L}])(' + _escRe(term) + ')(?![\\p{L}])', 'giu'); let m;
++      while((m = re.exec(texte)) !== null){
++        const start = m.index + m[1].length, end = start + m[2].length;
++        if(!prises.some(o => start < o.end && end > o.start)) prises.push({start, end, forme: m[2]});
++      }
++    });
++    prises.sort((a,b) => a.start - b.start);
++    const avant = [], apres = [];
++    let marques = 0;
++    prises.forEach(o => {
++      if(zones.some(z => o.start >= z.start && o.end <= z.end)){ marques++; return; }       // passage tenu à distance par σ
++      if(guillemets.some(q => o.start >= q.start && o.end <= q.end)){ marques++; return; }   // mention autonymique
++      const ph = phrases.find(s => o.start >= s.start && o.start < s.end);
++      if(ph && DISTANCE_RE.test(texte.slice(ph.start, ph.end))){ marques++; return; }        // distance dans la phrase
++      const extrait = ph ? texte.slice(ph.start, ph.end).trim() : o.forme;
++      (posReserve >= 0 && o.start > posReserve ? apres : avant).push({forme: o.forme, phrase: extrait.slice(0, 160)});
++    });
++    const n = avant.length + apres.length;
++    if(!n) return;
++    const posPct = posReserve >= 0 ? Math.round(100 * posReserve / Math.max(1, texte.length)) : null;
++    resultats.push({
++      notion_id: nid, notion: notion.label, pec_index: idx, reserve: p.text, adhesion: p.adhesion,
++      position_reserve_pct: posPct,
++      emplois_non_marques: n, avant_reserve: avant.length, apres_reserve: apres.length, emplois_marques: marques,
++      exemples_avant: avant.slice(0, 3), exemples_apres: apres.slice(0, 3),
++      risk: { level: (avant.length >= 2 && apres.length >= 1) ? 'high' : 'medium',
++              label: `réserve sur ${notion.label} contredite par ${n} emploi(s) non marqué(s)` }
++    });
++  });
++  return resultats;
++}
++
++
+ // Deterministic global verdict: a remaining high risk, or at least two remaining risks (medium included).
+-function computeGlobalVerdict(ops, dets, pec){
+-  const risks = [...(ops||[]), ...(dets||[]), ...(pec||[])].map(o => o.risk).filter(Boolean);
++function computeGlobalVerdict(ops, dets, pec, coherence){
++  const risks = [...(ops||[]), ...(dets||[]), ...(pec||[]), ...(coherence||[])].map(o => o.risk).filter(Boolean);
+   return risks.some(r => r.level === 'high') || risks.length >= 2;
+ }
+ 
+@@ -1531,6 +1632,15 @@ function appendBatchCard(container, r){
+         return `<div class="batch-op-line"><span class="batch-sigma-tag adh-${escapeHtmlBatch(adh)}">${escapeHtmlBatch((S.sigmaAdhesion||{})[adh] || adh || '\u03c3')}</span> ${escapeHtmlBatch(p.text||'')}${p.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}<div class="batch-sigma-meta">${meta}</div>${riskBadge}</div>`;
+       }).join('')}
+     </div>` : '';
++  const coherenceHtml = (r.coherence_pec && r.coherence_pec.length) ? `
++    <div class="batch-card-sigma">
++      <div class="batch-class-label">${lang === 'en' ? 'Stance consistency' : 'Cohérence de la prise en charge'}</div>
++      ${r.coherence_pec.map(c => `<div class="batch-op-line">
++        <span class="batch-op-risk ${c.risk.level==='high'?'risque-oui':'risque-ambigu'}">${escapeHtmlBatch(c.risk.label)}</span>
++        <div class="batch-sigma-meta">${lang === 'en' ? 'Reservation' : 'Réserve'} : « ${escapeHtmlBatch(c.reserve)} » (${escapeHtmlBatch(c.adhesion)}, ${lang === 'en' ? 'at' : 'à'} ${c.position_reserve_pct ?? '?'} % ${lang === 'en' ? 'of the text' : 'du texte'}) · ${lang === 'en' ? 'unmarked uses before' : 'emplois non marqués avant'} : ${c.avant_reserve} · ${lang === 'en' ? 'after' : 'après'} : ${c.apres_reserve}</div>
++        ${[...c.exemples_avant.map(e => ['\u2191', e]), ...c.exemples_apres.map(e => ['\u2193', e])].map(([sens, e]) => `<div class="batch-sigma-meta">${sens} <strong>${escapeHtmlBatch(e.forme)}</strong> — ${escapeHtmlBatch(e.phrase)}</div>`).join('')}
++      </div>`).join('')}
++    </div>` : '';
+   const verifHtml = (r.a_verifier && r.a_verifier.length) ? `
+     <div class="batch-card-verif">
+       <div class="batch-class-label">${STRINGS[lang].batchVerifHeader}</div>
+@@ -1558,6 +1668,7 @@ function appendBatchCard(container, r){
+       ${detsHtml}
+     </div>
+     ${sigmaHtml}
++    ${coherenceHtml}
+     ${mnemoHtml}
+     ${verifHtml}
+     ${erreurLigne}
+@@ -1941,7 +2052,8 @@ function showDemo(){
+     id: lang === 'en' ? 'pre-analysed example' : 'exemple préanalysé',
+     texte: texte, verite_terrain: null, double_alpha: null,
+     n_notions: p.notions.length, n_operations_internes: p.operations.length, n_determinations: p.determinations.length,
+-    risk_detected: computeGlobalVerdict(p.operations, p.determinations, p.pec),
++    coherence_pec: checkPecConsistency(texte, p.notions, p.pec),
++    risk_detected: computeGlobalVerdict(p.operations, p.determinations, p.pec, checkPecConsistency(texte, p.notions, p.pec)),
+     notions: p.notions, operations: p.operations, determinations: p.determinations,
+     pec: p.pec, a_verifier: p.a_verifier, mnemoniques: p.mnemoniques,
+     n_neutralises_sigma: nNeutralises, n_extraits_introuvables: nIntrouvables,
