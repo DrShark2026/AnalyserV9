@@ -43,11 +43,18 @@ un doute, puis se comporte comme s'il n'en avait aucun.
 | chemin | rôle |
 |---|---|
 | `index.html` | le récit : la thèse, la lettre de Grize, sa préface — bilingue FR/EN |
+| `cv.html` | le CV de Jean Charconnet |
 | `analyseur-grize.html` | l'outil, autonome ; à ouvrir comme artefact pour que l'appel au modèle fonctionne |
 | `corpus/` | quatre corpus segmentés, avec leur index et le statut de chacun |
-| `experience1/` | pilote sur le marquage : protocole, matériel, contrôle de manipulation |
+| `experience1/` | pilote sur le marquage : protocole, matériel, contrôle de manipulation, résultats |
+| `experience3/` | brouillon d'expérience sur la perte de prise en charge : le fragment et sa source |
+| `discovery-lens/` | outil dérivé pour les enseignants (en anglais), avec les essais pilotes |
+| `projets/` | pistes de travail, dont la cartographie de la notion de génome |
 | `docs/RESULTS.md` | les mesures, par corpus et par version |
+| `docs/DEPLOIEMENT.md` | notes de déploiement de la V9 |
+| `resultats_analyse_ia_corpus_pilote.json` | résultats du corpus pilote analysé par un autre modèle (GPT-5.6 Luna) |
 | `these-charconnet-1999.pdf` | le texte intégral de la thèse (383 pages) |
+| `*.jpg` | les images de la page d'accueil |
 | `.nojekyll` | désactive Jekyll, pour que les fichiers soient servis tels quels |
 
 ## Origine
