@@ -980,14 +980,14 @@ function buildAISystemPrompt(){
     "Exemples authentiques du corpus de la thèse :",
     fewshot,
     "",
-    "1. NOTIONS (α). Liste toutes les notions que le texte ancre réellement, sans présupposer qu’il y en a deux : un texte peut n’en ancrer qu’une — texte monadique, résultat normal —, deux, ou davantage (θ5 à discours intermédiaire). Identifiant \"N1\", \"N2\"… et étiquette de 1 à 4 mots, style \"/NOTION/\". Ajoute \"termes\" : 1 à 6 expressions copiées mot pour mot du texte qui désignent la notion elle-même (groupes nominaux, sigles), jamais un mot isolé et courant. N’invente jamais une notion que le texte ne pose pas : ce serait commettre le biais que cet outil détecte.",
-    "2. PRISE EN CHARGE (σ, tableau \"pec\"). Pour les passages significatifs — en priorité ceux qui portent sur une notion empruntée ou une assimilation —, décris l’attitude de l’AUTEUR DU TEXTE ENTIER, jamais celle de la personne citée envers ses propres mots. \"source\" : locuteur (en son nom propre) | nommee | vague (\"on\", \"certains\", \"les experts\", \"des études\") | effacee (tournure impersonnelle qui rend la source introuvable). \"adhesion\" : totale | partielle (concession, restriction) | suspendue (rapporté sans se prononcer) | contestee (mise en cause du point de vue du premier concepteur de la notion) | refutee. \"modalite\" : le marqueur de modalisation, ou null. \"fonction\" : autorite (l’auteur s’appuie sur la source pour étayer SA thèse) | concession | refutation | rapport | null. Ajoute \"notion_id\" : la notion sur laquelle porte la prise en charge, ou null. Un journaliste qui rapporte une citation sans la commenter : adhésion suspendue, fonction rapport. \"risk\" d’une entrée σ : pour une source effacee ou vague, ou locuteur sans appui, risk medium si aucune justification n’apparaît dans la même phrase ou une phrase proche — source nommée, donnée vérifiable, raisonnement explicite (y compris a fortiori ou conditionnel : \"si trois chercheurs ont pu le faire, nous devons supposer…\"), renvoi à un fait établi dans le texte ; une reformulation ou une autre tournure vague ne justifie rien. Signale toujours une autorité invoquée sans source identifiable (\"des études montrent\", \"research shows\") avec adhésion totale : c’est un λ sans source. Sinon risk null.",
+    "1. NOTIONS (α). Liste toutes les notions que le texte ancre réellement, sans présupposer qu’il y en a deux : un texte peut n’en ancrer qu’une — texte monadique, résultat normal —, deux, ou davantage (θ5 à discours intermédiaire). Identifiant \"N1\", \"N2\"… et étiquette de 1 à 4 mots, style \"/NOTION/\". Ajoute \"termes\" : 1 à 6 expressions copiées mot pour mot du texte qui désignent la notion elle-même (groupes nominaux, sigles), sigles et formes abrégées compris (\"V/A/K\", \"IA\"), jamais un mot isolé et courant. Les termes sont des variantes de FORME de la même désignation (pluriel, sigle, forme abrégée, reprise du même nom) : jamais une paraphrase, une glose ou une périphrase qui la traduit en d’autres mots (pour /REMIGRATION/, \"l’expulsion des étrangers\" n’est pas un terme mais une glose du journaliste). N’invente jamais une notion que le texte ne pose pas : ce serait commettre le biais que cet outil détecte.",
+    "2. PRISE EN CHARGE (σ, tableau \"pec\"). Pour les passages significatifs — en priorité ceux qui portent sur une notion empruntée ou une assimilation —, décris l’attitude de l’AUTEUR DU TEXTE ENTIER, jamais celle de la personne citée envers ses propres mots. \"source\" : locuteur (en son nom propre) | nommee | vague (\"on\", \"certains\", \"les experts\", \"des études\") | effacee (tournure impersonnelle qui rend la source introuvable). \"adhesion\" : totale | partielle (concession, restriction) | suspendue (rapporté sans se prononcer) | contestee (mise en cause du point de vue du premier concepteur de la notion) | refutee. \"modalite\" : le marqueur de modalisation, ou null. \"fonction\" : autorite (l’auteur s’appuie sur la source pour étayer SA thèse) | concession | refutation | rapport | null. Ajoute \"notion_id\" : la notion sur laquelle porte la prise en charge, ou null ; et \"portee\" : \"notion\" si le passage met en doute la notion elle-même — sa validité, son existence, sa pertinence (\"la théorie des styles d\u2019apprentissage est débattue\") —, \"propos\" s\u2019il tient à distance une affirmation faite à son sujet (\"Mistral affirme que son modèle est parmi les meilleurs\"). Un journaliste qui rapporte une citation sans la commenter : adhésion suspendue, fonction rapport. \"risk\" d’une entrée σ : pour une source effacee ou vague, ou locuteur sans appui, risk medium si aucune justification n’apparaît dans la même phrase ou une phrase proche — source nommée, donnée vérifiable, raisonnement explicite (y compris a fortiori ou conditionnel : \"si trois chercheurs ont pu le faire, nous devons supposer…\"), renvoi à un fait établi dans le texte ; une reformulation ou une autre tournure vague ne justifie rien. Une source nommée invoquée HORS de son domaine de compétence (une juridiction citée sur l’économie, un acteur sur la médecine), en fonction autorite : risk medium, l’autorité est empruntée. Signale toujours une autorité invoquée sans source identifiable (\"des études montrent\", \"research shows\") avec adhésion totale : c’est un λ sans source. Sinon risk null.",
     "3. MARQUAGE ET RISQUE — règle qui s’applique aux étapes 4 et 5. Principe directeur : une assimilation non marquée est un risque par défaut, même bien établie et souvent répétée en vulgarisation. Pour chaque assimilation candidate (ρ3, θ5, θ4, emprunt de vocabulaire à une autre notion), décide dans cet ordre :",
     "(a) MENTION OU USAGE — si le texte parle de la métaphore au lieu de l’employer (modalisation autonymique : terme court entre guillemets de distance ; cadre métalinguistique \"X are called Y\", \"referred to as\", \"the term\", \"the Y metaphor\", \"on appelle\", \"le terme\" ; inventaire de métaphores proposées par d’autres) : c’est une mention, risk null. Le même terme repris ensuite hors guillemets dans la voix du locuteur redevient un usage.",
-    "(b) NÉGATION — si le rapprochement est nié ou refusé (\"X, not Y\", \"ne… pas\", \"rather than\", \"contrairement à\") : risk null, c’est un marquage fort.",
+    "(b) NÉGATION — si le rapprochement est nié ou refusé (\"X, not Y\", \"ne… pas\", \"rather than\", \"contrairement à\") : risk null, c’est un marquage fort. Attention : une SUBSTITUTION n’est pas une négation. Quand \"plutôt que\", \"au lieu de\", \"à la place de\", \"remplacer X par Y\" font de X et Y deux candidats au même rôle (\"des robots plutôt que des étrangers\" pour la main-d’œuvre), le texte les range dans une même classe : c’est un θ5, marquage \"aucun\" si l’auteur l’assume, et non \"negation\". La négation porte sur une assimilation refusée (\"le modèle prédit plutôt qu’il ne pense\") ; la substitution pose une équivalence de fonction.",
     "(c) λ — si l’assimilation se trouve dans un discours inséré (citation de toute forme, discours rapporté, croyance attribuée, conditionnel, formule de cadrage : \"should be considered\", \"so-called\", \"qualifié de\") : l’adhésion σ de l’auteur décide. Suspendue, contestée ou réfutée : risk null. Partielle : au plus medium. Totale, surtout en fonction autorité (\"comme l’a montré X, le génome est un texte\") : la citation légitime au lieu de protéger — signale l’assimilation comme non marquée.",
     "(d) MARQUEUR LEXICAL — \"comme\", \"tel\", \"à la manière de\", ou verbe de dérivation (\"s’inspirer de\", \"imiter\", \"emprunter à\", \"calqué sur\", \"à l’image de\", \"par analogie avec\") : risk null, sauf si la suite reprend le rapprochement comme une identité — c’est alors la suite qu’on signale.",
-    "(e) LEXICALISATION — terme devenu l’unique désignation technique disponible dans son domaine, sans alternative littérale vivante (\"transcription\" en biologie moléculaire, \"neurone artificiel\", \"sandbox escape\") : risk null, et relève-le en mnémonique (étape 6). Mais si le cadre syntaxique lui prête un motif, une intention ou un sentiment (\"why its agents escaped\", \"wanted to\", \"pourquoi il s’est échappé\"), la métaphore morte est réanimée : signale-la en θ5 en citant ce cadre. Un terme seulement fréquent en vulgarisation (\"le génome est un texte\") n’est pas lexicalisé ; dans le doute, signale.",
+    "(e) LEXICALISATION — terme devenu l’unique désignation technique disponible dans son domaine, sans alternative littérale vivante (\"transcription\" en biologie moléculaire, \"neurone artificiel\", \"sandbox escape\") : risk null, et relève-le en mnémonique (étape 6). Mais si le cadre syntaxique lui prête un motif, une intention ou un sentiment (\"why its agents escaped\", \"wanted to\", \"pourquoi il s’est échappé\"), la métaphore morte est réanimée : signale-la en θ5 en citant ce cadre. Un terme seulement fréquent en vulgarisation (\"le génome est un texte\") n’est pas lexicalisé ; dans le doute, signale. Une expression idiomatique figée du discours ordinaire (\"dans la course\", \"le vent en poupe\", \"prendre le train en marche\", \"les géants du secteur\") n’est jamais un risque high : isolée, marquage \"lexicalise\" ; filée sur plusieurs phrases au point d’organiser le texte, risk medium au plus. PÉJORATIF OUVERT : une dévalorisation affichée (insulte, sobriquet, jugement de valeur explicite : \"tas de ferraille\", \"techno-bourrins\", \"usine à gaz\") est une prise de position explicite que le lecteur voit, non une assimilation cachée : risk medium au plus, et relève-la dans σ comme prise en charge du locuteur. IRONIE : une marque d’ironie ou d’antiphrase (\"mais oui, bien sûr\", \"on y croit\", \"rien que ça\", \"yeah, right\") est une réfutation : crée une entrée σ adhesion refutee, fonction refutation, portee propos, sur la phrase visée.",
     "(f) Sinon : \"risk\":{\"level\":\"high\"|\"medium\",\"label\":\"<15 mots maximum>\"}.",
     "RÈGLE CONTRAIGNANTE : chaque entrée de \"operations\" et de \"determinations\" porte un champ \"marquage\" qui dit LEQUEL de ces cas s\u2019applique, décidé AVANT le risque — \"mention\" (a), \"negation\" (b), \"lambda_distance\" (c, adhésion suspendue, contestée ou réfutée), \"lambda_endosse\" (c, adhésion totale, surtout en fonction autorité), \"marqueur_lexical\" (d), \"lexicalise\" (e), ou \"aucun\" (f). Un \"risk\" non null n\u2019est permis QUE si \"marquage\" vaut \"aucun\" ou \"lambda_endosse\" ; pour les cinq autres valeurs, \"risk\" est null sans exception, le principe directeur ne s\u2019appliquant qu\u2019au cas (f). Une analogie filée sur plusieurs phrases reste marquée si son marqueur est posé une fois (\"de la même manière que...\", \"ressemble à...\", \"s\u2019inspire de...\") : ne signale alors que les reprises ultérieures qui abandonnent le marqueur.",
     "Un passage que σ tient à distance ne porte jamais de risque, ni dans \"operations\" ni dans \"determinations\".",
@@ -999,7 +999,7 @@ function buildAISystemPrompt(){
     "8. VERDICT (\"risque_global\", décidé en dernier). true si une opération ou une détermination de niveau high porte sur l’assimilation centrale du texte, ou si au moins deux risques subsistent, medium compris ; false si les risques éventuels sont isolés et périphériques. En cas de doute réel, true.",
     "",
     "SORTIE. Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ou après ni balises markdown, en produisant les sections dans cet ordre exact :",
-    "{\"notions\":[{\"id\":\"N1\",\"label\":\"...\",\"termes\":[\"...\"]}],\"pec\":[{\"text\":\"<extrait exact>\",\"notion_id\":\"N1\"|null,\"source\":\"locuteur|nommee|vague|effacee\",\"adhesion\":\"totale|partielle|suspendue|contestee|refutee\",\"modalite\":\"<marqueur>\"|null,\"fonction\":\"autorite|concession|refutation|rapport\"|null,\"risk\":{\"level\":\"medium\",\"label\":\"<15 mots maximum>\"}|null}],\"operations\":[{\"notion_id\":\"N1\",\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"determinations\":[{\"notion_ids\":[\"N1\",\"N2\"],\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"ρ3|θ5|...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"mnemoniques\":[{\"terme\":\"...\",\"domaine_source\":\"...\"}],\"a_verifier\":[{\"text\":\"...\",\"raison\":\"<10 mots maximum>\"}],\"risque_global\":true|false}",
+    "{\"notions\":[{\"id\":\"N1\",\"label\":\"...\",\"termes\":[\"...\"]}],\"pec\":[{\"text\":\"<extrait exact>\",\"notion_id\":\"N1\"|null,\"portee\":\"notion|propos\",\"source\":\"locuteur|nommee|vague|effacee\",\"adhesion\":\"totale|partielle|suspendue|contestee|refutee\",\"modalite\":\"<marqueur>\"|null,\"fonction\":\"autorite|concession|refutation|rapport\"|null,\"risk\":{\"level\":\"medium\",\"label\":\"<15 mots maximum>\"}|null}],\"operations\":[{\"notion_id\":\"N1\",\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"determinations\":[{\"notion_ids\":[\"N1\",\"N2\"],\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"ρ3|θ5|...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"mnemoniques\":[{\"terme\":\"...\",\"domaine_source\":\"...\"}],\"a_verifier\":[{\"text\":\"...\",\"raison\":\"<10 mots maximum>\"}],\"risque_global\":true|false}",
     "Au plus 8 entrées au total entre \"operations\" et \"determinations\", et 6 dans \"pec\". Rédige \"label\" et \"notion\" dans la langue du texte analysé ; \"ajout\" et \"text\" restent des copies exactes du texte source. Le JSON doit toujours être complet et valide, quitte à raccourcir les labels ; aucun raisonnement hors du JSON.",
   ].join('\n');
 }
@@ -1196,8 +1196,9 @@ async function analyzeOneForBatch(texte){
   const pec = Array.isArray(parsed) ? [] : (parsed.pec || []);
   const aVerifier = Array.isArray(parsed) ? [] : (parsed.a_verifier || []);
   const mnemoniques = Array.isArray(parsed) ? [] : (parsed.mnemoniques || []);
-  const nNeutralises = enforceMarquage(ops, dets) + enforceSigmaCoherence(ops, dets, pec) + enforceAutonymy(ops, dets, texte);
+  const nNeutralises = enforceMarquage(ops, dets) + enforceSigmaCoherence(ops, dets, pec) + enforceAutonymy(ops, dets, texte) + enforceFigees(ops, dets, texte) + enforcePejoratifs(ops, dets) + enforceIronie(ops, dets, pec, texte);
   const nIntrouvables = checkExtracts(texte, ops, dets, pec, aVerifier);
+  enforceAutoriteEmpruntee(pec, aVerifier);
   // recomputed rather than trusted: the model states the rule but applies it unevenly
   const coherence = checkPecConsistency(texte, notions, pec);
   const risqueDetecte = computeGlobalVerdict(ops, dets, pec, coherence);
@@ -1265,6 +1266,38 @@ function _notionOfPec(p, notions){
   return hit ? hit.id : null;
 }
 
+// Variantes déterministes d'un terme : le sigle entre parenthèses, la forme sans parenthèses,
+// singulier et pluriel ; le modèle n'a pas à penser à toutes les formes.
+function _expandTermes(termes){
+  const out = new Set();
+  (termes||[]).filter(Boolean).forEach(t => {
+    t = String(t).trim();
+    const forms = [t];
+    const par = t.match(/\(([^)]{2,20})\)/);
+    if(par){ forms.push(par[1].trim()); forms.push(t.replace(/\s*\([^)]*\)\s*/g,' ').trim()); }
+    forms.forEach(f => {
+      if(f.replace(/[^\p{L}]/gu,'').length < 3) return;
+      out.add(f);
+      if(/s$/i.test(f) && !/ss$/i.test(f)) out.add(f.slice(0,-1)); else if(/\p{L}$/u.test(f)) out.add(f + 's');
+    });
+  });
+  return [...out];
+}
+// Un terme de 3 mots ou plus qui ne partage aucune racine avec l'étiquette ni avec le premier terme
+// est une glose (« l'expulsion des étrangers » pour /REMIGRATION/), pas une forme de la notion.
+function _racines(t){
+  return String(t||'').toLowerCase().split(/[^\p{L}]+/u).filter(w => w.length >= 5).map(w => w.slice(0,5));
+}
+function _filtreGloses(notion){
+  const termes = (notion.termes||[]).filter(Boolean);
+  const ref = new Set([..._racines(notion.label), ..._racines(termes[0])]);
+  return termes.filter((t, i) => {
+    if(i === 0) return true;
+    const mots = String(t).trim().split(/\s+/).length;
+    if(mots < 3) return true;
+    return _racines(t).some(r => ref.has(r));
+  });
+}
 function checkPecConsistency(texte, notions, pec){
   texte = String(texte||'');
   const resultats = [];
@@ -1276,10 +1309,15 @@ function checkPecConsistency(texte, notions, pec){
     return s >= 0 ? {start: s, end: s + String(p.text).length} : null;
   };
   const zones = (pec||[]).filter(p => ADHESION_RESERVEE.includes(p.adhesion)).map(locate).filter(Boolean);
+  // Le doute doit porter sur la notion elle-même (sa validité, son existence), pas sur un propos tenu à son sujet :
+  // « Mistral affirme que son modèle est parmi les meilleurs » met en doute un propos, pas l'existence du modèle.
+  // Sans le champ "portee" (analyses antérieures), on écarte le simple rapport, qui suspend sans douter.
+  const porteSurNotion = p => p.portee ? p.portee === 'notion'
+                                       : (p.adhesion !== 'suspendue' && p.fonction !== 'rapport');
   // une seule analyse par notion : la première réserve qui la concerne fait foi
   const parNotion = new Map();
   (pec||[]).forEach((p, idx) => {
-    if(!ADHESION_RESERVEE.includes(p.adhesion)) return;
+    if(!ADHESION_RESERVEE.includes(p.adhesion) || !porteSurNotion(p)) return;
     const nid = _notionOfPec(p, notions||[]);
     if(!nid) return;
     const loc = locate(p);
@@ -1288,7 +1326,7 @@ function checkPecConsistency(texte, notions, pec){
   });
   parNotion.forEach(({p, idx, loc}, nid) => {
     const notion = notions.find(n => n.id === nid);
-    const termes = (notion.termes||[]).filter(Boolean).sort((a,b) => b.length - a.length);
+    const termes = _expandTermes(_filtreGloses(notion)).sort((a,b) => b.length - a.length);
     if(!termes.length) return;
     const posReserve = loc ? loc.start : -1;
     // toutes les occurrences, les plus longues d'abord, sans chevauchement
@@ -1326,6 +1364,96 @@ function checkPecConsistency(texte, notions, pec){
   return resultats;
 }
 
+
+// Expressions figées : une métaphore usée du discours ordinaire (« dans la course », « le vent en poupe »)
+// ne trompe personne quand elle est isolée : risque neutralisé. Filée sur au moins deux phrases,
+// elle devient un cadre qui oriente la lecture : risque plafonné à moyen, jamais élevé.
+const FIGEES = [
+  {famille:'course',      re:/(^|[^\p{L}])(courses?|race|races|front-?runners?|peloton|à la traîne|lagging behind|rattraper (son|leur) retard|catch(ing)? up)(?![\p{L}])/iu},
+  {famille:'navigation',  re:/(^|[^\p{L}])(vent en poupe|tailwinds?|garder le cap|stay(ing)? the course)(?![\p{L}])/iu},
+  {famille:'train',       re:/(^|[^\p{L}])(train en marche|locomotives?|bandwagon)(?![\p{L}])/iu},
+  {famille:'combat',      re:/(^|[^\p{L}])(bras de fer|bataille|battles?|arms race|course aux armements|guerre des prix|price war)(?![\p{L}])/iu},
+  {famille:'géant',       re:/(^|[^\p{L}])(géants?|giants?|mastodontes?|poids lourds?|heavyweights?)(?![\p{L}])/iu},
+  {famille:'ruée',        re:/(^|[^\p{L}])(ruée vers l.or|gold rush|eldorado)(?![\p{L}])/iu},
+  {famille:'élan',        re:/(^|[^\p{L}])(coup d.accélérateur|passer la vitesse supérieure|game[- ]changer|change la donne)(?![\p{L}])/iu}
+];
+function enforceFigees(ops, dets, texte){
+  const phrases = String(texte||'').split(/(?<=[.!?\n])\s+/);
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!o.risk) return;
+    const a = String(o.ajout || o.text || '');
+    const fam = FIGEES.find(f => f.re.test(a));
+    if(!fam) return;
+    const reprises = phrases.filter(ph => fam.re.test(ph)).length;
+    if(reprises < 2){
+      o.risk_avant_fige = o.risk; o.risk = null; o.neutralise_fige = true; n++;
+    }else if(o.risk.level === 'high'){
+      o.risk_avant_fige = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_fige = fam.famille; n++;
+    }
+  });
+  return n;
+}
+
+// Péjoratif ouvert : une dévalorisation affichée (« tas de ferraille », « techno-bourrins ») est une prise
+// de position que le lecteur voit ; elle ne peut pas compter comme assimilation cachée : plafonnée à moyen.
+const PEJORATIFS_RE = /(^|[^\p{L}])(tas de ferraille|ferraille|bourrins?|techno-\p{L}+|usine à gaz|bidules?|machins?|gourous?|charlatans?|poudre de perlimpinpin|foutaises?|bullshit|snake oil|junk|hype|scams?|claptrap|gadgets?)(?![\p{L}])/iu;
+const PEJORATIF_LABEL_RE = /(dévalori|péjorati|dénigr|disparag|pejorat)/i;
+function enforcePejoratifs(ops, dets){
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!o.risk || o.risk.level !== 'high') return;
+    const a = String(o.ajout || o.text || '');
+    if(PEJORATIFS_RE.test(a) || PEJORATIF_LABEL_RE.test(o.risk.label || '')){
+      o.risk_avant_pejoratif = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_pejoratif = true; n++;
+    }
+  });
+  return n;
+}
+
+// Ironie : une antiphrase (« mais oui, bien sûr… ») réfute ce qu'elle accompagne. Si σ ne l'a pas relevée,
+// on ajoute l'entrée (portée « propos », pour ne pas déclencher le contrôle 4) et on neutralise
+// les risques portés par des ajouts situés dans la phrase ironique.
+const IRONIE_RE = /(mais oui,? bien sûr|on y croit|rien que ça|tu parles|c'est ça,? oui|ben voyons|bien sûr\s*…|yeah,? right)/iu;
+function enforceIronie(ops, dets, pec, texte){
+  texte = String(texte||'');
+  const phrases = texte.match(/[^.!?\n]+[.!?…]*/g) || [];
+  let n = 0;
+  phrases.forEach(ph => {
+    const m = ph.match(IRONIE_RE);
+    if(!m) return;
+    const phrase = ph.trim();
+    const dejaRelevee = (pec||[]).some(p => p.adhesion === 'refutee' && phrase.includes(String(p.text||'').slice(0, 30)));
+    if(!dejaRelevee && Array.isArray(pec)){
+      pec.push({ text: phrase, notion_id: null, portee: 'propos', source: 'locuteur', adhesion: 'refutee',
+                 modalite: m[0], fonction: 'refutation', risk: null, ajout_ironie: true });
+    }
+    [...(ops||[]), ...(dets||[])].forEach(o => {
+      if(!o.risk) return;
+      const a = String(o.ajout || '').trim();
+      const iA = a ? phrase.toLowerCase().indexOf(a.toLowerCase()) : -1;
+      const iM = phrase.search(IRONIE_RE);
+      // l'ironie vise ce qui la précède de près (ou la suit immédiatement)
+      if(iA >= 0 && Math.abs(iM - (iA + a.length)) < 60){
+        o.risk_avant_ironie = o.risk; o.risk = null; o.neutralise_ironie = true; n++;
+      }
+    });
+  });
+  return n;
+}
+
+// Autorité empruntée : une entrée σ en fonction autorité dont l'extrait est aussi signalé à vérifier
+// pour une question de mission ou de compétence reçoit un risque moyen.
+function enforceAutoriteEmpruntee(pec, aVerifier){
+  let n = 0;
+  (pec||[]).forEach(p => {
+    if(p.risk || p.fonction !== 'autorite') return;
+    const debut = String(p.text||'').slice(0, 40).toLowerCase();
+    const v = (aVerifier||[]).find(v => String(v.text||'').toLowerCase().includes(debut) && /(mission|compéten|competen|domaine|hors de|attribution)/i.test(v.raison||''));
+    if(v){ p.risk = { level:'medium', label:'Autorité invoquée hors de son domaine' }; p.autorite_empruntee = true; n++; }
+  });
+  return n;
+}
 
 // Deterministic global verdict: a remaining high risk, or at least two remaining risks (medium included).
 function computeGlobalVerdict(ops, dets, pec, coherence){
@@ -1510,7 +1638,7 @@ function renderBatchOpsForNotion(ops, notionId){
     const notion = escapeHtmlBatch(o.notion || '?');
     const ajout = escapeHtmlBatch(o.ajout || '');
     const riskBadge = o.risk ? `<span class="batch-op-risk ${o.risk.level==='high'?'risque-oui':'risque-ambigu'}">${escapeHtmlBatch(o.risk.label||'')}</span>` : '';
-    const neutral = o.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(o.marquage||'')})</span>` : (o.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (o.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : ''));
+    const neutral = o.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(o.marquage||'')})</span>` : (o.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (o.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : (o.neutralise_fige ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: isolated set phrase' : 'risque neutralisé : expression figée isolée'}</span>` : (o.plafonne_fige ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: extended set phrase' : 'plafonné à moyen : expression figée filée'} (${escapeHtmlBatch(o.plafonne_fige)})</span>` : (o.plafonne_pejoratif ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: overt pejorative' : 'plafonné à moyen : péjoratif ouvert'}</span>` : (o.neutralise_ironie ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: ironic refutation' : 'risque neutralisé : réfutation ironique'}</span>` : ''))))));
     return `<div class="batch-op-line"><span class="batch-op-tag">${escapeHtmlBatch(o.op||'')}</span> {${notion}} \u21a6 {${notion}, ${ajout}}${riskBadge}${neutral}${o.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}</div>`;
   }).join('');
 }
@@ -1523,7 +1651,7 @@ function renderBatchDeterminations(dets, notions){
     const ajout = escapeHtmlBatch(d.ajout || '');
     const refs = (d.notion_ids||[]).map(labelFor).map(escapeHtmlBatch).join(' + ');
     const riskBadge = d.risk ? `<span class="batch-op-risk ${d.risk.level==='high'?'risque-oui':'risque-ambigu'}">${escapeHtmlBatch(d.risk.label||'')}</span>` : '';
-    const neutral = d.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(d.marquage||'')})</span>` : (d.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (d.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : ''));
+    const neutral = d.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(d.marquage||'')})</span>` : (d.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (d.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : (d.neutralise_fige ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: isolated set phrase' : 'risque neutralisé : expression figée isolée'}</span>` : (d.plafonne_fige ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: extended set phrase' : 'plafonné à moyen : expression figée filée'} (${escapeHtmlBatch(d.plafonne_fige)})</span>` : (d.plafonne_pejoratif ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: overt pejorative' : 'plafonné à moyen : péjoratif ouvert'}</span>` : (d.neutralise_ironie ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: ironic refutation' : 'risque neutralisé : réfutation ironique'}</span>` : ''))))));
     return `<div class="batch-op-line"><span class="batch-op-tag">${escapeHtmlBatch(d.op||'')}</span> [${refs}] \u2192 {${notion}, ${ajout}}${riskBadge}${neutral}${d.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}</div>`;
   }).join('');
 }
@@ -2046,8 +2174,9 @@ const DEMO_CORRECTION = {
 function showDemo(){
   const texte = DEMO_TEXTE;
   const p = JSON.parse(JSON.stringify(DEMO_ANALYSE));
-  const nNeutralises = enforceMarquage(p.operations, p.determinations) + enforceSigmaCoherence(p.operations, p.determinations, p.pec) + enforceAutonymy(p.operations, p.determinations, texte);
+  const nNeutralises = enforceMarquage(p.operations, p.determinations) + enforceSigmaCoherence(p.operations, p.determinations, p.pec) + enforceAutonymy(p.operations, p.determinations, texte) + enforceFigees(p.operations, p.determinations, texte) + enforcePejoratifs(p.operations, p.determinations) + enforceIronie(p.operations, p.determinations, p.pec, texte);
   const nIntrouvables = checkExtracts(texte, p.operations, p.determinations, p.pec, p.a_verifier);
+  enforceAutoriteEmpruntee(p.pec, p.a_verifier);
   const r = {
     id: lang === 'en' ? 'pre-analysed example' : 'exemple préanalysé',
     texte: texte, verite_terrain: null, double_alpha: null,

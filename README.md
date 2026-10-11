@@ -30,13 +30,27 @@ L'analyse se déroule en huit étapes, produites dans cet ordre :
    d'erreur : seulement le constat qu'une vérification externe serait utile.
 8. **Verdict global** — calculé dans le code, non demandé au modèle.
 
-Quatre contrôles déterministes s'appliquent ensuite : neutralisation d'un risque porté par un
+Huit contrôles déterministes s'appliquent ensuite : neutralisation d'un risque porté par un
 passage que σ tient à distance, neutralisation des mentions autonymiques — un terme entre
 guillemets est mentionné, pas employé —, vérification que chaque extrait cité figure bien
-dans le texte source, et **cohérence de la prise en charge** : quand σ accorde à une notion une
-adhésion partielle, suspendue, contestée ou réfutée, chaque emploi non marqué de cette notion
-ailleurs dans le texte est signalé, avec sa position avant ou après la réserve. Le texte reconnaît
-un doute, puis se comporte comme s'il n'en avait aucun.
+dans le texte source, et **cohérence de la prise en charge** : quand σ met en doute une notion
+elle-même — sa validité, son existence — par une adhésion partielle, suspendue, contestée ou
+réfutée, chaque emploi non marqué de cette notion ailleurs dans le texte est signalé, avec sa
+position avant ou après la réserve. Le texte reconnaît un doute, puis se comporte comme s'il
+n'en avait aucun. Un doute qui porte seulement sur un propos tenu au sujet de la notion ne
+déclenche pas ce contrôle.
+
+Quatre contrôles portent sur des cas que le modèle surévalue ou néglige :
+
+- **expressions figées** — une métaphore usée du discours ordinaire (« dans la course », « les
+  géants du secteur ») voit son risque neutralisé quand elle est isolée, plafonné à moyen quand
+  elle est filée sur plusieurs phrases ;
+- **péjoratif ouvert** — une dévalorisation affichée (« tas de ferraille », « usine à gaz ») est une
+  prise de position visible, non une assimilation cachée : risque plafonné à moyen ;
+- **ironie** — une antiphrase (« mais oui, bien sûr », « ben voyons ») vaut réfutation : une entrée σ
+  réfutée est ajoutée si besoin, et les risques portés par le passage ironique sont neutralisés ;
+- **autorité empruntée** — une source invoquée en autorité, dont l'extrait est aussi signalé à
+  vérifier pour une question de compétence, reçoit un risque moyen.
 
 ## Contenu du dépôt
 
@@ -89,11 +103,17 @@ operations; determinations, the only place where ρ and θ5 may appear; wishful 
 Drew McDermott's sense; claims to verify; and a global verdict computed in code rather than
 asked of the model.
 
-Four deterministic checks follow: a risk borne by a passage σ holds at a distance is
+Eight deterministic checks follow: a risk borne by a passage σ holds at a distance is
 neutralised; so are autonymic mentions — a term in quotation marks is mentioned, not used;
-every quoted extract is checked against the source text; and stance consistency: when σ gives a
-notion partial, suspended, contested or refuted endorsement, every unmarked use of that notion
-elsewhere in the text is flagged, with its position before or after the reservation.
+every quoted extract is checked against the source text; and stance consistency: when σ casts
+doubt on a notion itself through partial, suspended, contested or refuted endorsement, every
+unmarked use of that notion elsewhere in the text is flagged, with its position before or after
+the reservation — doubt about a claim made about the notion does not trigger it. Four more
+checks handle cases the model over- or under-rates: an isolated set phrase ("in the race",
+"tech giants") has its risk neutralised, an extended one is capped at medium; an overt pejorative
+is a visible stance, not a hidden assimilation, and is capped at medium; irony counts as
+refutation, adding a refuted σ entry and neutralising risks in the ironic passage; and a source
+invoked as an authority outside its competence receives a medium risk.
 
 ## Origin
 
