@@ -4,6 +4,8 @@
 Récupère les fils listés dans feeds.json, garde les articles qui parlent
 des thèmes de mots_cles.json, et écrit un corpus du jour au format de
 l'analyseur (id, source, categorie, langue, date, lien, themes, texte).
+Chaque article porte aussi un score (passages repérés, ceux du titre
+comptent double) et dans_titre (un mot-clé figure dans le titre).
 
 Usage :
     python3 collect_rss.py                 # collecte normale
@@ -69,6 +71,16 @@ def motif(mot):
     if len(mot) <= 3:
         return re.compile(r"(?<!\w)" + m + r"(?!\w)")
     return re.compile(r"(?<!\w)" + m)
+
+
+def occurrences(spans):
+    """Nombre de passages repérés, en fusionnant les chevauchements (migrant / migrants, deport / deportation)."""
+    n, fin = 0, -1
+    for debut, f in sorted(spans):
+        if debut >= fin:
+            n += 1
+        fin = max(fin, f)
+    return n
 
 
 # ---------- lecture des fils ----------
@@ -149,13 +161,19 @@ def main():
             cle = hashlib.sha1(a["lien"].encode()).hexdigest()[:16]
             if cle in registre:
                 continue
-            texte_norm = sans_accents(a["titre"] + " " + a["resume"])
-            trouves, mots = [], []
+            titre_norm, resume_norm = sans_accents(a["titre"]), sans_accents(a["resume"])
+            trouves, mots, zones = [], [], {"titre": [], "resume": []}
             for th, langs in motifs.items():
                 for mot, rx in langs.get(f["langue"], []):
-                    if rx.search(texte_norm):
+                    trouve = False
+                    for zone, t in (("titre", titre_norm), ("resume", resume_norm)):
+                        for m in rx.finditer(t):
+                            zones[zone].append(m.span())
+                            trouve = True
+                    if trouve:
                         trouves.append(th)
                         mots.append(mot)
+            n_titre, n_resume = occurrences(zones["titre"]), occurrences(zones["resume"])
             if not trouves and not args.tous:
                 continue
             gardes += 1
@@ -169,6 +187,8 @@ def main():
                 "lien": a["lien"],
                 "themes": sorted(set(trouves)),
                 "mots_reperes": sorted(set(mots)),
+                "score": 2 * n_titre + n_resume,
+                "dans_titre": n_titre > 0,
                 "texte": a["titre"] + ("\n\n" + a["resume"] if a["resume"] else ""),
                 "verite_terrain": None,
             })
