@@ -1,0 +1,22 @@
+# Veille RSS
+
+Récupère chaque jour les articles de presse française et américaine qui parlent d'immigration ou de religion, et les range au format de l'analyseur.
+
+## Lancer
+
+```bash
+cd veille
+python3 collect_rss.py --test      # vérifie que chaque fil répond
+python3 collect_rss.py --jours 3   # collecte les articles des 3 derniers jours
+```
+
+Le résultat arrive dans `corpus/veille_AAAA-MM-JJ.json`, prêt à coller dans l'analyseur. Un article déjà vu n'est jamais repris deux fois (voir `registre.json`).
+
+## Régler
+
+- `feeds.json` : la liste des fils. Ajouter une ligne pour un nouveau fil, ou mettre `"actif": false` pour en couper un. Le champ `orientation` est vide : à remplir soi-même si on veut équilibrer les camps.
+- `mots_cles.json` : les mots qui font retenir un article, par thème et par langue.
+
+## Limites
+
+Les fils RSS ne donnent que le titre et un court résumé, pas l'article entier. C'est suffisant pour suivre la circulation des expressions dans les titres et les chapôs ; pour une analyse complète, il faut récupérer l'article à part.
