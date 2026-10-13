@@ -1,3 +1,7 @@
 # Veille RSS : données collectées, propres à chaque machine
 veille/registre.json
 veille/corpus/
+veille/collecte.log
+
+# Python
+__pycache__/
