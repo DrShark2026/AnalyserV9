@@ -5,3 +5,4 @@ veille/collecte.log
 
 # Python
 __pycache__/
+veille/.venv/

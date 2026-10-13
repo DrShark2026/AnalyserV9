@@ -22,3 +22,13 @@ Chaque article indique pourquoi il a été retenu : `mots_reperes` (les mots-cl�
 ## Limites
 
 Les fils RSS ne donnent que le titre et un court résumé, pas l'article entier. C'est suffisant pour suivre la circulation des expressions dans les titres et les chapôs ; pour une analyse complète, il faut récupérer l'article à part.
+
+## Texte complet
+
+```bash
+cd veille
+python3 -m venv .venv && .venv/bin/pip install trafilatura   # une seule fois
+.venv/bin/python complet.py          # dernier corpus, articles de score >= 2
+```
+
+Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_texte` (`complet`, `partiel` ou `echec`). Le script respecte robots.txt, espace ses requêtes d'au moins 3 secondes et ne contourne ni paywall ni protection anti-robot : un article réservé aux abonnés donne `partiel` (seul le début public est gardé), une page anti-robot donne `echec`. Les articles déjà traités ne sont pas retentés, sauf avec `--refaire`.
