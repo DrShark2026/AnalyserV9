@@ -9,8 +9,8 @@
     "en": ["islam", "muslim", "religious freedom", "mosque", "sharia", "christian nationalism", "antisemitism", "Islamic", "Muslims", "Christians", "evangelical", "people of faith", "faith leaders", "church and state", "religious liberty", "Jewish", "synagogue"]
   },
   "ia": {
-    "fr": ["intelligence artificielle", "IA", "ChatGPT", "OpenAI", "Anthropic", "Claude", "Mistral", "Gemini", "LLM", "AGI", "superintelligence", "agent IA"],
-    "en": ["artificial intelligence", "AI", "ChatGPT", "OpenAI", "Anthropic", "LLM", "AGI", "superintelligence", "AI agent"]
+    "fr": ["intelligence artificielle", "IA", "ChatGPT", "OpenAI", "Anthropic", "Claude", "Mistral", "Gemini", "LLM", "LLMs", "AGI", "superintelligence", "agent IA"],
+    "en": ["artificial intelligence", "AI", "ChatGPT", "OpenAI", "Anthropic", "Gemini", "LLM", "LLMs", "AGI", "superintelligence", "AI agent"]
   },
   "mnemoniques": {
     "fr": ["réfléchit", "réflexion", "comprend", "pense", "raisonne", "hallucine", "hallucination", "veut", "décide", "conscience", "ment"],
