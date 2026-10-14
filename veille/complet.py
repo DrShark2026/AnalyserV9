@@ -11,6 +11,8 @@ Règles de politesse : robots.txt est respecté, au plus une requête toutes les
 3 secondes (davantage si le site demande un Crawl-delay), et aucune tentative
 de contourner un paywall ou une protection anti-robot : une page réservée
 aux abonnés donne « partiel » (le début public), une page anti-robot « echec ».
+Si plusieurs articles d'une même source donnent exactement le même texte,
+c'est un bandeau ou une page générique, pas l'article : ils passent en « echec ».
 
 Usage :
     .venv/bin/python complet.py                  # dernier fichier, score >= 2
@@ -115,6 +117,26 @@ def traiter(article):
     return texte, "complet", f"{n} mots"
 
 
+def bandeaux(articles):
+    """Articles d'une même source au texte identique : c'est un bandeau, pas l'article. Les passe en echec."""
+    groupes = {}
+    for a in articles:
+        if a.get("texte_complet"):
+            cle = (a["source"], " ".join(a["texte_complet"].split()))
+            groupes.setdefault(cle, []).append(a)
+    touches = [a for g in groupes.values() if len(g) > 1 for a in g]
+    for a in touches:
+        a["texte_complet"] = None
+        a["statut_texte"] = "echec"
+    return touches
+
+
+def ecrire(fichier, articles):
+    tmp = fichier.with_suffix(".tmp")
+    tmp.write_text(json.dumps(articles, ensure_ascii=False, indent=2), "utf-8")
+    tmp.replace(fichier)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("fichier", nargs="?", help="corpus à compléter (défaut : le dernier veille_*.json)")
@@ -147,9 +169,14 @@ def main():
         traites += 1
         print(f"  {statut:<9} {a['source'][:24]:<24} {titre}\n  {'':<9} → {raison}")
         # écrit après chaque article : une interruption ne fait rien perdre
-        tmp = fichier.with_suffix(".tmp")
-        tmp.write_text(json.dumps(articles, ensure_ascii=False, indent=2), "utf-8")
-        tmp.replace(fichier)
+        ecrire(fichier, articles)
+
+    doublons = bandeaux(articles)
+    if doublons:
+        ecrire(fichier, articles)
+        print(f"\nTexte identique dans une même source (bandeau, pas l'article) → echec :")
+        for a in doublons:
+            print(f"  {a['source'][:24]:<24} {a['texte'].partition(chr(10) * 2)[0][:70]}")
 
     print(f"\n{traites} article(s) traité(s).")
     return 0

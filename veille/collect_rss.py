@@ -5,7 +5,9 @@ Récupère les fils listés dans feeds.json, garde les articles qui parlent
 des thèmes de mots_cles.json, et écrit un corpus du jour au format de
 l'analyseur (id, source, categorie, langue, date, lien, themes, texte).
 Chaque article porte aussi un score (passages repérés, ceux du titre
-comptent double) et dans_titre (un mot-clé figure dans le titre).
+comptent double), dans_titre (un mot-clé figure dans le titre) et
+mnemoniques (les mots de la liste « mnemoniques » trouvés, sans effet sur la
+sélection).
 
 Usage :
     python3 collect_rss.py                 # collecte normale
@@ -65,10 +67,10 @@ def date_iso(brut):
         return None
 
 
-def motif(mot):
-    """Mot court (3 lettres ou moins) : mot exact. Sinon : début de mot, suffixes permis (migrant -> migrants)."""
+def motif(mot, exact_max=3):
+    """Mot court (exact_max lettres ou moins) : mot exact. Sinon : début de mot, suffixes permis (migrant -> migrants)."""
     m = re.escape(sans_accents(mot))
-    if len(mot) <= 3:
+    if len(mot) <= exact_max:
         return re.compile(r"(?<!\w)" + m + r"(?!\w)")
     return re.compile(r"(?<!\w)" + m)
 
@@ -138,7 +140,9 @@ def main():
     args = ap.parse_args()
 
     feeds = [f for f in json.loads((ICI / "feeds.json").read_text("utf-8"))["feeds"] if f.get("actif", True)]
-    themes = {k: v for k, v in json.loads((ICI / "mots_cles.json").read_text("utf-8")).items() if not k.startswith("_")}
+    mots_cles = json.loads((ICI / "mots_cles.json").read_text("utf-8"))
+    mnemo = {lg: [(m, motif(m, exact_max=4)) for m in mots] for lg, mots in mots_cles.get("mnemoniques", {}).items()}
+    themes = {k: v for k, v in mots_cles.items() if not k.startswith("_") and k != "mnemoniques"}
     motifs = {th: {lg: [(m, motif(m)) for m in mots] for lg, mots in langs.items()} for th, langs in themes.items()}
 
     registre = json.loads(REGISTRE.read_text("utf-8")) if REGISTRE.exists() else {}
@@ -176,6 +180,7 @@ def main():
             n_titre, n_resume = occurrences(zones["titre"]), occurrences(zones["resume"])
             if not trouves and not args.tous:
                 continue
+            mnemoniques = sorted(m for m, rx in mnemo.get(f["langue"], []) if rx.search(titre_norm) or rx.search(resume_norm))
             gardes += 1
             retenus.append({
                 "id": f"{aujourdhui.isoformat()}-{cle}",
@@ -189,6 +194,7 @@ def main():
                 "mots_reperes": sorted(set(mots)),
                 "score": 2 * n_titre + n_resume,
                 "dans_titre": n_titre > 0,
+                "mnemoniques": mnemoniques,
                 "texte": a["titre"] + ("\n\n" + a["resume"] if a["resume"] else ""),
                 "verite_terrain": None,
             })
