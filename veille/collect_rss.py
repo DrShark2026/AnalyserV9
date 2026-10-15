@@ -6,7 +6,7 @@ des thèmes de mots_cles.json, et écrit un corpus du jour au format de
 l'analyseur (id, source, categorie, langue, date, lien, themes, texte).
 Chaque article porte aussi un score (passages repérés, ceux du titre
 comptent double), dans_titre (un mot-clé figure dans le titre) et
-mnemoniques (les mots de la liste « mnemoniques » trouvés, sans effet sur la
+mnemoniques_collecte (les mots de la liste « mnemoniques » trouvés, sans effet sur la
 sélection).
 
 Usage :
@@ -194,7 +194,7 @@ def main():
                 "mots_reperes": sorted(set(mots)),
                 "score": 2 * n_titre + n_resume,
                 "dans_titre": n_titre > 0,
-                "mnemoniques": mnemoniques,
+                "mnemoniques_collecte": mnemoniques,
                 "texte": a["titre"] + ("\n\n" + a["resume"] if a["resume"] else ""),
                 "verite_terrain": None,
             })

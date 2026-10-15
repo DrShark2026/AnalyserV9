@@ -14,7 +14,7 @@ Le résultat arrive dans `corpus/veille_AAAA-MM-JJ.json`, prêt à coller dans l
 
 Chaque article indique pourquoi il a été retenu : `mots_reperes` (les mots-clés trouvés), `score` (nombre de passages repérés, ceux du titre comptent double) et `dans_titre` (vrai si un mot-clé figure dans le titre). Rien n'est exclu sur ces critères : un score de 1 sans mot dans le titre signale en général une simple mention en passant.
 
-Le champ `mnemoniques` relève les verbes et noms qui prêtent à l'IA une activité mentale (`pense`, `comprend`, `hallucine`, `thinks`, `reasoning`…), d'après la liste `mnemoniques` de `mots_cles.json`. Il n'influe pas sur la sélection.
+Le champ `mnemoniques_collecte` relève les verbes et noms qui prêtent à l'IA une activité mentale (`pense`, `comprend`, `hallucine`, `thinks`, `reasoning`…), d'après la liste `mnemoniques` de `mots_cles.json`. Il n'influe pas sur la sélection.
 
 ## Régler
 
