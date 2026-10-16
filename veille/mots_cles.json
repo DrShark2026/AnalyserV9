@@ -5,8 +5,8 @@
     "en": ["immigration", "immigrant", "migrant", "illegal alien", "undocumented", "deportation", "border", "asylum", "sanctuary", "green card", "migrants", "deport", "refugee", "border crossing", "border wall", "birthright citizenship", "citizenship", "visa", "H-1B", "TPS", "mass deportation", "Immigration and Customs Enforcement"]
   },
   "religion": {
-    "fr": ["islam", "musulman", "laïcité", "séparatisme", "voile", "abaya", "mosquée", "islamisme", "racines chrétiennes", "catholique", "antisémitisme", "musulmans", "chrétien", "juif", "religion"],
-    "en": ["islam", "muslim", "religious freedom", "mosque", "sharia", "christian nationalism", "antisemitism", "Islamic", "Muslims", "Christians", "evangelical", "people of faith", "faith leaders", "church and state", "religious liberty", "Jewish", "synagogue"]
+    "fr": ["islam", "musulman", "laïcité", "séparatisme", "voile", "abaya", "mosquée", "islamisme", "racines chrétiennes", "catholique", "antisémitisme", "musulmans", "chrétien", "juif", "religion", "laïque", "burkini", "évangélique", "charia", "loi islamique", "Bagayoko", "maire de Saint-Denis", "maire de Saint Denis"],
+    "en": ["islam", "muslim", "religious freedom", "mosque", "sharia", "christian nationalism", "antisemitism", "Islamic", "Muslims", "Christians", "evangelical", "people of faith", "faith leaders", "church and state", "religious liberty", "Jewish", "synagogue", "secularism", "laïcité"]
   },
   "ia": {
     "fr": ["intelligence artificielle", "IA", "ChatGPT", "OpenAI", "Anthropic", "Claude", "Mistral", "Gemini", "LLM", "LLMs", "AGI", "superintelligence", "agent IA"],
