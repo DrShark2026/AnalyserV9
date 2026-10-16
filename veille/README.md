@@ -33,7 +33,7 @@ python3 -m venv .venv && .venv/bin/pip install trafilatura   # une seule fois
 .venv/bin/python complet.py          # dernier corpus, articles de score >= 2
 ```
 
-Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_texte` (`complet`, `partiel` ou `echec`). Le script respecte robots.txt, espace ses requêtes d'au moins 3 secondes et ne contourne ni paywall ni protection anti-robot : un article réservé aux abonnés donne `partiel` (seul le début public est gardé), une page anti-robot donne `echec`. Si plusieurs articles d'une même source donnent le même texte, c'est un bandeau et non l'article : ils passent aussi en `echec`. Les articles déjà traités ne sont pas retentés, sauf avec `--refaire`.
+Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_texte` (`complet`, `partiel` ou `echec`). Le script respecte robots.txt, espace ses requêtes d'au moins 3 secondes et ne contourne ni paywall ni protection anti-robot : un article réservé aux abonnés donne `partiel` (seul le début public est gardé), une page anti-robot donne `echec`. Si plusieurs articles d'une même source donnent le même texte, c'est un bandeau et non l'article : ils passent aussi en `echec`. Les articles en `echec` sont retentés à chaque passage ; les articles `complet` ou `partiel` ne le sont qu'avec `--refaire`.
 
 ## Automatisation
 

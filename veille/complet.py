@@ -14,10 +14,13 @@ aux abonnés donne « partiel » (le début public), une page anti-robot « eche
 Si plusieurs articles d'une même source donnent exactement le même texte,
 c'est un bandeau ou une page générique, pas l'article : ils passent en « echec ».
 
+Les articles en « echec » sont retentés à chaque passage ; les articles
+« complet » ou « partiel » ne le sont qu'avec --refaire.
+
 Usage :
     .venv/bin/python complet.py                  # dernier fichier, score >= 2
     .venv/bin/python complet.py --score 1        # seuil différent
-    .venv/bin/python complet.py --refaire        # retente aussi les articles déjà traités
+    .venv/bin/python complet.py --refaire        # retente aussi les articles complets ou partiels
     .venv/bin/python complet.py corpus/veille_2026-10-12.json
 
 Dépendance : trafilatura (installée dans veille/.venv).
@@ -141,7 +144,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("fichier", nargs="?", help="corpus à compléter (défaut : le dernier veille_*.json)")
     ap.add_argument("--score", type=int, default=2, help="score minimal (défaut : 2)")
-    ap.add_argument("--refaire", action="store_true", help="retenter les articles déjà traités")
+    ap.add_argument("--refaire", action="store_true", help="retenter aussi les articles complets ou partiels")
     args = ap.parse_args()
 
     if args.fichier:
@@ -160,7 +163,7 @@ def main():
         titre = a["texte"].partition("\n\n")[0][:70]
         if a.get("score", 0) < args.score:
             continue
-        if "statut_texte" in a and not args.refaire:
+        if a.get("statut_texte") in ("complet", "partiel") and not args.refaire:
             print(f"  {'déjà fait':<9} {a['source'][:24]:<24} {titre}")
             continue
         texte, statut, raison = traiter(a)
