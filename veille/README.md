@@ -35,9 +35,17 @@ python3 -m venv .venv && .venv/bin/pip install trafilatura   # une seule fois
 
 Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_texte` (`complet`, `partiel` ou `echec`). Le script respecte robots.txt, espace ses requêtes d'au moins 3 secondes et ne contourne ni paywall ni protection anti-robot : un article réservé aux abonnés donne `partiel` (seul le début public est gardé), une page anti-robot donne `echec`. Si plusieurs articles d'une même source donnent le même texte, c'est un bandeau et non l'article : ils passent aussi en `echec`. Les articles en `echec` sont retentés à chaque passage ; les articles `complet` ou `partiel` ne le sont qu'avec `--refaire`.
 
+## Lots pour l'analyseur
+
+```bash
+python3 lots.py                      # dernier corpus
+```
+
+Écrit `corpus/lots/lot_ia_AAAA-MM-JJ.json` (thème `ia`) et `corpus/lots/lot_politique_AAAA-MM-JJ.json` (thèmes `immigration` et `religion`), à coller dans l'analyseur. `texte` reste le titre + chapô ; `texte_complet` n'est gardé que pour les articles `complet` ; `n_mots` compte les mots de `texte`. Les articles en `echec` et les doublons (même lien ou même titre) sont écartés. Le script affiche le nombre d'articles par lot et par source.
+
 ## Automatisation
 
-Un minuteur systemd utilisateur lance la collecte (`--jours 2`) puis `complet.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant. Avant de lancer quoi que ce soit, le service attend jusqu'à 2 minutes que la résolution DNS fonctionne (le réseau n'est souvent pas prêt au démarrage) ; passé ce délai, la collecte est lancée quand même. La sortie s'ajoute à `collecte.log`.
+Un minuteur systemd utilisateur lance la collecte (`--jours 2`), puis `complet.py`, puis `lots.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant. Avant de lancer quoi que ce soit, le service attend jusqu'à 2 minutes que la résolution DNS fonctionne (le réseau n'est souvent pas prêt au démarrage) ; passé ce délai, la collecte est lancée quand même. La sortie s'ajoute à `collecte.log`.
 
 ```bash
 systemctl --user list-timers veille.timer       # prochaine exécution
