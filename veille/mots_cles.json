@@ -12,6 +12,10 @@
     "fr": ["intelligence artificielle", "IA", "ChatGPT", "OpenAI", "Anthropic", "Claude", "Mistral", "Gemini", "LLM", "LLMs", "AGI", "superintelligence", "agent IA"],
     "en": ["artificial intelligence", "AI", "ChatGPT", "OpenAI", "Anthropic", "Gemini", "LLM", "LLMs", "AGI", "superintelligence", "AI agent"]
   },
+  "analogies_historiques": {
+    "fr": ["Pétain", "Vichy", "Munich", "collabo", "années 30", "années 1930", "années trente", "Weimar", "Chamberlain", "appeasement"],
+    "en": ["Pétain", "Vichy", "Munich", "collaborationist", "Nazi collaborator", "1930s", "Weimar", "Chamberlain", "appeasement"]
+  },
   "mnemoniques": {
     "fr": ["réfléchit", "réflexion", "comprend", "pense", "raisonne", "hallucine", "hallucination", "veut", "décide", "conscience", "ment"],
     "en": ["thinks", "thinking", "understands", "reasons", "reasoning", "hallucinates", "hallucination", "wants", "decides", "conscious", "lies"]

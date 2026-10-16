@@ -14,18 +14,23 @@ aux abonnés donne « partiel » (le début public), une page anti-robot « eche
 Si plusieurs articles d'une même source donnent exactement le même texte,
 c'est un bandeau ou une page générique, pas l'article : ils passent en « echec ».
 
-Les articles en « echec » sont retentés à chaque passage ; les articles
-« complet » ou « partiel » ne le sont qu'avec --refaire.
+Seules les erreurs passagères (réseau, délai dépassé, HTTP 5xx) sont retentées,
+dans le même passage, 3 essais au plus (pauses de 10 puis 30 secondes). Un 403,
+une page anti-robot ou un paywall ne sont jamais retentés. Un article déjà
+traité, quel que soit son statut, ne l'est plus aux passages suivants ; seul
+--refaire, lancé à la main, le reprend. Un échec porte echec_passager (vrai si
+les 3 essais ont buté sur une erreur passagère).
 
 Usage :
     .venv/bin/python complet.py                  # dernier fichier, score >= 2
     .venv/bin/python complet.py --score 1        # seuil différent
-    .venv/bin/python complet.py --refaire        # retente aussi les articles complets ou partiels
+    .venv/bin/python complet.py --refaire        # reprend aussi les articles déjà traités
     .venv/bin/python complet.py corpus/veille_2026-10-12.json
 
 Dépendance : trafilatura (installée dans veille/.venv).
 """
 import argparse
+import http.client
 import json
 import re
 import sys
@@ -43,6 +48,7 @@ from collect_rss import SORTIE, UA
 DELAI_MIN = 3.0          # secondes entre deux requêtes, tous sites confondus
 MOTS_COMPLET = 150       # en dessous, le texte extrait est jugé partiel
 MOTS_ECHEC = 30          # en dessous, l'extraction est jugée ratée
+PAUSES = (10, 30)        # secondes avant le 2e et le 3e essai, erreurs passagères seulement
 
 # Signes qu'une page est réservée aux abonnés : on les constate, on ne les contourne pas.
 PAYWALL_JSONLD = re.compile(r'"isAccessibleForFree"\s*:\s*"?false"?', re.I)
@@ -93,31 +99,43 @@ def robots_pour(url):
     return _robots[site]
 
 
+def passagere(e):
+    """Erreur qui peut disparaître d'elle-même : réseau, délai dépassé, erreur du serveur (5xx)."""
+    if isinstance(e, urllib.error.HTTPError):
+        return e.code >= 500
+    return isinstance(e, (urllib.error.URLError, TimeoutError, ConnectionError, http.client.HTTPException))
+
+
 def traiter(article):
-    """Renvoie (texte_complet, statut, raison)."""
+    """Renvoie (texte_complet, statut, raison, passager)."""
     url = article["lien"]
     rp = robots_pour(url)
     if not rp.can_fetch(UA, url):
-        return None, "echec", "interdit par robots.txt"
+        return None, "echec", "interdit par robots.txt", False
     delai = max(DELAI_MIN, float(rp.crawl_delay(UA) or 0))
-    try:
-        page = telecharger(url, delai)
-    except urllib.error.HTTPError as e:
-        return None, "echec", f"HTTP {e.code}"
-    except Exception as e:
-        return None, "echec", str(e)[:80]
+    for essai in range(len(PAUSES) + 1):
+        try:
+            page = telecharger(url, delai)
+            break
+        except Exception as e:
+            raison = f"HTTP {e.code}" if isinstance(e, urllib.error.HTTPError) else str(e)[:80]
+            if not passagere(e):
+                return None, "echec", raison, False
+            if essai == len(PAUSES):
+                return None, "echec", f"{raison} ({essai + 1} essais)", True
+            time.sleep(PAUSES[essai])
 
     texte = trafilatura.extract(page, url=url, include_comments=False, include_tables=False)
     n = len(texte.split()) if texte else 0
     if ANTI_ROBOT.search(texte or "") or (n < MOTS_ECHEC and ANTI_ROBOT.search(page)):
-        return None, "echec", "page anti-robot à la place de l'article"
+        return None, "echec", "page anti-robot à la place de l'article", False
     if n < MOTS_ECHEC:
-        return None, "echec", f"extraction vide ({n} mots)"
+        return None, "echec", f"extraction vide ({n} mots)", False
     if PAYWALL_JSONLD.search(page) or PAYWALL_TEXTE.search(texte):
-        return texte, "partiel", f"réservé aux abonnés ({n} mots publics)"
+        return texte, "partiel", f"réservé aux abonnés ({n} mots publics)", False
     if n < MOTS_COMPLET:
-        return texte, "partiel", f"texte court ({n} mots)"
-    return texte, "complet", f"{n} mots"
+        return texte, "partiel", f"texte court ({n} mots)", False
+    return texte, "complet", f"{n} mots", False
 
 
 def bandeaux(articles):
@@ -131,6 +149,7 @@ def bandeaux(articles):
     for a in touches:
         a["texte_complet"] = None
         a["statut_texte"] = "echec"
+        a["echec_passager"] = False
     return touches
 
 
@@ -144,7 +163,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("fichier", nargs="?", help="corpus à compléter (défaut : le dernier veille_*.json)")
     ap.add_argument("--score", type=int, default=2, help="score minimal (défaut : 2)")
-    ap.add_argument("--refaire", action="store_true", help="retenter aussi les articles complets ou partiels")
+    ap.add_argument("--refaire", action="store_true", help="reprendre aussi les articles déjà traités")
     args = ap.parse_args()
 
     if args.fichier:
@@ -163,12 +182,16 @@ def main():
         titre = a["texte"].partition("\n\n")[0][:70]
         if a.get("score", 0) < args.score:
             continue
-        if a.get("statut_texte") in ("complet", "partiel") and not args.refaire:
+        if "statut_texte" in a and not args.refaire:
             print(f"  {'déjà fait':<9} {a['source'][:24]:<24} {titre}")
             continue
-        texte, statut, raison = traiter(a)
+        texte, statut, raison, passager = traiter(a)
         a["texte_complet"] = texte
         a["statut_texte"] = statut
+        if statut == "echec":
+            a["echec_passager"] = passager
+        else:
+            a.pop("echec_passager", None)
         traites += 1
         print(f"  {statut:<9} {a['source'][:24]:<24} {titre}\n  {'':<9} → {raison}")
         # écrit après chaque article : une interruption ne fait rien perdre

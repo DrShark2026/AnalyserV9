@@ -1,6 +1,6 @@
 # Veille RSS
 
-Récupère chaque jour les articles de presse française et américaine qui parlent d'immigration, de religion ou d'intelligence artificielle (presse, sites tech et blogs d'entreprises d'IA), et les range au format de l'analyseur.
+Récupère chaque jour les articles de presse française et américaine qui parlent d'immigration, de religion, d'intelligence artificielle ou qui recourent à des analogies historiques (Pétain, Vichy, Munich, Weimar…) (presse, sites tech et blogs d'entreprises d'IA), et les range au format de l'analyseur.
 
 ## Lancer
 
@@ -19,7 +19,7 @@ Le champ `mnemoniques_collecte` relève les verbes et noms qui prêtent à l'IA 
 ## Régler
 
 - `feeds.json` : la liste des fils. Ajouter une ligne pour un nouveau fil, ou mettre `"actif": false` pour en couper un. Le champ `orientation` est vide : à remplir soi-même si on veut équilibrer les camps.
-- `mots_cles.json` : les mots qui font retenir un article, par thème et par langue.
+- `mots_cles.json` : les mots qui font retenir un article, par thème et par langue. Thèmes : `immigration`, `religion`, `ia`, `analogies_historiques`. Un mot de plus de 3 lettres est cherché en début de mot : `collabo` prend aussi `collaboration` et `collaborateur`, `Munich` aussi le Bayern.
 
 ## Limites
 
@@ -33,7 +33,18 @@ python3 -m venv .venv && .venv/bin/pip install trafilatura   # une seule fois
 .venv/bin/python complet.py          # dernier corpus, articles de score >= 2
 ```
 
-Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_texte` (`complet`, `partiel` ou `echec`). Le script respecte robots.txt, espace ses requêtes d'au moins 3 secondes et ne contourne ni paywall ni protection anti-robot : un article réservé aux abonnés donne `partiel` (seul le début public est gardé), une page anti-robot donne `echec`. Si plusieurs articles d'une même source donnent le même texte, c'est un bandeau et non l'article : ils passent aussi en `echec`. Les articles en `echec` sont retentés à chaque passage ; les articles `complet` ou `partiel` ne le sont qu'avec `--refaire`.
+Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_texte` (`complet`, `partiel` ou `echec`). Le script respecte robots.txt, espace ses requêtes d'au moins 3 secondes et ne contourne ni paywall ni protection anti-robot : un article réservé aux abonnés donne `partiel` (seul le début public est gardé), une page anti-robot donne `echec`. Si plusieurs articles d'une même source donnent le même texte, c'est un bandeau et non l'article : ils passent aussi en `echec`. Seules les erreurs passagères (réseau, délai dépassé, HTTP 5xx) sont retentées, dans le même passage, 3 essais au plus ; un 403, une page anti-robot ou un paywall ne le sont jamais. Un article déjà traité n'est pas repris aux passages suivants, sauf avec `--refaire` lancé à la main. Un échec porte `echec_passager` (vrai si les 3 essais ont buté sur une erreur passagère).
+
+## Concordance
+
+```bash
+python3 concordance.py 'frontier|fronti[eè]re' -i
+python3 concordance.py '(?i:superintelligen|super intelligence)|\bSI\b' --avant-apres 2026-09-01 -o corpus/concordance_si.csv
+```
+
+Cherche une expression régulière dans tout le corpus (`corpus/veille_*.json`) et écrit un CSV de concordance (KWIC), une ligne par occurrence : date, source, catégorie, langue, champ (`titre`, `chapô` ou `texte_complet`), guillemets, 60 caractères de contexte de chaque côté, lien. `guillemets` vaut `autour` si le terme est dans un passage entre guillemets de 5 mots au plus, `citation` si le passage est plus long (discours rapporté), `non` sinon. Dans `texte_complet`, les paragraphes qui répètent le titre ou le chapô sont sautés.
+
+La recherche tient compte des majuscules (sinon `\bSI\b` prendrait « si ») : `-i` l'en dispense, `(?i:…)` le fait pour une partie du motif. `--avant-apres AAAA-MM-JJ` ajoute une colonne `periode` (`avant` ou `apres`, selon la date de l'article) et sépare le bilan affiché. Par défaut, le CSV va dans `corpus/concordance.csv`.
 
 ## Lots pour l'analyseur
 
@@ -41,11 +52,11 @@ Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_text
 python3 lots.py                      # dernier corpus
 ```
 
-Écrit `corpus/lots/lot_ia_AAAA-MM-JJ.json` (thème `ia`) et `corpus/lots/lot_politique_AAAA-MM-JJ.json` (thèmes `immigration` et `religion`), à coller dans l'analyseur. `texte` reste le titre + chapô ; `texte_complet` n'est gardé que pour les articles `complet` ; `n_mots` compte les mots de `texte`. Les articles en `echec` et les doublons (même lien ou même titre) sont écartés. Le script affiche le nombre d'articles par lot et par source.
+Écrit `corpus/lots/lot_ia_AAAA-MM-JJ.json` (thème `ia`) et `corpus/lots/lot_politique_AAAA-MM-JJ.json` (thèmes `immigration` et `religion` ; le thème `analogies_historiques` n'entre dans aucun lot), à coller dans l'analyseur. `texte` reste le titre + chapô ; quand le fil n'a pas de chapô, il est pris dans le premier paragraphe du texte complet (`chapo_du_texte_complet: true`). `texte_complet` n'est gardé que pour les articles `complet` ; `n_mots` compte les mots de `texte`. Les articles en `echec` et les doublons (même lien ou même titre) sont écartés, ainsi que, dans le lot IA, les articles de score inférieur à 2. Le script affiche le nombre d'articles par lot et par source.
 
 ## Automatisation
 
-Un minuteur systemd utilisateur lance la collecte (`--jours 2`), puis `complet.py`, puis `lots.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant. Avant de lancer quoi que ce soit, le service attend jusqu'à 2 minutes que la résolution DNS fonctionne (le réseau n'est souvent pas prêt au démarrage) ; passé ce délai, la collecte est lancée quand même. La sortie s'ajoute à `collecte.log`.
+Un minuteur systemd utilisateur lance la collecte (`--jours 2`), puis `complet.py`, puis `lots.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant. Avant de lancer quoi que ce soit, le service attend jusqu'à 2 minutes que la résolution DNS fonctionne (le réseau n'est souvent pas prêt au démarrage) ; passé ce délai, la collecte est lancée quand même. Si `complet.py` échoue, `lots.py` tourne quand même (préfixe `-` sur sa ligne du service). La sortie s'ajoute à `collecte.log`.
 
 ```bash
 systemctl --user list-timers veille.timer       # prochaine exécution
