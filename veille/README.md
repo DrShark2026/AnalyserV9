@@ -37,7 +37,7 @@ Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_text
 
 ## Automatisation
 
-Un minuteur systemd utilisateur lance la collecte (`--jours 2`) puis `complet.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant. La sortie s'ajoute à `collecte.log`.
+Un minuteur systemd utilisateur lance la collecte (`--jours 2`) puis `complet.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant. Avant de lancer quoi que ce soit, le service attend jusqu'à 2 minutes que la résolution DNS fonctionne (le réseau n'est souvent pas prêt au démarrage) ; passé ce délai, la collecte est lancée quand même. La sortie s'ajoute à `collecte.log`.
 
 ```bash
 systemctl --user list-timers veille.timer       # prochaine exécution
