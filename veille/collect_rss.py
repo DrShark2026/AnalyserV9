@@ -75,6 +75,23 @@ def motif(mot, exact_max=3):
     return re.compile(r"(?<!\w)" + m)
 
 
+ACCORD = r"(?:e?s|e|x)?"   # pluriel et féminin : réfugié -> réfugiés, réfugiée ; pas réfugier
+
+
+def mot_entier(mot, exact_max=3):
+    """Mot repère : mot entier, avec pluriel ou féminin sur chaque mot de plus de exact_max lettres
+    (titre de séjour -> titres de séjour). « réfugié » ne prend donc pas « se réfugier »."""
+    parties = []
+    for p in sans_accents(mot).split(" "):
+        parties.append(re.escape(p) + ("" if len(p) <= exact_max else ACCORD))
+    return re.compile(r"(?<!\w)" + " ".join(parties) + r"(?!\w)")
+
+
+def hors_exclusions(spans, exclusions):
+    """Garde les passages qui ne tombent pas dans une expression exclue (« catholique » dans « Université catholique »)."""
+    return [(d, f) for d, f in spans if not any(ed <= d and f <= ef for ed, ef in exclusions)]
+
+
 def occurrences(spans):
     """Nombre de passages repérés, en fusionnant les chevauchements (migrant / migrants, deport / deportation)."""
     n, fin = 0, -1
@@ -143,7 +160,8 @@ def main():
     mots_cles = json.loads((ICI / "mots_cles.json").read_text("utf-8"))
     mnemo = {lg: [(m, motif(m, exact_max=4)) for m in mots] for lg, mots in mots_cles.get("mnemoniques", {}).items()}
     themes = {k: v for k, v in mots_cles.items() if not k.startswith("_") and k != "mnemoniques"}
-    motifs = {th: {lg: [(m, motif(m)) for m in mots] for lg, mots in langs.items()} for th, langs in themes.items()}
+    motifs = {th: {lg: [(m, mot_entier(m)) for m in mots] for lg, mots in langs.items()} for th, langs in themes.items()}
+    exclusions = {th: [mot_entier(e) for e in exprs] for th, exprs in mots_cles.get("_exclusions", {}).items()}
 
     registre = json.loads(REGISTRE.read_text("utf-8")) if REGISTRE.exists() else {}
     aujourdhui = dt.date.today()
@@ -171,9 +189,10 @@ def main():
                 for mot, rx in langs.get(f["langue"], []):
                     trouve = False
                     for zone, t in (("titre", titre_norm), ("resume", resume_norm)):
-                        for m in rx.finditer(t):
-                            zones[zone].append(m.span())
-                            trouve = True
+                        exclus = [e.span() for rx_e in exclusions.get(th, []) for e in rx_e.finditer(t)]
+                        spans = hors_exclusions([m.span() for m in rx.finditer(t)], exclus)
+                        zones[zone] += spans
+                        trouve = trouve or bool(spans)
                     if trouve:
                         trouves.append(th)
                         mots.append(mot)

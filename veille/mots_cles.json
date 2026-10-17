@@ -1,12 +1,15 @@
 {
-  "_note": "Un article est retenu si son titre ou son résumé contient au moins un mot d'un thème (sans tenir compte des majuscules ni des accents). Ajoute ou retire des mots librement. 'mnemoniques' n'est pas un thème : ces mots ne font pas retenir un article, ils sont seulement relevés dans le champ 'mnemoniques_collecte' des articles (4 lettres ou moins : mot exact, pour que 'ment' ne prenne pas 'mentionne').",
+  "_note": "Un article est retenu si son titre ou son résumé contient au moins un mot d'un thème (sans tenir compte des majuscules ni des accents). Les mots sont cherchés entiers, au pluriel ou au féminin près : 'réfugié' prend 'réfugiés' et 'réfugiée', pas 'se réfugier'. '_exclusions' : par thème, expressions dans lesquelles un mot du thème ne compte pas. Ajoute ou retire des mots librement. 'mnemoniques' n'est pas un thème : ces mots ne font pas retenir un article, ils sont seulement relevés dans le champ 'mnemoniques_collecte' des articles (4 lettres ou moins : mot exact, pour que 'ment' ne prenne pas 'mentionne').",
+  "_exclusions": {
+    "religion": ["Université catholique", "Institut catholique"]
+  },
   "immigration": {
     "fr": ["immigration", "immigré", "migrant", "migratoire", "étranger", "sans-papiers", "clandestin", "régularisation", "expulsion", "OQTF", "droit d'asile", "demandeur d'asile", "remigration", "regroupement familial", "submersion", "appel d'air", "réfugié", "titre de séjour", "naturalisation", "frontière"],
-    "en": ["immigration", "immigrant", "migrant", "illegal alien", "undocumented", "deportation", "border", "asylum", "sanctuary", "green card", "migrants", "deport", "refugee", "border crossing", "border wall", "birthright citizenship", "citizenship", "visa", "H-1B", "TPS", "mass deportation", "Immigration and Customs Enforcement"]
+    "en": ["immigration", "immigrant", "migrant", "illegal alien", "undocumented", "deportation", "border", "asylum", "sanctuary", "green card", "migrants", "deport", "deported", "deportee", "refugee", "border crossing", "border wall", "birthright citizenship", "citizenship", "visa", "H-1B", "TPS", "mass deportation", "Immigration and Customs Enforcement"]
   },
   "religion": {
-    "fr": ["islam", "musulman", "laïcité", "séparatisme", "voile", "abaya", "mosquée", "islamisme", "racines chrétiennes", "catholique", "antisémitisme", "musulmans", "chrétien", "juif", "religion", "laïque", "burkini", "évangélique", "charia", "loi islamique", "Bagayoko", "maire de Saint-Denis", "maire de Saint Denis"],
-    "en": ["islam", "muslim", "religious freedom", "mosque", "sharia", "christian nationalism", "antisemitism", "Islamic", "Muslims", "Christians", "evangelical", "people of faith", "faith leaders", "church and state", "religious liberty", "Jewish", "synagogue", "secularism", "laïcité"]
+    "fr": ["islam", "musulman", "laïcité", "séparatisme", "voile", "abaya", "mosquée", "islamisme", "racines chrétiennes", "catholique", "antisémitisme", "musulmans", "chrétien", "juif", "religion", "laïque", "burkini", "évangélique", "charia", "loi islamique", "islamophobie", "islamophobe", "chrétienne", "juive"],
+    "en": ["islam", "muslim", "religious freedom", "mosque", "sharia", "christian nationalism", "antisemitism", "Islamic", "Muslims", "Christians", "evangelical", "people of faith", "faith leaders", "church and state", "religious liberty", "Jewish", "synagogue", "secularism", "laïcité", "Islamophobia"]
   },
   "ia": {
     "fr": ["intelligence artificielle", "IA", "ChatGPT", "OpenAI", "Anthropic", "Claude", "Mistral", "Gemini", "LLM", "LLMs", "AGI", "superintelligence", "agent IA"],
