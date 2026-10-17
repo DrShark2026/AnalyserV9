@@ -12,7 +12,8 @@ que l'analyseur lit), « texte_complet » n'est gardé que si statut_texte vaut
 pas de chapô, il est pris dans le premier paragraphe du texte complet qui ne
 répète pas le titre (l'article porte alors chapo_du_texte_complet: true).
 Sont écartés les articles en « echec », les doublons (même lien ou même titre
-dans un lot) et, pour le lot ia, les articles de score inférieur à 2.
+dans un lot) et les articles de score inférieur à 2 (ceux que complet.py ne
+traite pas).
 Un article qui touche les deux côtés figure dans les deux lots.
 
 Usage :
@@ -29,7 +30,7 @@ from pathlib import Path
 from collect_rss import SORTIE
 
 # nom du lot : (thèmes retenus, score minimal)
-LOTS = {"ia": ({"ia"}, 2), "politique": ({"immigration", "religion"}, 0)}
+LOTS = {"ia": ({"ia"}, 2), "politique": ({"immigration", "religion"}, 2)}
 
 
 def titre(a):
