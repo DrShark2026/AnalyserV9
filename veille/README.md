@@ -52,7 +52,7 @@ La recherche tient compte des majuscules (sinon `\bSI\b` prendrait « si ») : `
 python3 lots.py                      # dernier corpus
 ```
 
-Écrit `corpus/lots/lot_ia_AAAA-MM-JJ.json` (thème `ia`) et `corpus/lots/lot_politique_AAAA-MM-JJ.json` (thèmes `immigration` et `religion` ; le thème `analogies_historiques` n'entre dans aucun lot), à coller dans l'analyseur. `texte` reste le titre + chapô ; quand le fil n'a pas de chapô, il est pris dans le premier paragraphe du texte complet (`chapo_du_texte_complet: true`). `texte_complet` n'est gardé que pour les articles `complet` ; `n_mots` compte les mots de `texte`. Les articles en `echec` et les doublons (même lien ou même titre) sont écartés, ainsi que, dans les deux lots, les articles de score inférieur à 2 (ceux dont `complet.py` ne récupère pas le texte). Le script affiche le nombre d'articles par lot et par source.
+Écrit `corpus/lots/lot_ia_AAAA-MM-JJ.json` (thème `ia`) et `corpus/lots/lot_politique_AAAA-MM-JJ.json` (thèmes `immigration` et `religion` ; le thème `analogies_historiques` n'entre dans aucun lot), à coller dans l'analyseur. `texte` reste le titre + chapô ; quand le fil n'a pas de chapô, il est pris dans le premier paragraphe du texte complet (`chapo_du_texte_complet: true`). `texte_complet` n'est gardé que pour les articles `complet` ; `n_mots` compte les mots de `texte`. Les articles en `echec` et les doublons (même lien ou même titre) sont écartés, ainsi que les articles de score inférieur à 2 dans le lot IA et inférieur à 1 dans le lot politique (ses articles de score 1 n'ont que le titre et le chapô, `complet.py` ne récupérant le texte qu'à partir d'un score de 2). Le script affiche le nombre d'articles par lot et par source.
 
 ## Automatisation
 
