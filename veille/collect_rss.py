@@ -206,6 +206,7 @@ def main():
                 "source": f["nom"],
                 "categorie": f["categorie"],
                 "orientation": f.get("orientation", ""),
+                "degre": f.get("degre", ""),
                 "langue": f["langue"],
                 "date": a["date"],
                 "lien": a["lien"],
