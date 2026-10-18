@@ -14,8 +14,9 @@ répète pas le titre (l'article porte alors chapo_du_texte_complet: true).
 Sont écartés les articles en « echec », les doublons (même lien ou même titre
 dans un lot) et les articles de score trop faible : inférieur à 2 pour le lot
 ia, à 1 pour le lot politique (dont les articles de score 1 n'ont pas de texte
-complet, complet.py ne les traitant pas). Chaque source garde au plus 5
-articles par lot, ceux de meilleur score.
+complet, complet.py ne les traitant pas). Chaque source garde au plus 6
+articles dans le lot ia et 3 dans le lot politique (groupe témoin), ceux de
+meilleur score.
 Un article qui touche les deux côtés figure dans les deux lots.
 
 Usage :
@@ -31,9 +32,8 @@ from pathlib import Path
 
 from collect_rss import SORTIE
 
-# nom du lot : (thèmes retenus, score minimal)
-LOTS = {"ia": ({"ia"}, 2), "politique": ({"immigration", "religion", "mouvements_sociaux"}, 1)}
-PAR_SOURCE = 5   # au plus N articles par source dans un lot, les mieux notés
+# nom du lot : (thèmes retenus, score minimal, articles par source au plus, les mieux notés)
+LOTS = {"ia": ({"ia"}, 2, 6), "politique": ({"immigration", "religion", "mouvements_sociaux"}, 1, 3)}
 
 
 def titre(a):
@@ -78,7 +78,7 @@ def main():
 
     dossier = SORTIE / "lots"
     dossier.mkdir(exist_ok=True)
-    for nom, (themes, score_min) in LOTS.items():
+    for nom, (themes, score_min, par_source_max) in LOTS.items():
         lot, vus, doublons, faibles = [], set(), [], 0
         for a in articles:
             if a.get("statut_texte") == "echec" or not themes & set(a["themes"]):
@@ -104,7 +104,7 @@ def main():
         for b in lot:
             par_source[b["source"]].append(b)
         gardes = {id(b) for bs in par_source.values()
-                  for b in sorted(bs, key=lambda b: -b.get("score", 0))[:PAR_SOURCE]}
+                  for b in sorted(bs, key=lambda b: -b.get("score", 0))[:par_source_max]}
         plafonnes = collections.Counter(b["source"] for b in lot if id(b) not in gardes)
         lot = [b for b in lot if id(b) in gardes]
 
@@ -118,7 +118,7 @@ def main():
         if faibles:
             print(f"  {faibles} article(s) de score < {score_min} écartés")
         if plafonnes:
-            print(f"  {sum(plafonnes.values())} article(s) au-delà de {PAR_SOURCE} par source écartés "
+            print(f"  {sum(plafonnes.values())} article(s) au-delà de {par_source_max} par source écartés "
                   f"({', '.join(f'{s} {n}' for s, n in plafonnes.most_common())})")
         emprunts = sum(1 for a in lot if a.get("chapo_du_texte_complet"))
         if emprunts:

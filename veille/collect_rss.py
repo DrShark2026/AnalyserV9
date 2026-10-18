@@ -197,6 +197,9 @@ def main():
                         trouves.append(th)
                         mots.append(mot)
             n_titre, n_resume = occurrences(zones["titre"]), occurrences(zones["resume"])
+            par_defaut = not trouves and bool(f.get("theme_defaut"))
+            if par_defaut:
+                trouves.append(f["theme_defaut"])
             if not trouves and not args.tous:
                 continue
             mnemoniques = sorted(m for m, rx in mnemo.get(f["langue"], []) if rx.search(titre_norm) or rx.search(resume_norm))
@@ -207,6 +210,7 @@ def main():
                 "categorie": f["categorie"],
                 "orientation": f.get("orientation", ""),
                 "degre": f.get("degre", ""),
+                "posture_ia": f.get("posture_ia", ""),
                 "langue": f["langue"],
                 "date": a["date"],
                 "lien": a["lien"],
@@ -214,6 +218,7 @@ def main():
                 "mots_reperes": sorted(set(mots)),
                 "score": 2 * n_titre + n_resume,
                 "dans_titre": n_titre > 0,
+                "theme_par_defaut": par_defaut,
                 "mnemoniques_collecte": mnemoniques,
                 "texte": a["titre"] + ("\n\n" + a["resume"] if a["resume"] else ""),
                 "verite_terrain": None,
