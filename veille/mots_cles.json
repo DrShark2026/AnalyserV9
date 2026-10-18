@@ -1,7 +1,7 @@
 {
   "_note": "Un article est retenu si son titre ou son résumé contient au moins un mot d'un thème (sans tenir compte des majuscules ni des accents). Les mots sont cherchés entiers, au pluriel ou au féminin près : 'réfugié' prend 'réfugiés' et 'réfugiée', pas 'se réfugier'. '_exclusions' : par thème, expressions dans lesquelles un mot du thème ne compte pas. Ajoute ou retire des mots librement. 'mnemoniques' n'est pas un thème : ces mots ne font pas retenir un article, ils sont seulement relevés dans le champ 'mnemoniques_collecte' des articles (4 lettres ou moins : mot exact, pour que 'ment' ne prenne pas 'mentionne').",
   "_exclusions": {
-    "religion": ["Université catholique", "Institut catholique"]
+    "religion": ["Université catholique", "Institut catholique", "lève le voile", "lever le voile", "levé le voile", "lèvent le voile"]
   },
   "immigration": {
     "fr": ["immigration", "immigré", "migrant", "migratoire", "étranger", "sans-papiers", "clandestin", "régularisation", "expulsion", "OQTF", "droit d'asile", "demandeur d'asile", "remigration", "regroupement familial", "submersion", "appel d'air", "réfugié", "titre de séjour", "naturalisation", "frontière"],
@@ -18,6 +18,10 @@
   "analogies_historiques": {
     "fr": ["Pétain", "Vichy", "Munich", "collabo", "années 30", "années 1930", "années trente", "Weimar", "Chamberlain", "appeasement"],
     "en": ["Pétain", "Vichy", "Munich", "collaborationist", "Nazi collaborator", "1930s", "Weimar", "Chamberlain", "appeasement"]
+  },
+  "mouvements_sociaux": {
+    "fr": ["manifestation", "manifestant", "cortège", "gilets jaunes", "lycéens", "mobilisation", "grève", "black bloc", "casseurs", "ultragauche", "émeutiers", "interpellations", "convergence des luttes", "maintien de l’ordre", "maintien de l'ordre", "lacrymogène"],
+    "en": ["protest", "protesters", "demonstration", "rioters", "riot", "strike", "yellow vests", "black bloc", "tear gas", "crackdown"]
   },
   "mnemoniques": {
     "fr": ["réfléchit", "réflexion", "comprend", "pense", "raisonne", "hallucine", "hallucination", "veut", "décide", "conscience", "ment"],

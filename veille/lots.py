@@ -4,7 +4,7 @@
 Prend le dernier corpus/veille_*.json et écrit deux lots, prêts à coller
 dans l'analyseur :
     corpus/lots/lot_ia_AAAA-MM-JJ.json          thème ia
-    corpus/lots/lot_politique_AAAA-MM-JJ.json   thèmes immigration et religion
+    corpus/lots/lot_politique_AAAA-MM-JJ.json   thèmes immigration, religion et mouvements_sociaux
 
 Chaque article garde ses champs ; « texte » reste le titre + chapô (c'est lui
 que l'analyseur lit), « texte_complet » n'est gardé que si statut_texte vaut
@@ -31,7 +31,7 @@ from pathlib import Path
 from collect_rss import SORTIE
 
 # nom du lot : (thèmes retenus, score minimal)
-LOTS = {"ia": ({"ia"}, 2), "politique": ({"immigration", "religion"}, 1)}
+LOTS = {"ia": ({"ia"}, 2), "politique": ({"immigration", "religion", "mouvements_sociaux"}, 1)}
 
 
 def titre(a):

@@ -1,6 +1,6 @@
 # Veille RSS
 
-Récupère chaque jour les articles de presse française et américaine qui parlent d'immigration, de religion, d'intelligence artificielle ou qui recourent à des analogies historiques (Pétain, Vichy, Munich, Weimar…) (presse, sites tech et blogs d'entreprises d'IA), et les range au format de l'analyseur.
+Récupère chaque jour les articles de presse française et américaine qui parlent d'immigration, de religion, de mouvements sociaux, d'intelligence artificielle ou qui recourent à des analogies historiques (Pétain, Vichy, Munich, Weimar…) (presse, sites tech et blogs d'entreprises d'IA), et les range au format de l'analyseur.
 
 ## Lancer
 
@@ -19,7 +19,7 @@ Le champ `mnemoniques_collecte` relève les verbes et noms qui prêtent à l'IA 
 ## Régler
 
 - `feeds.json` : la liste des fils. Ajouter une ligne pour un nouveau fil, ou mettre `"actif": false` pour en couper un. Le champ `orientation` est vide : à remplir soi-même si on veut équilibrer les camps.
-- `mots_cles.json` : les mots qui font retenir un article, par thème et par langue. Thèmes : `immigration`, `religion`, `ia`, `analogies_historiques`. Les mots sont cherchés entiers, au pluriel ou au féminin près (pour les mots de plus de 3 lettres) : `réfugié` prend `réfugiés` et `réfugiée`, pas « se réfugier » ; `collabo` ne prend plus `collaboration`. Dans une expression, chaque mot peut s'accorder (`titre de séjour` prend `titres de séjour`). `Munich` prend toujours le Bayern. `_exclusions` liste, par thème, les expressions où un mot ne compte pas : « catholique » est ignoré dans « Université catholique » et « Institut catholique ».
+- `mots_cles.json` : les mots qui font retenir un article, par thème et par langue. Thèmes : `immigration`, `religion`, `mouvements_sociaux`, `ia`, `analogies_historiques`. Les mots sont cherchés entiers, au pluriel ou au féminin près (pour les mots de plus de 3 lettres) : `réfugié` prend `réfugiés` et `réfugiée`, pas « se réfugier » ; `collabo` ne prend plus `collaboration`. Dans une expression, chaque mot peut s'accorder (`titre de séjour` prend `titres de séjour`). `Munich` prend toujours le Bayern. `_exclusions` liste, par thème, les expressions où un mot ne compte pas : « catholique » est ignoré dans « Université catholique » et « Institut catholique ».
 
 ## Limites
 
@@ -52,7 +52,7 @@ La recherche tient compte des majuscules (sinon `\bSI\b` prendrait « si ») : `
 python3 lots.py                      # dernier corpus
 ```
 
-Écrit `corpus/lots/lot_ia_AAAA-MM-JJ.json` (thème `ia`) et `corpus/lots/lot_politique_AAAA-MM-JJ.json` (thèmes `immigration` et `religion` ; le thème `analogies_historiques` n'entre dans aucun lot), à coller dans l'analyseur. `texte` reste le titre + chapô ; quand le fil n'a pas de chapô, il est pris dans le premier paragraphe du texte complet (`chapo_du_texte_complet: true`). `texte_complet` n'est gardé que pour les articles `complet` ; `n_mots` compte les mots de `texte`. Les articles en `echec` et les doublons (même lien ou même titre) sont écartés, ainsi que les articles de score inférieur à 2 dans le lot IA et inférieur à 1 dans le lot politique (ses articles de score 1 n'ont que le titre et le chapô, `complet.py` ne récupérant le texte qu'à partir d'un score de 2). Le script affiche le nombre d'articles par lot et par source.
+Écrit `corpus/lots/lot_ia_AAAA-MM-JJ.json` (thème `ia`) et `corpus/lots/lot_politique_AAAA-MM-JJ.json` (thèmes `immigration`, `religion` et `mouvements_sociaux` ; le thème `analogies_historiques` n'entre dans aucun lot), à coller dans l'analyseur. `texte` reste le titre + chapô ; quand le fil n'a pas de chapô, il est pris dans le premier paragraphe du texte complet (`chapo_du_texte_complet: true`). `texte_complet` n'est gardé que pour les articles `complet` ; `n_mots` compte les mots de `texte`. Les articles en `echec` et les doublons (même lien ou même titre) sont écartés, ainsi que les articles de score inférieur à 2 dans le lot IA et inférieur à 1 dans le lot politique (ses articles de score 1 n'ont que le titre et le chapô, `complet.py` ne récupérant le texte qu'à partir d'un score de 2). Le script affiche le nombre d'articles par lot et par source.
 
 ## Automatisation
 
