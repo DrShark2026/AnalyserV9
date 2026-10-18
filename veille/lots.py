@@ -14,7 +14,8 @@ répète pas le titre (l'article porte alors chapo_du_texte_complet: true).
 Sont écartés les articles en « echec », les doublons (même lien ou même titre
 dans un lot) et les articles de score trop faible : inférieur à 2 pour le lot
 ia, à 1 pour le lot politique (dont les articles de score 1 n'ont pas de texte
-complet, complet.py ne les traitant pas).
+complet, complet.py ne les traitant pas). Chaque source garde au plus 5
+articles par lot, ceux de meilleur score.
 Un article qui touche les deux côtés figure dans les deux lots.
 
 Usage :
@@ -32,6 +33,7 @@ from collect_rss import SORTIE
 
 # nom du lot : (thèmes retenus, score minimal)
 LOTS = {"ia": ({"ia"}, 2), "politique": ({"immigration", "religion", "mouvements_sociaux"}, 1)}
+PAR_SOURCE = 5   # au plus N articles par source dans un lot, les mieux notés
 
 
 def titre(a):
@@ -98,6 +100,14 @@ def main():
             b["n_mots"] = len(b["texte"].split())
             lot.append(b)
 
+        par_source = collections.defaultdict(list)
+        for b in lot:
+            par_source[b["source"]].append(b)
+        gardes = {id(b) for bs in par_source.values()
+                  for b in sorted(bs, key=lambda b: -b.get("score", 0))[:PAR_SOURCE]}
+        plafonnes = collections.Counter(b["source"] for b in lot if id(b) not in gardes)
+        lot = [b for b in lot if id(b) in gardes]
+
         sortie = dossier / f"lot_{nom}_{jour}.json"
         sortie.write_text(json.dumps(lot, ensure_ascii=False, indent=2), "utf-8")
         statuts = collections.Counter(a.get("statut_texte", "non traité") for a in lot)
@@ -107,6 +117,9 @@ def main():
             print(f"  {source:<40} {n:>3}")
         if faibles:
             print(f"  {faibles} article(s) de score < {score_min} écartés")
+        if plafonnes:
+            print(f"  {sum(plafonnes.values())} article(s) au-delà de {PAR_SOURCE} par source écartés "
+                  f"({', '.join(f'{s} {n}' for s, n in plafonnes.most_common())})")
         emprunts = sum(1 for a in lot if a.get("chapo_du_texte_complet"))
         if emprunts:
             print(f"  {emprunts} chapô(s) pris dans le texte complet")

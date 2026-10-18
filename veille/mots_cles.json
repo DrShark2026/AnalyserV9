@@ -20,7 +20,7 @@
     "en": ["Pétain", "Vichy", "Munich", "collaborationist", "Nazi collaborator", "1930s", "Weimar", "Chamberlain", "appeasement"]
   },
   "mouvements_sociaux": {
-    "fr": ["manifestation", "manifestant", "cortège", "gilets jaunes", "lycéens", "mobilisation", "grève", "black bloc", "casseurs", "ultragauche", "émeutiers", "interpellations", "convergence des luttes", "maintien de l’ordre", "maintien de l'ordre", "lacrymogène"],
+    "fr": ["manifestation", "manifestant", "cortège", "gilets jaunes", "lycéen", "lycéens", "mobilisation", "grève", "black bloc", "casseurs", "ultragauche", "émeutiers", "interpellations", "convergence des luttes", "maintien de l’ordre", "maintien de l'ordre", "lacrymogène"],
     "en": ["protest", "protesters", "demonstration", "rioters", "riot", "strike", "yellow vests", "black bloc", "tear gas", "crackdown"]
   },
   "mnemoniques": {
