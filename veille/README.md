@@ -18,7 +18,7 @@ Le champ `mnemoniques_collecte` relève les verbes et noms qui prêtent à l'IA 
 
 ## Régler
 
-- `feeds.json` : la liste des fils. Ajouter une ligne pour un nouveau fil, ou mettre `"actif": false` pour en couper un. Le champ `orientation` est vide : à remplir soi-même si on veut équilibrer les camps.
+- `feeds.json` : la liste des fils. Ajouter une ligne pour un nouveau fil, ou mettre `"actif": false` pour en couper un. Le champ `orientation` (`gauche`, `centre gauche`, `centre`, `droite`) et le champ `degre` (`modere` ou `radical`) situent chaque fil ; ils restent vides pour les fils tech, les blogs d'entreprise et ceux qu'on n'a pas classés.
 - `mots_cles.json` : les mots qui font retenir un article, par thème et par langue. Thèmes : `immigration`, `religion`, `mouvements_sociaux`, `ia`, `analogies_historiques`. Les mots sont cherchés entiers, au pluriel ou au féminin près (pour les mots de plus de 3 lettres) : `réfugié` prend `réfugiés` et `réfugiée`, pas « se réfugier » ; `collabo` ne prend plus `collaboration`. Dans une expression, chaque mot peut s'accorder (`titre de séjour` prend `titres de séjour`). `Munich` prend toujours le Bayern. `_exclusions` liste, par thème, les expressions où un mot ne compte pas : « catholique » est ignoré dans « Université catholique » et « Institut catholique ».
 
 ## Limites
