@@ -25,11 +25,11 @@
     {"nom": "Fox News – Politics", "langue": "en", "categorie": "information", "orientation": "droite", "degre": "modere", "url": "https://moxie.foxnews.com/google-publisher/politics.xml", "actif": true},
     {"nom": "Politico – Politics", "langue": "en", "categorie": "information", "orientation": "", "degre": "", "url": "https://rss.politico.com/politics-news.xml", "actif": true},
     {"nom": "The Nation – Politics", "langue": "en", "categorie": "opinion", "orientation": "gauche", "degre": "modere", "url": "https://www.thenation.com/subject/politics/feed/", "actif": true},
-    {"nom": "Jacobin", "langue": "en", "categorie": "opinion", "orientation": "gauche", "degre": "modere", "url": "https://jacobin.com/feed/", "actif": true},
+    {"nom": "Jacobin", "langue": "en", "categorie": "opinion", "orientation": "gauche", "degre": "radical", "url": "https://jacobin.com/feed/", "actif": true},
     {"nom": "Mother Jones – Politics", "langue": "en", "categorie": "information", "orientation": "gauche", "degre": "modere", "url": "https://www.motherjones.com/politics/feed/", "actif": true},
     {"nom": "National Review", "langue": "en", "categorie": "opinion", "orientation": "droite", "degre": "modere", "url": "https://www.nationalreview.com/feed/", "actif": true},
     {"nom": "The Federalist", "langue": "en", "categorie": "opinion", "orientation": "droite", "degre": "modere", "url": "https://thefederalist.com/feed/", "actif": true},
-    {"nom": "Breitbart – Politics", "langue": "en", "categorie": "information", "orientation": "droite", "degre": "modere", "url": "https://www.breitbart.com/politics/feed/", "actif": true},
+    {"nom": "Breitbart – Politics", "langue": "en", "categorie": "information", "orientation": "droite", "degre": "radical", "url": "https://www.breitbart.com/politics/feed/", "actif": true},
 
     {"nom": "Le Monde – Pixels", "langue": "fr", "categorie": "tech", "orientation": "", "degre": "", "url": "https://www.lemonde.fr/pixels/rss_full.xml", "actif": true},
     {"nom": "Numerama", "langue": "fr", "categorie": "tech", "orientation": "", "degre": "", "url": "https://www.numerama.com/feed/", "actif": true},
