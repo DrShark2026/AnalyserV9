@@ -20,6 +20,7 @@ Aucune dépendance : uniquement la bibliothèque standard de Python.
 import argparse
 import datetime as dt
 import email.utils
+import gzip
 import hashlib
 import html
 import json
@@ -104,10 +105,18 @@ def occurrences(spans):
 
 # ---------- lecture des fils ----------
 
+def lire_reponse(r):
+    """Corps de la réponse ; certains serveurs (DeepMind) l'envoient en gzip sans qu'on le demande."""
+    brut = r.read()
+    if r.headers.get("Content-Encoding", "").lower() == "gzip":
+        brut = gzip.decompress(brut)
+    return brut
+
+
 def telecharger(url, timeout=20):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+        return lire_reponse(r)
 
 
 def local(tag):

@@ -44,7 +44,7 @@ from urllib.parse import urlsplit
 
 import trafilatura
 
-from collect_rss import SORTIE, UA
+from collect_rss import SORTIE, UA, lire_reponse
 from lots import pour_un_lot
 
 DELAI_MIN = 3.0          # secondes entre deux requêtes, tous sites confondus
@@ -78,7 +78,7 @@ def telecharger(url, delai=DELAI_MIN, timeout=20):
     attendre(delai)
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "fr,en;q=0.8"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        brut = r.read()
+        brut = lire_reponse(r)
         return brut.decode(r.headers.get_content_charset() or "utf-8", errors="replace")
 
 
