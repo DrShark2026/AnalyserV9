@@ -142,7 +142,7 @@ def texte_de(el, *noms):
 
 
 def lire_fil(octets):
-    """Renvoie une liste de dicts {titre, lien, date, resume} pour RSS 2.0 ou Atom."""
+    """Renvoie une liste de dicts {titre, lien, date, resume, auteur} pour RSS 2.0 ou Atom."""
     racine = ET.fromstring(octets)
     items = [e for e in racine.iter() if local(e.tag) in ("item", "entry")]
     articles = []
@@ -152,6 +152,7 @@ def lire_fil(octets):
             "lien": texte_de(it, "link", "guid", "id"),
             "date": date_iso(texte_de(it, "pubDate", "published", "updated", "date")),
             "resume": nettoyer_html(texte_de(it, "description", "summary", "encoded", "content")),
+            "auteur": texte_de(it, "creator", "author"),
         })
     return articles
 
@@ -186,6 +187,8 @@ def main():
         gardes = 0
         for a in articles:
             if not a["lien"] or not a["titre"]:
+                continue
+            if a["auteur"] in f.get("exclure_auteurs", []):
                 continue
             if limite and a["date"] and a["date"] < limite:
                 continue
