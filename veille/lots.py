@@ -13,7 +13,9 @@ pas de chapô, il est pris dans le premier paragraphe du texte complet qui ne
 répète pas le titre (l'article porte alors chapo_du_texte_complet: true).
 Sont écartés les articles en « echec », les doublons (même lien ou même titre
 dans un lot) et les articles de score trop faible : inférieur à 2 pour le lot
-ia, à 1 pour le lot politique. La règle de sélection d'un lot est dans
+ia, à 1 pour le lot politique ; dans le lot ia, les articles des sources à
+posture_ia renseignée sont exemptés de ce seuil, sauf ceux qui n'ont le thème
+que par défaut (theme_par_defaut: true, aucun mot repère). La règle de sélection d'un lot est dans
 candidat(), que complet.py reprend : tout article qui peut entrer dans un lot
 a son texte complet cherché. Chaque source garde au plus 6
 articles dans le lot ia et 3 dans le lot politique (groupe témoin), ceux de
@@ -33,8 +35,9 @@ from pathlib import Path
 
 from collect_rss import SORTIE
 
-# nom du lot : (thèmes retenus, score minimal, articles par source au plus, les mieux notés)
-LOTS = {"ia": ({"ia"}, 2, 6), "politique": ({"immigration", "religion", "mouvements_sociaux"}, 1, 3)}
+# nom du lot : (thèmes retenus, score minimal, articles par source au plus, les mieux notés,
+#               sources à posture_ia renseignée exemptées du score minimal, hors thème par défaut)
+LOTS = {"ia": ({"ia"}, 2, 6, True), "politique": ({"immigration", "religion", "mouvements_sociaux"}, 1, 3, False)}
 
 
 def titre(a):
@@ -57,14 +60,18 @@ def avec_chapo(a):
     return a["texte"], False
 
 
-def candidat(a, themes, score_min):
+def candidat(a, themes, score_min, exempte_posture_ia):
     """Règle de sélection d'un lot, avant l'écart des echecs, des doublons et du plafond par source."""
-    return bool(themes & set(a["themes"])) and a.get("score", 0) >= score_min
+    if not themes & set(a["themes"]):
+        return False
+    if a.get("score", 0) >= score_min:
+        return True
+    return exempte_posture_ia and bool(a.get("posture_ia")) and not a.get("theme_par_defaut")
 
 
 def pour_un_lot(a):
     """Vrai si l'article peut entrer dans au moins un lot : complet.py cherche alors son texte."""
-    return any(candidat(a, themes, score_min) for themes, score_min, _ in LOTS.values())
+    return any(candidat(a, themes, score_min, exempte) for themes, score_min, _, exempte in LOTS.values())
 
 
 def main():
@@ -89,12 +96,12 @@ def main():
 
     dossier = SORTIE / "lots"
     dossier.mkdir(exist_ok=True)
-    for nom, (themes, score_min, par_source_max) in LOTS.items():
+    for nom, (themes, score_min, par_source_max, exempte) in LOTS.items():
         lot, vus, doublons, faibles = [], set(), [], 0
         for a in articles:
             if a.get("statut_texte") == "echec" or not themes & set(a["themes"]):
                 continue
-            if not candidat(a, themes, score_min):
+            if not candidat(a, themes, score_min, exempte):
                 faibles += 1
                 continue
             cles = {("lien", a["lien"]), ("titre", cle_titre(a))}
@@ -128,6 +135,9 @@ def main():
             print(f"  {source:<40} {n:>3}")
         if faibles:
             print(f"  {faibles} article(s) de score < {score_min} écartés")
+        exemptes = sum(1 for a in lot if a.get("score", 0) < score_min)
+        if exemptes:
+            print(f"  {exemptes} article(s) de score < {score_min} gardés (source à posture_ia)")
         if plafonnes:
             print(f"  {sum(plafonnes.values())} article(s) au-delà de {par_source_max} par source écartés "
                   f"({', '.join(f'{s} {n}' for s, n in plafonnes.most_common())})")
