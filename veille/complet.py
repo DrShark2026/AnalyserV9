@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Texte complet des articles retenus par la veille.
 
-Prend le dernier corpus/veille_*.json, ouvre le lien de chaque article dont
-le score est d'au moins 2, extrait le corps de l'article avec trafilatura et
-ajoute deux champs :
+Prend le dernier corpus/veille_*.json, ouvre le lien de chaque article qui
+peut entrer dans un lot (règles de lots.py : thèmes et score minimal de
+chaque lot, avant l'écart des doublons et le plafond par source), extrait
+le corps de l'article avec trafilatura et ajoute deux champs :
     texte_complet  le corps de l'article (None en cas d'échec)
     statut_texte   complet | partiel | echec
 
@@ -22,8 +23,8 @@ traité, quel que soit son statut, ne l'est plus aux passages suivants ; seul
 les 3 essais ont buté sur une erreur passagère).
 
 Usage :
-    .venv/bin/python complet.py                  # dernier fichier, score >= 2
-    .venv/bin/python complet.py --score 1        # seuil différent
+    .venv/bin/python complet.py                  # dernier fichier, articles des lots
+    .venv/bin/python complet.py --score 1        # seuil unique au lieu des règles des lots
     .venv/bin/python complet.py --refaire        # reprend aussi les articles déjà traités
     .venv/bin/python complet.py corpus/veille_2026-10-12.json
 
@@ -44,6 +45,7 @@ from urllib.parse import urlsplit
 import trafilatura
 
 from collect_rss import SORTIE, UA
+from lots import pour_un_lot
 
 DELAI_MIN = 3.0          # secondes entre deux requêtes, tous sites confondus
 MOTS_COMPLET = 150       # en dessous, le texte extrait est jugé partiel
@@ -162,7 +164,7 @@ def ecrire(fichier, articles):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("fichier", nargs="?", help="corpus à compléter (défaut : le dernier veille_*.json)")
-    ap.add_argument("--score", type=int, default=2, help="score minimal (défaut : 2)")
+    ap.add_argument("--score", type=int, help="score minimal unique (défaut : les règles des lots)")
     ap.add_argument("--refaire", action="store_true", help="reprendre aussi les articles déjà traités")
     args = ap.parse_args()
 
@@ -180,7 +182,8 @@ def main():
     traites = 0
     for a in articles:
         titre = a["texte"].partition("\n\n")[0][:70]
-        if a.get("score", 0) < args.score:
+        voulu = pour_un_lot(a) if args.score is None else a.get("score", 0) >= args.score
+        if not voulu:
             continue
         if "statut_texte" in a and not args.refaire:
             print(f"  {'déjà fait':<9} {a['source'][:24]:<24} {titre}")

@@ -13,8 +13,9 @@ pas de chapô, il est pris dans le premier paragraphe du texte complet qui ne
 répète pas le titre (l'article porte alors chapo_du_texte_complet: true).
 Sont écartés les articles en « echec », les doublons (même lien ou même titre
 dans un lot) et les articles de score trop faible : inférieur à 2 pour le lot
-ia, à 1 pour le lot politique (dont les articles de score 1 n'ont pas de texte
-complet, complet.py ne les traitant pas). Chaque source garde au plus 6
+ia, à 1 pour le lot politique. La règle de sélection d'un lot est dans
+candidat(), que complet.py reprend : tout article qui peut entrer dans un lot
+a son texte complet cherché. Chaque source garde au plus 6
 articles dans le lot ia et 3 dans le lot politique (groupe témoin), ceux de
 meilleur score.
 Un article qui touche les deux côtés figure dans les deux lots.
@@ -56,6 +57,16 @@ def avec_chapo(a):
     return a["texte"], False
 
 
+def candidat(a, themes, score_min):
+    """Règle de sélection d'un lot, avant l'écart des echecs, des doublons et du plafond par source."""
+    return bool(themes & set(a["themes"])) and a.get("score", 0) >= score_min
+
+
+def pour_un_lot(a):
+    """Vrai si l'article peut entrer dans au moins un lot : complet.py cherche alors son texte."""
+    return any(candidat(a, themes, score_min) for themes, score_min, _ in LOTS.values())
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("fichier", nargs="?", help="corpus de veille (défaut : le dernier veille_*.json)")
@@ -83,7 +94,7 @@ def main():
         for a in articles:
             if a.get("statut_texte") == "echec" or not themes & set(a["themes"]):
                 continue
-            if a.get("score", 0) < score_min:
+            if not candidat(a, themes, score_min):
                 faibles += 1
                 continue
             cles = {("lien", a["lien"]), ("titre", cle_titre(a))}
