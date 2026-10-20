@@ -7,7 +7,8 @@ l'analyseur (id, source, categorie, langue, date, lien, themes, texte).
 Chaque article porte aussi un score (passages repérés, ceux du titre
 comptent double), dans_titre (un mot-clé figure dans le titre) et
 mnemoniques_collecte (les mots de la liste « mnemoniques » trouvés, sans effet sur la
-sélection).
+sélection). Les articles d'un fil à « texte_complet »: false portent
+statut_texte « resume » : complet.py ne cherche pas leur texte.
 
 Usage :
     python3 collect_rss.py                 # collecte normale
@@ -195,6 +196,8 @@ def main():
             cle = hashlib.sha1(a["lien"].encode()).hexdigest()[:16]
             if cle in registre:
                 continue
+            if sans_accents(a["resume"]) == sans_accents(a["titre"]):
+                a["resume"] = ""     # fil sans chapô qui répète le titre (Anthropic) : il compterait deux fois
             titre_norm, resume_norm = sans_accents(a["titre"]), sans_accents(a["resume"])
             trouves, mots, zones = [], [], {"titre": [], "resume": []}
             for th, langs in motifs.items():
@@ -216,7 +219,7 @@ def main():
                 continue
             mnemoniques = sorted(m for m, rx in mnemo.get(f["langue"], []) if rx.search(titre_norm) or rx.search(resume_norm))
             gardes += 1
-            retenus.append({
+            article = {
                 "id": f"{aujourdhui.isoformat()}-{cle}",
                 "source": f["nom"],
                 "categorie": f["categorie"],
@@ -234,7 +237,10 @@ def main():
                 "mnemoniques_collecte": mnemoniques,
                 "texte": a["titre"] + ("\n\n" + a["resume"] if a["resume"] else ""),
                 "verite_terrain": None,
-            })
+            }
+            if f.get("texte_complet") is False:
+                article["statut_texte"] = "resume"     # le site refuse le texte complet : complet.py ne le cherche pas
+            retenus.append(article)
             registre[cle] = {"lien": a["lien"], "vu_le": aujourdhui.isoformat()}
         bilan.append((f["nom"], len(articles), gardes))
 

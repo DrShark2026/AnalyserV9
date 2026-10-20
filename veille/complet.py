@@ -7,6 +7,9 @@ chaque lot, avant l'écart des doublons et le plafond par source), extrait
 le corps de l'article avec trafilatura et ajoute deux champs :
     texte_complet  le corps de l'article (None en cas d'échec)
     statut_texte   complet | partiel | echec
+Les articles déjà marqués « resume » (fil à texte_complet: false dans
+feeds.json, le site refuse le texte complet) ne sont jamais ouverts, même
+avec --refaire : ils gardent le résumé du fil.
 
 Règles de politesse : robots.txt est respecté, au plus une requête toutes les
 3 secondes (davantage si le site demande un Crawl-delay), et aucune tentative
@@ -183,7 +186,7 @@ def main():
     for a in articles:
         titre = a["texte"].partition("\n\n")[0][:70]
         voulu = pour_un_lot(a) if args.score is None else a.get("score", 0) >= args.score
-        if not voulu:
+        if not voulu or a.get("statut_texte") == "resume":
             continue
         if "statut_texte" in a and not args.refaire:
             print(f"  {'déjà fait':<9} {a['source'][:24]:<24} {titre}")
