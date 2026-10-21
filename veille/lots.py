@@ -11,7 +11,9 @@ que l'analyseur lit), « texte_complet » n'est gardé que si statut_texte vaut
 « complet », et « n_mots » compte les mots de « texte ». Si le fil ne donne
 pas de chapô, il est pris dans le premier paragraphe du texte complet qui ne
 répète pas le titre (l'article porte alors chapo_du_texte_complet: true).
-Sont écartés les articles en « echec », les doublons (même lien ou même titre
+Un article en « echec » (anti-robot, robots.txt, 403, extraction vide, bandeau)
+reste dans le lot avec son résumé RSS : statut_texte y vaut « resume ».
+Sont écartés les doublons (même lien ou même titre
 dans un lot) et les articles de score trop faible : inférieur à 2 pour le lot
 ia, à 1 pour le lot politique ; dans le lot ia, les articles des sources à
 posture_ia renseignée sont exemptés de ce seuil, sauf ceux qui n'ont le thème
@@ -61,7 +63,7 @@ def avec_chapo(a):
 
 
 def candidat(a, themes, score_min, exempte_posture_ia):
-    """Règle de sélection d'un lot, avant l'écart des echecs, des doublons et du plafond par source."""
+    """Règle de sélection d'un lot, avant l'écart des doublons et du plafond par source."""
     if not themes & set(a["themes"]):
         return False
     if a.get("score", 0) >= score_min:
@@ -92,14 +94,14 @@ def main():
     print(f"{fichier.name} : {len(articles)} articles")
 
     echecs = [a for a in articles if a.get("statut_texte") == "echec"]
-    print(f"  {len(echecs)} en echec, écartés")
+    print(f"  {len(echecs)} en echec, gardés avec leur résumé RSS (statut_texte resume)")
 
     dossier = SORTIE / "lots"
     dossier.mkdir(exist_ok=True)
     for nom, (themes, score_min, par_source_max, exempte) in LOTS.items():
         lot, vus, doublons, faibles = [], set(), [], 0
         for a in articles:
-            if a.get("statut_texte") == "echec" or not themes & set(a["themes"]):
+            if not themes & set(a["themes"]):
                 continue
             if not candidat(a, themes, score_min, exempte):
                 faibles += 1
@@ -115,6 +117,8 @@ def main():
                 b["chapo_du_texte_complet"] = True
             if a.get("statut_texte") == "complet":
                 b["texte_complet"] = a["texte_complet"]
+            elif a.get("statut_texte") == "echec":
+                b["statut_texte"] = "resume"     # extraction ratée : on garde le résumé RSS de « texte »
             b["n_mots"] = len(b["texte"].split())
             lot.append(b)
 
