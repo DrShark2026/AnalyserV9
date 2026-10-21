@@ -8,7 +8,10 @@ Chaque article porte aussi un score (passages repérés, ceux du titre
 comptent double), dans_titre (un mot-clé figure dans le titre) et
 mnemoniques_collecte (les mots de la liste « mnemoniques » trouvés, sans effet sur la
 sélection). Les articles d'un fil à « texte_complet »: false portent
-statut_texte « resume » : complet.py ne cherche pas leur texte.
+statut_texte « resume » : complet.py ne cherche pas leur texte. Un article
+dont le titre ou le début du chapô contient « Sponsored », « Partner content »
+ou « Contenu sponsorisé » porte categorie « sponsorise » : il n'entre dans
+aucun lot.
 
 Usage :
     python3 collect_rss.py                 # collecte normale
@@ -102,6 +105,19 @@ def occurrences(spans):
             n += 1
         fin = max(fin, f)
     return n
+
+
+# « partner content » et « contenu sponsorisé » ne servent qu'à étiqueter ; « sponsored » seulement en
+# étiquette (en tête, suivi de « : », « | », « ] », « ) » ou précédé de « | », « [ », « ( »),
+# pas dans « a bill sponsored by » ni « sponsored access »
+SPONSOR = re.compile(r"(?<!\w)(?:partner content|contenu sponsorise)(?!\w)"
+                     r"|^\W*sponsored(?!\w)|(?<!\w)sponsored\s*[:|\])]|[|\[(]\s*sponsored(?!\w)")
+DEBUT_RESUME = 300   # « début du texte » : les premiers caractères du chapô
+
+
+def sponsorise(titre_norm, resume_norm):
+    """Vrai si le titre ou le début du chapô (déjà sans accents ni majuscules) annonce un contenu sponsorisé."""
+    return bool(SPONSOR.search(titre_norm) or SPONSOR.search(resume_norm[:DEBUT_RESUME]))
 
 
 # ---------- lecture des fils ----------
@@ -222,7 +238,7 @@ def main():
             article = {
                 "id": f"{aujourdhui.isoformat()}-{cle}",
                 "source": f["nom"],
-                "categorie": f["categorie"],
+                "categorie": "sponsorise" if sponsorise(titre_norm, resume_norm) else f["categorie"],
                 "orientation": f.get("orientation", ""),
                 "degre": f.get("degre", ""),
                 "posture_ia": f.get("posture_ia", ""),

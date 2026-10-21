@@ -17,6 +17,10 @@ de contourner un paywall ou une protection anti-robot : une page réservée
 aux abonnés donne « partiel » (le début public), une page anti-robot « echec ».
 Si plusieurs articles d'une même source donnent exactement le même texte,
 c'est un bandeau ou une page générique, pas l'article : ils passent en « echec ».
+Un article dont le texte complet commence par une mention « Sponsored »,
+« Partner content » ou « Contenu sponsorisé » (même règle que collect_rss.py)
+passe en categorie « sponsorise » et sort des lots ; ce contrôle porte à chaque
+passage sur tous les articles qui ont un texte complet, déjà traités compris.
 
 Seules les erreurs passagères (réseau, délai dépassé, HTTP 5xx) sont retentées,
 dans le même passage, 3 essais au plus (pauses de 10 puis 30 secondes). Un 403,
@@ -47,7 +51,7 @@ from urllib.parse import urlsplit
 
 import trafilatura
 
-from collect_rss import SORTIE, UA, lire_reponse
+from collect_rss import DEBUT_RESUME, SORTIE, UA, lire_reponse, sans_accents, sponsorise
 from lots import pour_un_lot
 
 DELAI_MIN = 3.0          # secondes entre deux requêtes, tous sites confondus
@@ -158,6 +162,16 @@ def bandeaux(articles):
     return touches
 
 
+def sponsorises(articles):
+    """Articles dont le texte complet s'ouvre sur une mention de contenu sponsorisé (MIT Technology Review
+    ne la met pas dans le fil) : les passe en categorie « sponsorise »."""
+    touches = [a for a in articles if a.get("texte_complet") and a.get("categorie") != "sponsorise"
+               and sponsorise("", sans_accents(a["texte_complet"][:DEBUT_RESUME]))]
+    for a in touches:
+        a["categorie"] = "sponsorise"
+    return touches
+
+
 def ecrire(fichier, articles):
     tmp = fichier.with_suffix(".tmp")
     tmp.write_text(json.dumps(articles, ensure_ascii=False, indent=2), "utf-8")
@@ -208,6 +222,13 @@ def main():
         ecrire(fichier, articles)
         print(f"\nTexte identique dans une même source (bandeau, pas l'article) → echec :")
         for a in doublons:
+            print(f"  {a['source'][:24]:<24} {a['texte'].partition(chr(10) * 2)[0][:70]}")
+
+    marques = sponsorises(articles)
+    if marques:
+        ecrire(fichier, articles)
+        print(f"\nTexte complet annoncé comme sponsorisé → categorie sponsorise, hors des lots :")
+        for a in marques:
             print(f"  {a['source'][:24]:<24} {a['texte'].partition(chr(10) * 2)[0][:70]}")
 
     print(f"\n{traites} article(s) traité(s).")

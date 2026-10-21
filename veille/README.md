@@ -14,6 +14,8 @@ Le résultat arrive dans `corpus/veille_AAAA-MM-JJ.json`, prêt à coller dans l
 
 Chaque article indique pourquoi il a été retenu : `mots_reperes` (les mots-clés trouvés), `score` (nombre de passages repérés, ceux du titre comptent double) et `dans_titre` (vrai si un mot-clé figure dans le titre). Rien n'est exclu sur ces critères : un score de 1 sans mot dans le titre signale en général une simple mention en passant.
 
+Un article dont le titre ou le début du chapô (300 premiers caractères) contient « Sponsored », « Partner content » ou « Contenu sponsorisé » (sans tenir compte des majuscules ni des accents) porte `categorie: "sponsorise"` au lieu de la catégorie du fil. Il reste dans le corpus, mais n'entre dans aucun lot et `complet.py` ne cherche pas son texte.
+
 Le champ `mnemoniques_collecte` relève les verbes et noms qui prêtent à l'IA une activité mentale (`pense`, `comprend`, `hallucine`, `thinks`, `reasoning`…), d'après la liste `mnemoniques` de `mots_cles.json`. Il n'influe pas sur la sélection.
 
 ## Régler
@@ -33,7 +35,7 @@ python3 -m venv .venv && .venv/bin/pip install trafilatura   # une seule fois
 .venv/bin/python complet.py          # dernier corpus, articles qui peuvent entrer dans un lot
 ```
 
-Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_texte` (`complet`, `partiel` ou `echec`). Le script respecte robots.txt, espace ses requêtes d'au moins 3 secondes et ne contourne ni paywall ni protection anti-robot : un article réservé aux abonnés donne `partiel` (seul le début public est gardé), une page anti-robot donne `echec`. Si plusieurs articles d'une même source donnent le même texte, c'est un bandeau et non l'article : ils passent aussi en `echec`. Seules les erreurs passagères (réseau, délai dépassé, HTTP 5xx) sont retentées, dans le même passage, 3 essais au plus ; un 403, une page anti-robot ou un paywall ne le sont jamais. Un article déjà traité n'est pas repris aux passages suivants, sauf avec `--refaire` lancé à la main. Un échec porte `echec_passager` (vrai si les 3 essais ont buté sur une erreur passagère).
+Ouvre le lien de chaque article retenu et ajoute `texte_complet` et `statut_texte` (`complet`, `partiel` ou `echec`). Le script respecte robots.txt, espace ses requêtes d'au moins 3 secondes et ne contourne ni paywall ni protection anti-robot : un article réservé aux abonnés donne `partiel` (seul le début public est gardé), une page anti-robot donne `echec`. Si plusieurs articles d'une même source donnent le même texte, c'est un bandeau et non l'article : ils passent aussi en `echec`. Un article dont le texte complet commence par une mention de contenu sponsorisé (même règle qu'à la collecte : MIT Technology Review ne la met que dans la page) passe en `categorie: "sponsorise"` et sort des lots ; ce contrôle porte à chaque passage sur tous les articles qui ont un texte complet, déjà traités compris. Seules les erreurs passagères (réseau, délai dépassé, HTTP 5xx) sont retentées, dans le même passage, 3 essais au plus ; un 403, une page anti-robot ou un paywall ne le sont jamais. Un article déjà traité n'est pas repris aux passages suivants, sauf avec `--refaire` lancé à la main. Un échec porte `echec_passager` (vrai si les 3 essais ont buté sur une erreur passagère).
 
 ## Concordance
 

@@ -21,7 +21,8 @@ que par défaut (theme_par_defaut: true, aucun mot repère). La règle de sélec
 candidat(), que complet.py reprend : tout article qui peut entrer dans un lot
 a son texte complet cherché. Chaque source garde au plus 6
 articles dans le lot ia et 3 dans le lot politique (groupe témoin), ceux de
-meilleur score.
+meilleur score. Les articles de categorie « sponsorise » (marqués par
+collect_rss.py) n'entrent dans aucun lot, et complet.py ne cherche pas leur texte.
 Un article qui touche les deux côtés figure dans les deux lots.
 
 Usage :
@@ -64,7 +65,7 @@ def avec_chapo(a):
 
 def candidat(a, themes, score_min, exempte_posture_ia):
     """Règle de sélection d'un lot, avant l'écart des doublons et du plafond par source."""
-    if not themes & set(a["themes"]):
+    if not themes & set(a["themes"]) or a.get("categorie") == "sponsorise":
         return False
     if a.get("score", 0) >= score_min:
         return True
@@ -99,9 +100,12 @@ def main():
     dossier = SORTIE / "lots"
     dossier.mkdir(exist_ok=True)
     for nom, (themes, score_min, par_source_max, exempte) in LOTS.items():
-        lot, vus, doublons, faibles = [], set(), [], 0
+        lot, vus, doublons, faibles, sponsorises = [], set(), [], 0, 0
         for a in articles:
             if not themes & set(a["themes"]):
+                continue
+            if a.get("categorie") == "sponsorise":
+                sponsorises += 1
                 continue
             if not candidat(a, themes, score_min, exempte):
                 faibles += 1
@@ -137,6 +141,8 @@ def main():
               f"({', '.join(f'{n} {s}' for s, n in statuts.most_common())})")
         for source, n in collections.Counter(a["source"] for a in lot).most_common():
             print(f"  {source:<40} {n:>3}")
+        if sponsorises:
+            print(f"  {sponsorises} article(s) sponsorisé(s) écartés")
         if faibles:
             print(f"  {faibles} article(s) de score < {score_min} écartés")
         exemptes = sum(1 for a in lot if a.get("score", 0) < score_min)
