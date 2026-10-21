@@ -8,7 +8,9 @@ Chaque article porte aussi un score (passages repérés, ceux du titre
 comptent double), dans_titre (un mot-clé figure dans le titre) et
 mnemoniques_collecte (les mots de la liste « mnemoniques » trouvés, sans effet sur la
 sélection). Les articles d'un fil à « texte_complet »: false portent
-statut_texte « resume » : complet.py ne cherche pas leur texte. Un article
+statut_texte « resume » : complet.py ne cherche pas leur texte. Un fil qui
+porte une liste « themes » n'est cherché que pour ces thèmes ; « pays » est
+recopié dans chaque article. Un article
 dont le titre ou le début du chapô contient « Sponsored », « Partner content »
 ou « Contenu sponsorisé » porte categorie « sponsorise » : il n'entre dans
 aucun lot.
@@ -217,6 +219,8 @@ def main():
             titre_norm, resume_norm = sans_accents(a["titre"]), sans_accents(a["resume"])
             trouves, mots, zones = [], [], {"titre": [], "resume": []}
             for th, langs in motifs.items():
+                if "themes" in f and th not in f["themes"]:
+                    continue     # thème que ce fil ne cherche pas (fils hors de France : pas d'analogies historiques)
                 for mot, rx in langs.get(f["langue"], []):
                     trouve = False
                     for zone, t in (("titre", titre_norm), ("resume", resume_norm)):
@@ -239,6 +243,7 @@ def main():
                 "id": f"{aujourdhui.isoformat()}-{cle}",
                 "source": f["nom"],
                 "categorie": "sponsorise" if sponsorise(titre_norm, resume_norm) else f["categorie"],
+                "pays": f.get("pays", ""),
                 "orientation": f.get("orientation", ""),
                 "degre": f.get("degre", ""),
                 "posture_ia": f.get("posture_ia", ""),
