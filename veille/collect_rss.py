@@ -10,7 +10,9 @@ mnemoniques_collecte (les mots de la liste « mnemoniques » trouvés, sans effe
 sélection). Les articles d'un fil à « texte_complet »: false portent
 statut_texte « resume » : complet.py ne cherche pas leur texte. Un fil qui
 porte une liste « themes » n'est cherché que pour ces thèmes ; « pays » est
-recopié dans chaque article. Un article
+recopié dans chaque article. « exclure_pres_de » écarte un mot repère du fil
+quand un des mots donnés est à PROCHE mots ou moins (« lycéen » près de
+« Parcoursup » chez Europe 1). Un article
 dont le titre ou le début du chapô contient « Sponsored », « Partner content »
 ou « Contenu sponsorisé » porte categorie « sponsorise » : il n'entre dans
 aucun lot.
@@ -41,6 +43,7 @@ ICI = Path(__file__).resolve().parent
 SORTIE = ICI / "corpus"
 REGISTRE = ICI / "registre.json"
 UA = "Mozilla/5.0 (veille-analyseur-grize; usage de recherche)"
+PROCHE = 8   # « près de » pour exclure_pres_de : nombre de mots au plus entre les deux
 
 
 # ---------- utilitaires ----------
@@ -97,6 +100,15 @@ def mot_entier(mot, exact_max=3):
 def hors_exclusions(spans, exclusions):
     """Garde les passages qui ne tombent pas dans une expression exclue (« catholique » dans « Université catholique »)."""
     return [(d, f) for d, f in spans if not any(ed <= d and f <= ef for ed, ef in exclusions)]
+
+
+def loin_de(spans, t, regles):
+    """Garde les passages qui ne sont pas près d'un mot écartant (« lycéens » près de « Parcoursup »)."""
+    def pres(d, f, voisins):
+        return any(len(re.findall(r"\w+", t[min(f, vd):max(d, vf)])) <= PROCHE
+                   for rx_v in voisins for vd, vf in (m.span() for m in rx_v.finditer(t)))
+    return [(d, f) for d, f in spans
+            if not any(rx.fullmatch(t[d:f]) and pres(d, f, voisins) for rx, voisins in regles)]
 
 
 def occurrences(spans):
@@ -204,6 +216,7 @@ def main():
             echecs.append((f["nom"], str(e)[:120]))
             continue
         gardes = 0
+        pres_de = [(mot_entier(m), [mot_entier(v) for v in voisins]) for m, voisins in f.get("exclure_pres_de", {}).items()]
         for a in articles:
             if not a["lien"] or not a["titre"]:
                 continue
@@ -225,7 +238,7 @@ def main():
                     trouve = False
                     for zone, t in (("titre", titre_norm), ("resume", resume_norm)):
                         exclus = [e.span() for rx_e in exclusions.get(th, []) for e in rx_e.finditer(t)]
-                        spans = hors_exclusions([m.span() for m in rx.finditer(t)], exclus)
+                        spans = loin_de(hors_exclusions([m.span() for m in rx.finditer(t)], exclus), t, pres_de)
                         zones[zone] += spans
                         trouve = trouve or bool(spans)
                     if trouve:
