@@ -11,8 +11,8 @@ sélection). Les articles d'un fil à « texte_complet »: false portent
 statut_texte « resume » : complet.py ne cherche pas leur texte. Un fil qui
 porte une liste « themes » n'est cherché que pour ces thèmes ; « pays » est
 recopié dans chaque article. « exclure_pres_de » écarte un mot repère du fil
-quand un des mots donnés est à PROCHE mots ou moins (« lycéen » près de
-« Parcoursup » chez Europe 1). Un article
+quand un des mots donnés en est séparé par PROCHE mots ou moins (« lycéen »
+près de « Parcoursup », « manifestation » près de « Bolsonaro » chez Europe 1). Un article
 dont le titre ou le début du chapô contient « Sponsored », « Partner content »
 ou « Contenu sponsorisé » porte categorie « sponsorise » : il n'entre dans
 aucun lot.
@@ -105,7 +105,7 @@ def hors_exclusions(spans, exclusions):
 def loin_de(spans, t, regles):
     """Garde les passages qui ne sont pas près d'un mot écartant (« lycéens » près de « Parcoursup »)."""
     def pres(d, f, voisins):
-        return any(len(re.findall(r"\w+", t[min(f, vd):max(d, vf)])) <= PROCHE
+        return any(len(re.findall(r"\w+", t[min(f, vf):max(d, vd)])) <= PROCHE   # mots entre les deux
                    for rx_v in voisins for vd, vf in (m.span() for m in rx_v.finditer(t)))
     return [(d, f) for d, f in spans
             if not any(rx.fullmatch(t[d:f]) and pres(d, f, voisins) for rx, voisins in regles)]
