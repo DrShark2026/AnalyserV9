@@ -1,7 +1,13 @@
 {
-  "_note": "Un article est retenu si son titre ou son résumé contient au moins un mot d'un thème (sans tenir compte des majuscules ni des accents). Les mots sont cherchés entiers, au pluriel ou au féminin près : 'réfugié' prend 'réfugiés' et 'réfugiée', pas 'se réfugier'. '_exclusions' : par thème, expressions dans lesquelles un mot du thème ne compte pas. Ajoute ou retire des mots librement. 'mnemoniques' n'est pas un thème : ces mots ne font pas retenir un article, ils sont seulement relevés dans le champ 'mnemoniques_collecte' des articles (4 lettres ou moins : mot exact, pour que 'ment' ne prenne pas 'mentionne').",
+  "_note": "Un article est retenu si son titre ou son résumé contient au moins un mot d'un thème (sans tenir compte des majuscules ni des accents). Les mots sont cherchés entiers, au pluriel ou au féminin près : 'réfugié' prend 'réfugiés' et 'réfugiée', pas 'se réfugier'. '_exclusions' : par thème, expressions dans lesquelles un mot du thème ne compte pas. Ajoute ou retire des mots librement. 'mnemoniques' n'est pas un thème : ces mots ne font pas retenir un article, ils sont seulement relevés dans le champ 'mnemoniques_collecte' des articles (4 lettres ou moins : mot exact, pour que 'ment' ne prenne pas 'mentionne'). '_sous_themes' : par thème, des familles de mots (confinement, bulle pour 'ia') qui ne font pas retenir un article ; elles ne sont cherchées que dans un article qui a déjà le thème par un de ses mots (pas par 'theme_defaut' de feeds.json), comptent alors dans le score et 'mots_reperes', et le nom de la famille va dans le champ 'sous_theme'.",
   "_exclusions": {
     "religion": ["Université catholique", "Institut catholique", "lève le voile", "lever le voile", "levé le voile", "lèvent le voile"]
+  },
+  "_sous_themes": {
+    "ia": {
+      "confinement": ["confiner", "confinement", "bac à sable", "sandbox", "cage", "évasion", "s'échapper", "s’échapper", "escape", "air gap", "containment", "quarantaine", "boxing"],
+      "bulle": ["bulle", "bubble", "krach", "crash", "subprime", "dot-com", "bulle internet", "tulipe", "spéculation", "survalorisation"]
+    }
   },
   "immigration": {
     "fr": ["immigration", "immigré", "migrant", "migratoire", "étrangers en situation irrégulière", "personnes étrangères", "femmes étrangères", "travailleurs étrangers", "ressortissants étrangers", "droit des étrangers", "délinquance étrangère", "criminalité étrangère", "sans-papiers", "clandestin", "régularisation", "expulsion", "expulser", "expulsé", "OQTF", "droit d'asile", "demandeur d'asile", "remigration", "regroupement familial", "submersion", "appel d'air", "réfugié", "titre de séjour", "naturalisation", "frontière"],

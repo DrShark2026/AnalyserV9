@@ -13,9 +13,15 @@ porte une liste « themes » n'est cherché que pour ces thèmes ; « pays » es
 recopié dans chaque article. « exclure_pres_de » écarte un mot repère du fil
 quand un des mots donnés en est séparé par PROCHE mots ou moins (« lycéen »
 près de « Parcoursup », « manifestation » près de « Bolsonaro » chez Europe 1). Un article
-dont le titre ou le début du chapô contient « Sponsored », « Partner content »
-ou « Contenu sponsorisé » porte categorie « sponsorise » : il n'entre dans
-aucun lot.
+dont le titre ou le début du chapô contient « Sponsored », « Partner content »,
+« Contenu sponsorisé » ou « [Sponso] » porte categorie « sponsorise » : il
+n'entre dans aucun lot. « exclure_rubriques » marque hors_lots les articles du
+fil classés dans une de ces rubriques du fil (<category>) : ils restent dans le
+corpus mais n'entrent dans aucun lot. Les « _sous_themes » de mots_cles.json
+(confinement, bulle pour l'IA) ne font pas retenir un article : leurs mots ne
+sont cherchés que dans un article qui a déjà le thème par un de ses mots (pas
+par theme_defaut), comptent alors dans mots_reperes et le score, et le nom de
+la famille va dans sous_theme.
 
 Usage :
     python3 collect_rss.py                 # collecte normale
@@ -123,9 +129,10 @@ def occurrences(spans):
 
 # « partner content » et « contenu sponsorisé » ne servent qu'à étiqueter ; « sponsored » seulement en
 # étiquette (en tête, suivi de « : », « | », « ] », « ) » ou précédé de « | », « [ », « ( »),
-# pas dans « a bill sponsored by » ni « sponsored access »
+# pas dans « a bill sponsored by » ni « sponsored access » ; « [sponso] » entre crochets (Numerama)
 SPONSOR = re.compile(r"(?<!\w)(?:partner content|contenu sponsorise)(?!\w)"
-                     r"|^\W*sponsored(?!\w)|(?<!\w)sponsored\s*[:|\])]|[|\[(]\s*sponsored(?!\w)")
+                     r"|^\W*sponsored(?!\w)|(?<!\w)sponsored\s*[:|\])]|[|\[(]\s*sponsored(?!\w)"
+                     r"|\[\s*sponso\s*\]")
 DEBUT_RESUME = 300   # « début du texte » : les premiers caractères du chapô
 
 
@@ -173,7 +180,7 @@ def texte_de(el, *noms):
 
 
 def lire_fil(octets):
-    """Renvoie une liste de dicts {titre, lien, date, resume, auteur} pour RSS 2.0 ou Atom."""
+    """Renvoie une liste de dicts {titre, lien, date, resume, auteur, rubriques} pour RSS 2.0 ou Atom."""
     racine = ET.fromstring(octets)
     items = [e for e in racine.iter() if local(e.tag) in ("item", "entry")]
     articles = []
@@ -184,6 +191,7 @@ def lire_fil(octets):
             "date": date_iso(texte_de(it, "pubDate", "published", "updated", "date")),
             "resume": nettoyer_html(texte_de(it, "description", "summary", "encoded", "content")),
             "auteur": texte_de(it, "creator", "author"),
+            "rubriques": [nettoyer_html(c.text) for c in it if local(c.tag) == "category" and c.text],
         })
     return articles
 
@@ -203,6 +211,8 @@ def main():
     themes = {k: v for k, v in mots_cles.items() if not k.startswith("_") and k != "mnemoniques"}
     motifs = {th: {lg: [(m, mot_entier(m)) for m in mots] for lg, mots in langs.items()} for th, langs in themes.items()}
     exclusions = {th: [mot_entier(e) for e in exprs] for th, exprs in mots_cles.get("_exclusions", {}).items()}
+    sous_motifs = {th: {nom: [(m, mot_entier(m)) for m in mots] for nom, mots in familles.items()}
+                   for th, familles in mots_cles.get("_sous_themes", {}).items()}
 
     registre = json.loads(REGISTRE.read_text("utf-8")) if REGISTRE.exists() else {}
     aujourdhui = dt.date.today()
@@ -230,24 +240,37 @@ def main():
             if sans_accents(a["resume"]) == sans_accents(a["titre"]):
                 a["resume"] = ""     # fil sans chapô qui répète le titre (Anthropic) : il compterait deux fois
             titre_norm, resume_norm = sans_accents(a["titre"]), sans_accents(a["resume"])
-            trouves, mots, zones = [], [], {"titre": [], "resume": []}
+            trouves, mots, sous, zones = [], [], [], {"titre": [], "resume": []}
+
+            def repere(th, rx):
+                """Vrai si le mot est dans le titre ou le chapô ; ses passages vont dans zones."""
+                trouve = False
+                for zone, t in (("titre", titre_norm), ("resume", resume_norm)):
+                    exclus = [e.span() for rx_e in exclusions.get(th, []) for e in rx_e.finditer(t)]
+                    spans = loin_de(hors_exclusions([m.span() for m in rx.finditer(t)], exclus), t, pres_de)
+                    zones[zone] += spans
+                    trouve = trouve or bool(spans)
+                return trouve
+
             for th, langs in motifs.items():
                 if "themes" in f and th not in f["themes"]:
                     continue     # thème que ce fil ne cherche pas (fils hors de France : pas d'analogies historiques)
                 for mot, rx in langs.get(f["langue"], []):
-                    trouve = False
-                    for zone, t in (("titre", titre_norm), ("resume", resume_norm)):
-                        exclus = [e.span() for rx_e in exclusions.get(th, []) for e in rx_e.finditer(t)]
-                        spans = loin_de(hors_exclusions([m.span() for m in rx.finditer(t)], exclus), t, pres_de)
-                        zones[zone] += spans
-                        trouve = trouve or bool(spans)
-                    if trouve:
+                    if repere(th, rx):
                         trouves.append(th)
                         mots.append(mot)
-            n_titre, n_resume = occurrences(zones["titre"]), occurrences(zones["resume"])
             par_defaut = not trouves and bool(f.get("theme_defaut"))
             if par_defaut:
                 trouves.append(f["theme_defaut"])
+            for th, familles in sous_motifs.items():
+                if th not in trouves or par_defaut:
+                    continue     # « bulle » ou « cage » seuls ne font pas un article sur l'IA, même sur un fil IA
+                for nom, liste in familles.items():
+                    for mot, rx in liste:
+                        if repere(th, rx):
+                            sous.append(nom)
+                            mots.append(mot)
+            n_titre, n_resume = occurrences(zones["titre"]), occurrences(zones["resume"])
             if not trouves and not args.tous:
                 continue
             mnemoniques = sorted(m for m, rx in mnemo.get(f["langue"], []) if rx.search(titre_norm) or rx.search(resume_norm))
@@ -264,6 +287,7 @@ def main():
                 "date": a["date"],
                 "lien": a["lien"],
                 "themes": sorted(set(trouves)),
+                "sous_theme": sorted(set(sous)),
                 "mots_reperes": sorted(set(mots)),
                 "score": 2 * n_titre + n_resume,
                 "dans_titre": n_titre > 0,
@@ -272,6 +296,9 @@ def main():
                 "texte": a["titre"] + ("\n\n" + a["resume"] if a["resume"] else ""),
                 "verite_terrain": None,
             }
+            rubrique = next((r for r in a["rubriques"] if r in f.get("exclure_rubriques", [])), None)
+            if rubrique:
+                article["hors_lots"] = f"rubrique {rubrique}"
             if f.get("texte_complet") is False:
                 article["statut_texte"] = "resume"     # le site refuse le texte complet : complet.py ne le cherche pas
             retenus.append(article)

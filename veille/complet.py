@@ -17,10 +17,11 @@ de contourner un paywall ou une protection anti-robot : une page réservée
 aux abonnés donne « partiel » (le début public), une page anti-robot « echec ».
 Si plusieurs articles d'une même source donnent exactement le même texte,
 c'est un bandeau ou une page générique, pas l'article : ils passent en « echec ».
-Un article dont le texte complet commence par une mention « Sponsored »,
-« Partner content » ou « Contenu sponsorisé » (même règle que collect_rss.py)
-passe en categorie « sponsorise » et sort des lots ; ce contrôle porte à chaque
-passage sur tous les articles qui ont un texte complet, déjà traités compris.
+Un article dont le titre, le début du chapô ou le début du texte complet porte
+une mention « Sponsored », « Partner content », « Contenu sponsorisé » ou
+« [Sponso] » (même règle que collect_rss.py) passe en categorie « sponsorise »
+et sort des lots ; ce contrôle porte à chaque passage sur tous les articles,
+déjà traités compris.
 
 Seules les erreurs passagères (réseau, délai dépassé, HTTP 5xx) sont retentées,
 dans le même passage, 3 essais au plus (pauses de 10 puis 30 secondes). Un 403,
@@ -163,10 +164,14 @@ def bandeaux(articles):
 
 
 def sponsorises(articles):
-    """Articles dont le texte complet s'ouvre sur une mention de contenu sponsorisé (MIT Technology Review
-    ne la met pas dans le fil) : les passe en categorie « sponsorise »."""
-    touches = [a for a in articles if a.get("texte_complet") and a.get("categorie") != "sponsorise"
-               and sponsorise("", sans_accents(a["texte_complet"][:DEBUT_RESUME]))]
+    """Articles dont le titre, le chapô ou le texte complet s'ouvre sur une mention de contenu sponsorisé
+    (MIT Technology Review ne la met pas dans le fil ; la règle a pu changer depuis la collecte) :
+    les passe en categorie « sponsorise »."""
+    def annonce(a):
+        t, _, chapo = a["texte"].partition("\n\n")
+        return (sponsorise(sans_accents(t), sans_accents(chapo))
+                or bool(a.get("texte_complet")) and sponsorise("", sans_accents(a["texte_complet"][:DEBUT_RESUME])))
+    touches = [a for a in articles if a.get("categorie") != "sponsorise" and annonce(a)]
     for a in touches:
         a["categorie"] = "sponsorise"
     return touches
@@ -227,7 +232,7 @@ def main():
     marques = sponsorises(articles)
     if marques:
         ecrire(fichier, articles)
-        print(f"\nTexte complet annoncé comme sponsorisé → categorie sponsorise, hors des lots :")
+        print(f"\nArticle annoncé comme sponsorisé → categorie sponsorise, hors des lots :")
         for a in marques:
             print(f"  {a['source'][:24]:<24} {a['texte'].partition(chr(10) * 2)[0][:70]}")
 
