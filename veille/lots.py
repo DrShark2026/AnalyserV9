@@ -22,7 +22,7 @@ que par défaut (theme_par_defaut: true, aucun mot repère). La règle de sélec
 candidat(), que complet.py reprend : tout article qui peut entrer dans un lot
 a son texte complet cherché. Chaque source garde au plus 6
 articles dans le lot ia et 3 dans le lot politique (groupe témoin), ceux de
-meilleur score. Les articles de categorie « sponsorise » (marqués par
+meilleur score ; à score égal, le texte complet le plus long passe devant. Les articles de categorie « sponsorise » (marqués par
 collect_rss.py) n'entrent dans aucun lot, et complet.py ne cherche pas leur texte.
 Un article qui touche les deux côtés figure dans les deux lots.
 
@@ -133,7 +133,7 @@ def main():
         for b in lot:
             par_source[b["source"]].append(b)
         gardes = {id(b) for bs in par_source.values()
-                  for b in sorted(bs, key=lambda b: -b.get("score", 0))[:par_source_max]}
+                  for b in sorted(bs, key=lambda b: (-b.get("score", 0), -b.get("n_mots_complet", 0)))[:par_source_max]}
         plafonnes = collections.Counter(b["source"] for b in lot if id(b) not in gardes)
         lot = [b for b in lot if id(b) in gardes]
 
