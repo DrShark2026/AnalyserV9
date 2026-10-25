@@ -8,7 +8,8 @@ dans l'analyseur :
 
 Chaque article garde ses champs ; « texte » reste le titre + chapô (c'est lui
 que l'analyseur lit), « texte_complet » n'est gardé que si statut_texte vaut
-« complet », et « n_mots » compte les mots de « texte ». Si le fil ne donne
+« complet », « n_mots » compte les mots de « texte » et « n_mots_complet »
+ceux de « texte_complet » quand il est gardé. Si le fil ne donne
 pas de chapô, il est pris dans le premier paragraphe du texte complet qui ne
 répète pas le titre (l'article porte alors chapo_du_texte_complet: true).
 Un article en « echec » (anti-robot, robots.txt, 403, extraction vide, bandeau)
@@ -124,6 +125,8 @@ def main():
             elif a.get("statut_texte") == "echec":
                 b["statut_texte"] = "resume"     # extraction ratée : on garde le résumé RSS de « texte »
             b["n_mots"] = len(b["texte"].split())
+            if "texte_complet" in b:
+                b["n_mots_complet"] = len(b["texte_complet"].split())
             lot.append(b)
 
         par_source = collections.defaultdict(list)

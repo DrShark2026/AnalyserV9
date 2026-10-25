@@ -370,6 +370,8 @@ def textes(dossier, nom):
             del a["texte_complet"]
         a.pop("echec_passager", None)
         a["n_mots"] = len(a["texte"].split())
+        if "texte_complet" in a:
+            a["n_mots_complet"] = len(a["texte_complet"].split())
         lot.append(a)
     ecrire_json(fichier, lot)
     ecrire_comptage(dossier / "comptage.csv", lot)
