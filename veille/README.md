@@ -56,6 +56,15 @@ python3 lots.py                      # dernier corpus
 
 Écrit `corpus/lots/lot_ia_AAAA-MM-JJ.json` (thème `ia`) et `corpus/lots/lot_politique_AAAA-MM-JJ.json` (thèmes `immigration`, `religion` et `mouvements_sociaux` ; le thème `analogies_historiques` n'entre dans aucun lot), à coller dans l'analyseur. `texte` reste le titre + chapô ; quand le fil n'a pas de chapô, il est pris dans le premier paragraphe du texte complet (`chapo_du_texte_complet: true`). `texte_complet` n'est gardé que pour les articles `complet` ; `n_mots` compte les mots de `texte`, `n_mots_complet` ceux de `texte_complet` quand il est gardé. Un article en `echec` (page anti-robot, robots.txt, 403, extraction vide, bandeau) reste dans le lot avec son résumé RSS et `statut_texte: "resume"` ; il garde `echec_passager`, ce qui le distingue d'un article d'un fil à `texte_complet: false`. Les doublons (même lien ou même titre) sont écartés, ainsi que les articles de score inférieur à 2 dans le lot IA et inférieur à 1 dans le lot politique ; les articles des fils à `posture_ia` renseignée sont exemptés du seuil du lot IA (quatrième valeur de `LOTS`), sauf ceux qui n'ont le thème que par défaut (`theme_par_defaut: true`). Cette règle est dans `candidat()`, que `complet.py` reprend : il récupère le texte de tout article qui peut entrer dans un lot. Chaque source garde au plus 6 articles dans le lot IA et 3 dans le lot politique, qui sert de groupe témoin (troisième valeur de `LOTS` dans `lots.py`), ceux de meilleur score ; à score égal, le texte complet le plus long (`n_mots_complet`) passe devant, puis l'ordre du corpus décide. Le script affiche le nombre d'articles par lot et par source, et ceux écartés par ce plafond.
 
+## Résultats de l'analyseur
+
+```bash
+python3 ranger_resultats.py          # depuis ~/Téléchargements
+python3 ranger_resultats.py ~/Bureau # autre dossier
+```
+
+Copie les `resultats_batch_*.json` téléchargés depuis l'analyseur dans `corpus/resultats/` (hors git, comme tout `corpus/`), sous le nom `AAAA-MM-JJ_ia.json` ou `AAAA-MM-JJ_politique.json`. Le jour est celui du lot, lu dans l'id des articles (`AAAA-MM-JJ-…`, jour de la collecte, et non la date de publication, qui varie d'un article à l'autre) ; le thème est `ia` si tous les articles ont le thème `ia`, `politique` si tous ont `immigration`, `religion` ou `mouvements_sociaux`. Les résultats d'un dossier (thème `orelien`, par exemple) et les fichiers illisibles sont laissés de côté et signalés. S'il y a déjà un fichier pour ce jour et ce thème, le plus récent (date de modification, que la copie conserve) est gardé et le doublon est signalé, à chaque passage tant que l'ancien téléchargement reste dans le dossier. Un fichier déjà rangé à l'identique est passé sans rien dire. Les téléchargements ne sont jamais modifiés.
+
 ## Dossiers
 
 ```bash
