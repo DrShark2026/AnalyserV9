@@ -21,8 +21,10 @@ posture_ia renseignée sont exemptés de ce seuil, sauf ceux qui n'ont le thème
 que par défaut (theme_par_defaut: true, aucun mot repère). La règle de sélection d'un lot est dans
 candidat(), que complet.py reprend : tout article qui peut entrer dans un lot
 a son texte complet cherché. Chaque source garde au plus 6
-articles dans le lot ia et 3 dans le lot politique (groupe témoin), ceux de
-meilleur score ; à score égal, le texte complet le plus long passe devant. Les articles de categorie « sponsorise » (marqués par
+articles dans le lot ia et 3 dans le lot politique (groupe témoin) : d'abord
+le meilleur article de chaque thème du lot (immigration, religion,
+mouvements_sociaux), pour qu'un jour de manifestations n'efface pas les deux
+autres, puis les suivants par score ; à score égal, le texte complet le plus long passe devant. Les articles de categorie « sponsorise » (marqués par
 collect_rss.py) et ceux marqués hors_lots (rubrique exclue du fil, comme les jeux
 vidéo de Numerama) n'entrent dans aucun lot, et complet.py ne cherche pas leur texte.
 Un article qui touche les deux côtés figure dans les deux lots.
@@ -77,6 +79,18 @@ def candidat(a, themes, score_min, exempte_posture_ia):
 def pour_un_lot(a):
     """Vrai si l'article peut entrer dans au moins un lot : complet.py cherche alors son texte."""
     return any(candidat(a, themes, score_min, exempte) for themes, score_min, _, exempte in LOTS.values())
+
+
+def plafonner(bs, themes, n):
+    """Les n articles gardés d'une source : le meilleur de chaque thème du lot, puis les suivants par score."""
+    tries = sorted(bs, key=lambda b: (-b.get("score", 0), -b.get("n_mots_complet", 0)))
+    gardes, couverts = [], set()
+    for b in tries:
+        if len(gardes) < n and themes & set(b["themes"]) - couverts:
+            gardes.append(b)
+            couverts |= set(b["themes"])
+    gardes += [b for b in tries if b not in gardes][:n - len(gardes)]
+    return gardes
 
 
 def main():
@@ -136,8 +150,7 @@ def main():
         par_source = collections.defaultdict(list)
         for b in lot:
             par_source[b["source"]].append(b)
-        gardes = {id(b) for bs in par_source.values()
-                  for b in sorted(bs, key=lambda b: (-b.get("score", 0), -b.get("n_mots_complet", 0)))[:par_source_max]}
+        gardes = {id(b) for bs in par_source.values() for b in plafonner(bs, themes, par_source_max)}
         plafonnes = collections.Counter(b["source"] for b in lot if id(b) not in gardes)
         lot = [b for b in lot if id(b) in gardes]
 

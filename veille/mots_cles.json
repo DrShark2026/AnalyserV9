@@ -1,7 +1,10 @@
 {
-  "_note": "Un article est retenu si son titre ou son résumé contient au moins un mot d'un thème (sans tenir compte des majuscules ni des accents). Les mots sont cherchés entiers, au pluriel ou au féminin près : 'réfugié' prend 'réfugiés' et 'réfugiée', pas 'se réfugier'. '_exclusions' : par thème, expressions dans lesquelles un mot du thème ne compte pas. Ajoute ou retire des mots librement. 'mnemoniques' n'est pas un thème : ces mots ne font pas retenir un article, ils sont seulement relevés dans le champ 'mnemoniques_collecte' des articles (4 lettres ou moins : mot exact, pour que 'ment' ne prenne pas 'mentionne'). '_sous_themes' : par thème, des familles de mots (confinement, bulle pour 'ia') qui ne font pas retenir un article ; elles ne sont cherchées que dans un article qui a déjà le thème par un de ses mots (pas par 'theme_defaut' de feeds.json), comptent alors dans le score et 'mots_reperes', et le nom de la famille va dans le champ 'sous_theme'.",
+  "_note": "Un article est retenu si son titre ou son résumé contient au moins un mot d'un thème (sans tenir compte des majuscules ni des accents). Les mots sont cherchés entiers, au pluriel ou au féminin près : 'réfugié' prend 'réfugiés' et 'réfugiée', pas 'se réfugier'. '_exclusions' : par thème, expressions dans lesquelles un mot du thème ne compte pas. Ajoute ou retire des mots librement. 'mnemoniques' n'est pas un thème : ces mots ne font pas retenir un article, ils sont seulement relevés dans le champ 'mnemoniques_collecte' des articles (4 lettres ou moins : mot exact, pour que 'ment' ne prenne pas 'mentionne'). '_pas_seuls' : par thème, des mots qui ne comptent que si l'article a déjà le thème par un autre mot, ou si le fil a ce thème pour 'theme_defaut' ('Claude' : Claude Monet, Marie-Claude). '_sous_themes' : par thème, des familles de mots (confinement, bulle pour 'ia') qui ne font pas retenir un article ; elles ne sont cherchées que dans un article qui a déjà le thème par un de ses mots (pas par 'theme_defaut' de feeds.json), comptent alors dans le score et 'mots_reperes', et le nom de la famille va dans le champ 'sous_theme'.",
   "_exclusions": {
     "religion": ["Université catholique", "Institut catholique", "lève le voile", "lever le voile", "levé le voile", "lèvent le voile"]
+  },
+  "_pas_seuls": {
+    "ia": ["Claude"]
   },
   "_sous_themes": {
     "ia": {
@@ -27,7 +30,7 @@
   },
   "mouvements_sociaux": {
     "fr": ["manifestation", "manifestant", "cortège", "gilets jaunes", "lycéen", "lycéens", "mobilisation", "grève", "black bloc", "casseurs", "ultragauche", "émeutiers", "émeute", "pillage", "pille", "pilleur", "pilleuse", "piller", "pillent", "pillaient", "pillera", "interpellations", "convergence des luttes", "maintien de l’ordre", "maintien de l'ordre", "lacrymogène", "recel", "revente", "Leboncoin", "le bon coin", "Vinted", "eBay", "merci le 17 octobre", "Rayan PSN"],
-    "en": ["protest", "protesters", "demonstration", "rioters", "riot", "strike", "yellow vests", "black bloc", "tear gas", "crackdown"]
+    "en": ["protest", "protesters", "demonstration", "rioters", "riot", "on strike", "general strike", "strikers", "strike action", "labor strike", "labour strike", "walkout", "picket line", "yellow vests", "black bloc", "tear gas", "crackdown"]
   },
   "mnemoniques": {
     "fr": ["réfléchit", "réflexion", "comprend", "pense", "raisonne", "hallucine", "hallucination", "veut", "décide", "conscience", "ment"],

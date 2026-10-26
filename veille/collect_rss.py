@@ -21,7 +21,9 @@ corpus mais n'entrent dans aucun lot. Les « _sous_themes » de mots_cles.json
 (confinement, bulle pour l'IA) ne font pas retenir un article : leurs mots ne
 sont cherchés que dans un article qui a déjà le thème par un de ses mots (pas
 par theme_defaut), comptent alors dans mots_reperes et le score, et le nom de
-la famille va dans sous_theme.
+la famille va dans sous_theme. Les « _pas_seuls » (« Claude » pour l'IA) ne
+comptent que si l'article a déjà le thème par un autre mot, ou si le fil a ce
+thème pour theme_defaut : Claude Monet ne fait pas un article sur l'IA.
 
 Usage :
     python3 collect_rss.py                 # collecte normale
@@ -211,6 +213,7 @@ def main():
     themes = {k: v for k, v in mots_cles.items() if not k.startswith("_") and k != "mnemoniques"}
     motifs = {th: {lg: [(m, mot_entier(m)) for m in mots] for lg, mots in langs.items()} for th, langs in themes.items()}
     exclusions = {th: [mot_entier(e) for e in exprs] for th, exprs in mots_cles.get("_exclusions", {}).items()}
+    pas_seuls = {th: set(mots) for th, mots in mots_cles.get("_pas_seuls", {}).items()}
     sous_motifs = {th: {nom: [(m, mot_entier(m)) for m in mots] for nom, mots in familles.items()}
                    for th, familles in mots_cles.get("_sous_themes", {}).items()}
 
@@ -255,10 +258,16 @@ def main():
             for th, langs in motifs.items():
                 if "themes" in f and th not in f["themes"]:
                     continue     # thème que ce fil ne cherche pas (fils hors de France : pas d'analogies historiques)
+                seuls = pas_seuls.get(th, set())
                 for mot, rx in langs.get(f["langue"], []):
-                    if repere(th, rx):
+                    if mot not in seuls and repere(th, rx):
                         trouves.append(th)
                         mots.append(mot)
+                if th in trouves or f.get("theme_defaut") == th:     # « Claude » seul : peut-être Monet
+                    for mot, rx in langs.get(f["langue"], []):
+                        if mot in seuls and repere(th, rx):
+                            trouves.append(th)
+                            mots.append(mot)
             par_defaut = not trouves and bool(f.get("theme_defaut"))
             if par_defaut:
                 trouves.append(f["theme_defaut"])
