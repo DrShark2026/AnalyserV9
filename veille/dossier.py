@@ -2,8 +2,9 @@
 """Dossier : collecte rétrospective sur un sujet, séparée de la veille quotidienne.
 
 Interroge Google Actualités (news.google.com/rss/search) pour chaque requête,
-entre guillemets, dans les éditions France (fr, FR), Canada (fr-CA, CA),
-Belgique (fr, BE) et États-Unis (en-US, US), par tranches de 7 jours sur les
+entre guillemets (une requête qui en contient déjà, comme "sentience" IA, part
+telle quelle), dans les éditions France (fr, FR), Canada (fr-CA, CA),
+Belgique (fr, BE) et États-Unis (en-US, US), ou celles de --editions, par tranches de 7 jours sur les
 N jours qui finissent aujourd'hui ou à --jusqu-au (opérateurs after:/before:,
 after: la veille du premier jour, before: le lendemain du dernier) ; une tranche
 qui atteint le plafond de 100 résultats de Google est refaite jour par jour. Les liens
@@ -39,6 +40,7 @@ Usage :
     python3 dossier.py orelien "Thélyson Orélien" "Thelyson Orelien"
     python3 dossier.py orelien "Thélyson Orélien" --jours 30
     python3 dossier.py orelien "Thélyson Orélien" --jusqu-au 2026-10-22 --remplacer --garder
+    python3 dossier.py conscience_ia '"conscience" "intelligence artificielle"' "AI consciousness" --editions fr en
     .venv/bin/python dossier.py orelien --textes
 """
 import argparse
@@ -160,11 +162,24 @@ def resultats(xml_txt):
             src.get("url", "") if src is not None else "", grappe
 
 
-def collecter(nom, requetes, jours, jusqu_au, liens_f):
+def termes(requete):
+    """Motifs des termes d'une requête : ses passages entre guillemets et ses mots hors guillemets,
+    ou la requête entière si elle n'a pas de guillemets."""
+    if '"' not in requete:
+        return [mot_entier(requete)]
+    return [mot_entier(g or m) for g, m in re.findall(r'"([^"]+)"|([^\s"]+)', requete)]
+
+
+def dans(rxs, titre_n):
+    """Nombre de fois où le titre contient la requête : le moins présent de ses termes."""
+    return min(len(rx.findall(titre_n)) for rx in rxs)
+
+
+def collecter(nom, requetes, jours, jusqu_au, liens_f, editions):
     feeds = json.loads((ICI / "feeds.json").read_text("utf-8"))["feeds"]
     mots_cles = json.loads((ICI / "mots_cles.json").read_text("utf-8"))
     mnemo = {lg: [(m, motif(m, exact_max=4)) for m in ms] for lg, ms in mots_cles.get("mnemoniques", {}).items()}
-    rx_req = [(r, mot_entier(r)) for r in requetes]
+    rx_req = [(r, termes(r)) for r in requetes]
 
     maintenant = dt.datetime.now().astimezone()
     fin = (jusqu_au or maintenant.date()) + dt.timedelta(days=1)          # exclu
@@ -200,7 +215,7 @@ def collecter(nom, requetes, jours, jusqu_au, liens_f):
                 lien = final or lien_g
                 champs, connus = fiche_source(source, final or url_source, feeds)
                 titre_n = sans_accents(titre)
-                n_titre = sum(len(rx.findall(titre_n)) for _, rx in rx_req)
+                n_titre = sum(dans(rxs, titre_n) for _, rxs in rx_req)
                 a = {
                     "id": f"{nom}-{hashlib.sha1(lien.encode()).hexdigest()[:16]}",
                     "source": source,
@@ -213,7 +228,7 @@ def collecter(nom, requetes, jours, jusqu_au, liens_f):
                     "date": date,
                     "lien": lien,
                     "themes": [nom],
-                    "mots_reperes": sorted(r for r, rx in rx_req if rx.search(titre_n)),
+                    "mots_reperes": sorted(r for r, rxs in rx_req if dans(rxs, titre_n)),
                     "score": 2 * n_titre,
                     "dans_titre": n_titre > 0,
                     "theme_par_defaut": False,
@@ -239,11 +254,11 @@ def collecter(nom, requetes, jours, jusqu_au, liens_f):
 
     def rechercher():
         for requete in requetes:
-            for langue, ed in EDITIONS.items():
+            for langue, ed in editions.items():
                 a_faire = list(tranches)
                 while a_faire:
                     d0, d1 = a_faire.pop(0)
-                    q = f'"{requete}" after:{d0 - dt.timedelta(days=1)} before:{d1}'
+                    q = (requete if '"' in requete else f'"{requete}"') + f' after:{d0 - dt.timedelta(days=1)} before:{d1}'
                     url = "https://news.google.com/rss/search?" + urllib.parse.urlencode({"q": q, **ed})
                     items = list(resultats(google(url)))
                     n_grappe = sum(len(g) for *_, g in items)
@@ -277,7 +292,7 @@ def collecter(nom, requetes, jours, jusqu_au, liens_f):
         "requetes": requetes,
         "jours": jours,
         "jusqu_au": (fin - dt.timedelta(days=1)).isoformat(),
-        "editions": EDITIONS,
+        "editions": editions,
         "tranches": [[d0.isoformat(), (d1 - dt.timedelta(days=1)).isoformat()] for d0, d1 in tranches],
         "recherches": journal,
         "n_articles": len(articles),
@@ -401,6 +416,8 @@ def main():
     ap.add_argument("requetes", nargs="*", help="requêtes, cherchées entre guillemets")
     ap.add_argument("--jours", type=int, default=60, help="période couverte, jusqu'à aujourd'hui (défaut 60)")
     ap.add_argument("--jusqu-au", type=dt.date.fromisoformat, help="dernier jour couvert, AAAA-MM-JJ (défaut : aujourd'hui)")
+    ap.add_argument("--editions", nargs="+", choices=list(EDITIONS), default=list(EDITIONS),
+                    help="éditions de Google Actualités (défaut : toutes)")
     ap.add_argument("--textes", action="store_true", help="étape 2 : texte complet des articles déjà listés")
     ap.add_argument("--remplacer", action="store_true", help="refaire l'étape 1 même si les textes sont commencés")
     ap.add_argument("--garder", action="store_true",
@@ -427,7 +444,8 @@ def main():
         ancien = json.loads((dossier / f"lot_{args.nom}.json").read_text("utf-8"))
         ecrire_json(liens_f, {urllib.parse.urlsplit(a["lien_google"]).path.rsplit("/", 1)[-1]: a["lien"]
                               for a in ancien if a.get("lien_resolu")})
-    articles, meta, tranches = collecter(args.nom, args.requetes, args.jours, args.jusqu_au, liens_f)
+    articles, meta, tranches = collecter(args.nom, args.requetes, args.jours, args.jusqu_au, liens_f,
+                                       {e: EDITIONS[e] for e in args.editions})
     if args.garder and (dossier / f"lot_{args.nom}.json").exists():
         ancien = json.loads((dossier / f"lot_{args.nom}.json").read_text("utf-8"))
         gardes = garder_precedents(articles, ancien, meta["collecte"])
