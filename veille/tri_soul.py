@@ -50,6 +50,9 @@ Sortie, dans corpus/dossiers/<nom>/ :
     tri_soul.csv            id, titre, source, date, categorie, phrase, motif
     echantillon_verif.csv   10 articles tirés au hasard par catégorie (même format) ; la graine du
                             tirage est notée dans dossier.log (tirée au hasard sans --graine)
+    echantillon_indetermine.csv  30 articles indetermine tirés avec la même graine, d'abord ceux où
+                            « âme » ou « soul » apparaît : id, titre, source, date, langue,
+                            statut_texte, n_mots, n_occurrences, phrase (jusqu'à 3 phrases)
 
 Usage :
     python3 tri_soul.py
@@ -72,6 +75,8 @@ FENETRE = 15        # mots autour de « soul » pour le filtre du domaine
 CONTEXTE = 40       # mots autour de « soul » pour départager esthétique et métaphysique
 REQUETE = '"AI" "soul"'
 PAR_CATEGORIE = 10
+N_INDETERMINE = 30
+AME_OU_SOUL = re.compile(r"(?<![\w-])(âmes?|souls?|soulless|soulful)(?![\w-])", re.I)
 CATEGORIES = ("hors_sujet", "indetermine", "non_analysable", "a_recollecter", "ame_esthetique", "ame_metaphysique", "ame_collective", "soul_doc")
 
 SOUL = re.compile(r"^souls?$|^soul(less|lessness|ful|fully)$", re.I)
@@ -327,6 +332,7 @@ def main():
                 corrections[ident] = cat
 
     lignes = []
+    indetermines = []
     for a in choisis:
         titre, _, chapo = (a.get("texte") or "").partition("\n")
         complet = (textes.get(a["id"]) or {}).get("texte_complet") or a.get("texte_complet") or ""
@@ -351,10 +357,16 @@ def main():
             categorie = corrections[a["id"]]
         lignes.append({"id": a["id"], "titre": titre.strip(), "source": a["source"], "date": a["date"],
                        "categorie": categorie, "phrase": phrase_de(texte, rang), "motif": motif})
+        if categorie == "indetermine":
+            phrases = list(dict.fromkeys(phrase_de(texte, m.start()) for m in AME_OU_SOUL.finditer(texte)))
+            indetermines.append({"id": a["id"], "titre": titre.strip(), "source": a["source"], "date": a["date"],
+                                 "langue": a.get("langue"), "statut_texte": a.get("statut_texte"),
+                                 "n_mots": len(texte.split()), "n_occurrences": len(phrases),
+                                 "phrase": " | ".join(phrases[:3])})
 
     champs = ["id", "titre", "source", "date", "categorie", "phrase", "motif"]
 
-    def ecrire(chemin, ls):
+    def ecrire(chemin, ls, champs=champs):
         with open(chemin, "w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=champs)
             w.writeheader()
@@ -374,13 +386,20 @@ def main():
     for c in CATEGORIES:
         echantillon += hasard.sample(par_cat[c], min(PAR_CATEGORIE, len(par_cat[c])))
     ecrire(dossier / "echantillon_verif.csv", echantillon)
+    hasard = random.Random(graine)
+    avec = [l for l in indetermines if l["n_occurrences"]]
+    sans = [l for l in indetermines if not l["n_occurrences"]]
+    ech_ind = avec if len(avec) <= N_INDETERMINE else hasard.sample(avec, N_INDETERMINE)
+    ech_ind += hasard.sample(sans, min(N_INDETERMINE - len(ech_ind), len(sans)))
+    ecrire(dossier / "echantillon_indetermine.csv", ech_ind, list(indetermines[0]) if indetermines else ["id"])
 
     compte = collections.Counter(l["categorie"] for l in lignes)
     egalites = sum(1 for l in lignes if "à vérifier" in l["motif"])
     resume = (f"tri_soul.py : {len(lignes)} articles de la requête {REQUETE} triés → tri_soul.csv ; "
               + ", ".join(f"{c} {compte[c]}" for c in CATEGORIES)
               + f" (égalités à vérifier : {egalites}) ; "
-              f"échantillon de {len(echantillon)} (graine {graine}) → echantillon_verif.csv")
+              f"échantillon de {len(echantillon)} (graine {graine}) → echantillon_verif.csv ; "
+              f"{len(ech_ind)} des {len(indetermines)} indetermine → echantillon_indetermine.csv")
     print(resume)
     with open(dossier / "dossier.log", "a", encoding="utf-8") as f:
         f.write(f"===== {resume} ({dt.datetime.now():%F %T}) =====\n")
