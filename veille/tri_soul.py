@@ -8,6 +8,9 @@
                       complet ou fait moins de 50 mots : on ne force pas le classement
     a_recollecter     comme non_analysable ou indetermine, mais le titre est dans le sujet
                       (liste tenue à la main : tri_soul_a_recollecter.txt dans le dossier)
+
+Corrections à la main : tri_soul_corrections.txt dans le dossier, une ligne par article,
+« id catégorie », puis un commentaire libre ; elles passent après toutes les règles.
     ame_esthetique    l'âme comme authenticité, créativité, intention humaine
                       (souvent : l'IA n'en a pas)
     ame_metaphysique  l'âme au sens religieux ou philosophique (une IA peut-elle
@@ -310,6 +313,15 @@ def main():
     a_recollecter = set()
     if f_recollecter.exists():
         a_recollecter = {l.split()[0] for l in f_recollecter.read_text("utf-8").splitlines() if l.strip() and not l.startswith("#")}
+    f_corrections = dossier / "tri_soul_corrections.txt"
+    corrections = {}
+    if f_corrections.exists():
+        for l in f_corrections.read_text("utf-8").splitlines():
+            if l.strip() and not l.startswith("#"):
+                ident, cat = l.split()[:2]
+                if cat not in CATEGORIES:
+                    ap.error(f"{f_corrections.name} : catégorie inconnue « {cat} » pour {ident}")
+                corrections[ident] = cat
 
     lignes = []
     for a in choisis:
@@ -331,6 +343,9 @@ def main():
                 if a["id"] in a_recollecter:
                     categorie = "a_recollecter"
                     motif += " ; titre dans le sujet : texte complet à récupérer"
+        if a["id"] in corrections and corrections[a["id"]] != categorie:
+            motif = f"correction manuelle (au lieu de {categorie} : {motif})"
+            categorie = corrections[a["id"]]
         lignes.append({"id": a["id"], "titre": titre.strip(), "source": a["source"], "date": a["date"],
                        "categorie": categorie, "phrase": phrase_de(texte, rang), "motif": motif})
 
