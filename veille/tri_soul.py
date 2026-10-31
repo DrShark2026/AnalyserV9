@@ -118,13 +118,15 @@ QUESTION = re.compile(
     r"[^?]{0,40}\b(have|has|possess|get|gain|develop|acquire|grow|need)\s+(a\s+|an?\s+)?souls?\b[^?]{0,40}\?"
     r"|\bsouls?\b[^?]{0,20}\b(in|of|for)\s+(the\s+|a\s+)?(machines?|ai|a\.i\.|robots?|chatbots?|claude)\b[^?]{0,20}\?",
     re.I)
-# l'âme d'une institution, d'un secteur, d'un lieu : soul of business, Hollywood's soul, fight for its soul
+# l'âme d'une institution, d'un secteur, d'un lieu, d'un labo d'IA : soul of business, Hollywood's soul, OpenAI's soul,
+# fight for its soul
 COLLECTIF_NOMS = (r"(business(es)?|compan(y|ies)|firms?|corporat\w+|industr(y|ies)|sectors?|hollywood|newsrooms?|"
                   r"journalism|media|press|cit(y|ies)|towns?|nations?|countr(y|ies)|party|democracy|republic|"
                   r"universit(y|ies)|schools?|education|brands?|internet|web|sports?|football|teams?|clubs?|"
                   r"professions?|workplaces?|organi[sz]ations?|institutions?|markets?|economy|capitalism|tech|"
                   r"silicon valley|wall street|communit(y|ies)|neighbou?rhoods?|studios?|labels?|newspapers?|"
-                  r"magazines?|publishing|cinema|america|india|cyprus|europe|china|britain|france)")
+                  r"magazines?|publishing|cinema|america|india|cyprus|europe|china|britain|france|"
+                  r"openai|anthropic|mistral|google|deepmind|meta|xai|microsoft|nvidia)")
 COLLECTIF = re.compile(
     r"\bsouls? of (the |our |its |their |a |this |modern |american |british |global )?([\w-]+ ){0,2}?" + COLLECTIF_NOMS + r"\b"
     r"|\b" + COLLECTIF_NOMS + r"(['’]s)? souls?\b"
