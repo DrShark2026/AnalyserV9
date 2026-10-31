@@ -48,7 +48,8 @@ Rien n'est modifié dans le dossier : le tri est écrit à part.
 
 Sortie, dans corpus/dossiers/<nom>/ :
     tri_soul.csv            id, titre, source, date, categorie, phrase, motif
-    echantillon_verif.csv   10 articles tirés au hasard par catégorie (même format)
+    echantillon_verif.csv   10 articles tirés au hasard par catégorie (même format) ; la graine du
+                            tirage est notée dans dossier.log (tirée au hasard sans --graine)
 
 Usage :
     python3 tri_soul.py
@@ -364,7 +365,8 @@ def main():
         print("essai, rien d'écrit : " + ", ".join(f"{c} {compte[c]}" for c in CATEGORIES))
         return 0
     ecrire(dossier / "tri_soul.csv", lignes)
-    hasard = random.Random(args.graine)
+    graine = args.graine if args.graine is not None else random.randrange(10000)   # notée dans le journal
+    hasard = random.Random(graine)
     par_cat = collections.defaultdict(list)
     for l in lignes:
         par_cat[l["categorie"]].append(l)
@@ -378,7 +380,7 @@ def main():
     resume = (f"tri_soul.py : {len(lignes)} articles de la requête {REQUETE} triés → tri_soul.csv ; "
               + ", ".join(f"{c} {compte[c]}" for c in CATEGORIES)
               + f" (égalités à vérifier : {egalites}) ; "
-              f"échantillon de {len(echantillon)} → echantillon_verif.csv")
+              f"échantillon de {len(echantillon)} (graine {graine}) → echantillon_verif.csv")
     print(resume)
     with open(dossier / "dossier.log", "a", encoding="utf-8") as f:
         f.write(f"===== {resume} ({dt.datetime.now():%F %T}) =====\n")
