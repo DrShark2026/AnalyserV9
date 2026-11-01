@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Trie les articles d'un dossier venus de la requête "AI" "soul" en huit catégories.
+"""Trie les articles d'un dossier venus de la requête "AI" "soul" en dix catégories.
 
     hors_sujet        « soul » n'a rien à voir avec l'IA (jeu vidéo, soul music,
                       marque, « heart and soul »…)
-    indetermine       « soul » n'est pas dans le texte complet (50 mots ou plus)
+    indetermine       pas de « soul » classable dans le texte complet (50 mots ou plus),
+                      mais « âme », « soul » ou « soulless » y apparaît
+    sans_occurrence   ni « âme » ni « soul » dans le texte complet (50 mots ou plus) :
+                      le mot n'est pas dans le texte, on ne peut pas le classer
     non_analysable    « soul » n'est pas dans le texte disponible, et ce texte n'est pas
                       complet ou fait moins de 50 mots : on ne force pas le classement
     a_recollecter     comme non_analysable ou indetermine, mais le titre est dans le sujet
                       (liste tenue à la main : tri_soul_a_recollecter.txt dans le dossier)
-
-Corrections à la main : tri_soul_corrections.txt dans le dossier, une ligne par article,
-« id catégorie », puis un commentaire libre ; elles passent après toutes les règles.
+    a_garder_conscience  hors du tri âme/soul, mais pertinent pour le dossier conscience
+                      principal (par correction à la main seulement)
     ame_esthetique    l'âme comme authenticité, créativité, intention humaine
                       (souvent : l'IA n'en a pas)
     ame_metaphysique  l'âme au sens religieux ou philosophique (une IA peut-elle
@@ -19,13 +21,16 @@ Corrections à la main : tri_soul_corrections.txt dans le dossier, une ligne par
                       business, Hollywood's soul, fight for its soul)
     soul_doc          le « soul document » de Claude (sa constitution)
 
+Corrections à la main : tri_soul_corrections.txt dans le dossier, une ligne par article,
+« id catégorie », puis un commentaire libre ; elles passent après toutes les règles.
+
 Les sites de musique (Soul Kitchen, Soul Bag, Larsen…) et Body+Soul sont hors_sujet
 d'office, par la source. Les mots sont découpés hors apostrophes et guillemets
 ('Soul', Soul's) ; « AI » d'un vol Air India (AI-2379) ou du prénom Ai Jing n'est pas
 l'IA, ni le « ai » de « j'ai ». Un article où « AI » n'est que cela est hors_sujet.
 D'abord, les « soul » qui ne sont pas l'âme sont écartés : genres musicaux (soul
 music, afro soul, la soul), expressions (heart and soul, a single soul, an innocent
-soul, soul-crushing, souls on board), noms propres (Soul Machines, l'appli Soul, Dark Souls, Rubber
+soul, soul-crushing, souls on board, soul gem, soul mate, soul food, soul brother/sister, soul patch), noms propres (Soul Machines, l'appli Soul, Dark Souls, Rubber
 Soul…). On garde les « soul » à moins de 15 mots d'un terme du domaine (AI,
 artificial intelligence, machine, model, chatbot, robot, consciousness, sentient,
 Claude, ChatGPT…). Puis, dans l'ordre :
@@ -34,10 +39,12 @@ Claude, ChatGPT…). Puis, dans l'ordre :
         « soul » écartés)
     aucun soul gardé → hors_sujet
     un « soul doc(ument) / overview » → soul_doc
-    au moins la moitié des soul gardés sont l'âme d'une institution → ame_collective
+    au moins la moitié des soul gardés sont l'âme d'une institution (ou d'un lieu, d'un
+        secteur, d'un sport, d'un événement, d'une pratique) → ame_collective
     indices autour des soul gardés (40 mots) : la catégorie qui en a le plus
         l'emporte (art, musique, création… contre Dieu, pape, théologie…)
-    à égalité : le déterminant — « a soul », « a human soul », « give X a soul »,
+    à égalité : un « soul of X / X's soul » d'institution parmi les soul gardés → ame_collective
+    encore égalité : le déterminant — « a soul », « a human soul », « give X a soul »,
         « souls » → ame_metaphysique ; « soul » sans article (have soul, lacks soul,
         no soul), soulless, soulful → ame_esthetique ; la forme la plus fréquente
     encore égalité : titre qui demande si une IA a une âme → ame_metaphysique
@@ -77,7 +84,8 @@ REQUETE = '"AI" "soul"'
 PAR_CATEGORIE = 10
 N_INDETERMINE = 30
 AME_OU_SOUL = re.compile(r"(?<![\w-])(âmes?|souls?|soulless|soulful)(?![\w-])", re.I)
-CATEGORIES = ("hors_sujet", "indetermine", "non_analysable", "a_recollecter", "ame_esthetique", "ame_metaphysique", "ame_collective", "soul_doc")
+CATEGORIES = ("hors_sujet", "indetermine", "sans_occurrence", "non_analysable", "a_recollecter",
+              "a_garder_conscience", "ame_esthetique", "ame_metaphysique", "ame_collective", "soul_doc")
 
 SOUL = re.compile(r"^souls?$|^soul(less|lessness|ful|fully)$", re.I)
 DOMAINE = re.compile(
@@ -106,7 +114,8 @@ EXPRESSIONS = re.compile(
     r"|\b(neo|afro|northern|southern|deep|blue[- ]eyed|r\s?&\s?b|rnb|funk|gospel|jazz|pop|psychedelic|amapiano)[- ]soul\b"
     r"|\bsoul[- ]?(music|musique|tracks?|songs?|singers?|chanteu\w*|albums?|artists?|artistes?|genre|bands?|groupe|"
     r"funk|jazz|r\s?&\s?b|ballads?|vibes?|food|mates?|searching|strike|calibur|knights?|reaver|hackers?|train|"
-    r"cycle|cycling|machines?|app|matching|eater|edge|sisters?|origin|ferry|reborn|zhang|x\b|2\.0|n1|notes)"
+    r"cycle|cycling|machines?|app|matching|eater|edge|sisters?|brothers?|brotha|gems?|patch(es)?|origin|ferry|reborn|"
+    r"zhang|x\b|2\.0|n1|notes)"
     r"|\b(la|en|de la)\s+soul\b|\b(couleur|voix|style|univers|influences?|chanteuse|chanteur|reine|roi)\s+soul\b"
     r"|\b(sell|sells|selling|sold)\s+(their|his|her|your|my|our)\s+souls?\b"
     r"|\bsoul-(crushing|sucking|squeezing|searching|destroying|stirring|baring|deep)\b"
@@ -124,15 +133,19 @@ QUESTION = re.compile(
     r"[^?]{0,40}\b(have|has|possess|get|gain|develop|acquire|grow|need)\s+(a\s+|an?\s+)?souls?\b[^?]{0,40}\?"
     r"|\bsouls?\b[^?]{0,20}\b(in|of|for)\s+(the\s+|a\s+)?(machines?|ai|a\.i\.|robots?|chatbots?|claude)\b[^?]{0,20}\?",
     re.I)
-# l'âme d'une institution, d'un secteur, d'un lieu, d'un labo d'IA : soul of business, Hollywood's soul, OpenAI's soul,
-# fight for its soul
+# l'âme d'une institution, d'un secteur, d'un lieu, d'un labo d'IA, d'un sport, d'un événement, d'une pratique :
+# soul of business, Hollywood's soul, OpenAI's soul, the World Cup's soul, soul of journalism, fight for its soul
 COLLECTIF_NOMS = (r"(business(es)?|compan(y|ies)|firms?|corporat\w+|industr(y|ies)|sectors?|hollywood|newsrooms?|"
                   r"journalism|media|press|cit(y|ies)|towns?|nations?|countr(y|ies)|party|democracy|republic|"
                   r"universit(y|ies)|schools?|education|brands?|internet|web|sports?|football|teams?|clubs?|"
                   r"professions?|workplaces?|organi[sz]ations?|institutions?|markets?|economy|capitalism|tech|"
                   r"silicon valley|wall street|communit(y|ies)|neighbou?rhoods?|studios?|labels?|newspapers?|"
                   r"magazines?|publishing|cinema|america|india|cyprus|europe|china|britain|france|"
-                  r"openai|anthropic|mistral|google|deepmind|meta|xai|microsoft|nvidia)")
+                  r"openai|anthropic|mistral|google|deepmind|meta|xai|microsoft|nvidia|"
+                  r"world cup|olympics|olympic games|super bowl|tournaments?|leagues?|championships?|festivals?|"
+                  r"soccer|basketball|baseball|tennis|golf|cricket|rugby|cycling|formula (1|one)|nba|nfl|"
+                  r"photography|filmmaking|architecture|medicine|nursing|teaching|academia|science|advertising|"
+                  r"marketing|broadcasting|radio|television)")
 COLLECTIF = re.compile(
     r"\bsouls? of (the |our |its |their |a |this |modern |american |british |global )?([\w-]+ ){0,2}?" + COLLECTIF_NOMS + r"\b"
     r"|\b" + COLLECTIF_NOMS + r"(['’]s)? souls?\b"
@@ -279,6 +292,9 @@ def classer(texte, titre=""):
     dets = {i: determinant(ms, i) for i in proches}
     n_meta = [i for i, d in dets.items() if d == "meta"]
     n_esth = [i for i, d in dets.items() if d == "esth"]
+    if collectifs:
+        return ("ame_collective", jetons[collectifs[0]].start(),
+                motif + f" ; égalité départagée par « soul of X / X's soul » d'une institution ({len(collectifs)}×)")
     if len(n_meta) != len(n_esth):
         gagnants = n_meta if len(n_meta) > len(n_esth) else n_esth
         return ("ame_metaphysique" if gagnants is n_meta else "ame_esthetique", jetons[gagnants[0]].start(),
@@ -352,6 +368,9 @@ def main():
                 if a["id"] in a_recollecter:
                     categorie = "a_recollecter"
                     motif += " ; titre dans le sujet : texte complet à récupérer"
+            elif not AME_OU_SOUL.search(texte):
+                categorie = "sans_occurrence"
+                motif += " ; ni « âme » ni « soul » dans le texte"
         if a["id"] in corrections and corrections[a["id"]] != categorie:
             motif = f"correction manuelle (au lieu de {categorie} : {motif})"
             categorie = corrections[a["id"]]
@@ -391,7 +410,8 @@ def main():
     sans = [l for l in indetermines if not l["n_occurrences"]]
     ech_ind = avec if len(avec) <= N_INDETERMINE else hasard.sample(avec, N_INDETERMINE)
     ech_ind += hasard.sample(sans, min(N_INDETERMINE - len(ech_ind), len(sans)))
-    ecrire(dossier / "echantillon_indetermine.csv", ech_ind, list(indetermines[0]) if indetermines else ["id"])
+    ecrire(dossier / "echantillon_indetermine.csv", ech_ind, ["id", "titre", "source", "date", "langue", "statut_texte",
+                                                              "n_mots", "n_occurrences", "phrase"])
 
     compte = collections.Counter(l["categorie"] for l in lignes)
     egalites = sum(1 for l in lignes if "à vérifier" in l["motif"])
