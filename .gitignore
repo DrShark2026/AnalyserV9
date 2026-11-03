@@ -6,3 +6,6 @@ veille/collecte.log
 # Python
 __pycache__/
 veille/.venv/
+
+# Exports du traitement par lot pour les tests : articles de presse sous droits, à garder hors du dépôt
+tests/fixtures/*.json

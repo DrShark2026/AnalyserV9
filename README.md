@@ -52,6 +52,27 @@ Quatre contrôles portent sur des cas que le modèle surévalue ou néglige :
 - **autorité empruntée** — une source invoquée en autorité, dont l'extrait est aussi signalé à
   vérifier pour une question de compétence, reçoit un risque moyen.
 
+Deux contrôles touchent la prise en charge elle-même :
+
+- **inversion σ (antiphrase)** — sur une notion, dans un même paragraphe, il faut à la fois un
+  marqueur de cadre (« si j'ai bien compris », « soi-disant », « paraît-il », « certes … mais », ou
+  une hyperbole notée `lexicalise`) et deux ajouts d'orientation opposée qu'aucun concessif ne
+  tranche. Les entrées σ totales concernées passent alors à l'adhésion **feinte** (fonction
+  antiphrase), et le document reçoit `ironie_detectee` et `figure_detectee: ["antiphrase"]`, avec
+  les marqueurs et la paire qui l'ont déclenchée. Un marqueur seul ne déclenche rien ; les
+  opérations ne sont pas réécrites. Quand le marqueur est dans une ligne d'en-tête (« [Rubrique]
+  Si j'ai bien compris… »), la fenêtre devient le document entier, mais seules les entrées σ qui
+  portent le marqueur ou l'un des deux ajouts basculent. Un marqueur prononcé par un énonciateur
+  mis en scène ne compte pas ;
+- **polyphonie** — un discours direct prêté à un énonciateur fictif ou générique (« le banquier »)
+  n'est pas pris en charge par le locuteur : source `enonciateur_mis_en_scene`, adhésion suspendue.
+  L'énonciateur est reconnu par un verbe de parole ou un deux-points, ou par la phrase qui précède
+  la citation quand celle-ci s'ouvre sur une apostrophe à la 2e personne (« Vous avez tout raté… »).
+
+Les contrôles déterministes se testent sans navigateur : `node --test tests/`. Pour les rejouer
+sur un export du traitement par lot : `node tests/rejouer.js <export.json> [id]`. Les tests de POL-25
+et d'IA-40 lisent un export déposé dans `tests/fixtures/`, qui reste hors du dépôt (articles sous droits).
+
 ## Contenu du dépôt
 
 | chemin | rôle |
