@@ -1792,7 +1792,8 @@ function enforceIronie(ops, dets, pec, texte){
 //       marquage « lexicalise » avec hyperbole: true),
 //   (2) deux ajouts d'orientation opposée sur N qu'aucun concessif résolutif ne tranche.
 // Un marqueur seul ne déclenche rien : un « certes… mais » ordinaire reste une concession.
-// Action : les entrées σ concernées passent de « totale » à « feinte » (fonction antiphrase) ; le document
+// Action : les entrées σ concernées passent de « totale » à « feinte » (fonction antiphrase) — et de « partielle »
+// à « feinte » pour celle qui porte elle-même le marqueur de cadre ; le document
 // reçoit ironie_detectee / figure_detectee. Les opérations ne sont pas touchées : on signale, on ne corrige pas.
 const MARQUEURS_CADRE = [
   { id:'si_j_ai_bien_compris', re:/si j['’]ai bien compris/iu },
@@ -1947,8 +1948,11 @@ function enforceInversionSigma(texte, notions, ops, dets, pec){
       const touchees = [];
       (pec||[]).forEach((p, i) => {
         const pp = pecPos[i];
-        if(pp < f.start || pp >= f.end || p.adhesion !== 'totale') return;
+        if(pp < f.start || pp >= f.end) return;
         const porteMarqueur = MARQUEURS_CADRE.some(mk => mk.re.test(String(p.text||'')));
+        // totale bascule ; partielle aussi, mais seulement pour la σ qui porte elle-même le marqueur de cadre :
+        // le modèle lit souvent « Si j'ai bien compris » comme une précaution (partielle), c'est-à-dire au premier degré
+        if(!(p.adhesion === 'totale' || (p.adhesion === 'partielle' && porteMarqueur))) return;
         if(p.notion_id && !ids.includes(p.notion_id) && !porteMarqueur) return;
         // fenêtre = document entier : on ne bascule pas toute la chronique, seulement les σ qui portent le cadre ou la paire
         if(f.englobant && !porteMarqueur){

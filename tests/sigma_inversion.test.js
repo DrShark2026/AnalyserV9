@@ -280,6 +280,17 @@ test('canon_norm : positif sur N3 /MACRONISME/, négatif sur N1 /EMMANUEL MACRON
   assert.ok(r.journal_sigma.some(l => /déclenchée sur N1\+N3 .*canon « macron »/.test(l)));
 });
 
+test('σ porteuse du marqueur en adhésion partielle ⇒ feinte ; autre σ partielle ⇒ inchangée', () => {
+  const an = MACRON.analyse();
+  an.pec[0].adhesion = 'partielle';              // lecture au premier degré de « Si j'ai bien compris »
+  an.pec.push({ text: 'Le Président est désormais totalement insolvable.', notion_id: 'N1', portee: 'propos', source: 'locuteur', adhesion: 'partielle', modalite: null, fonction: 'concession', risk: null });
+  const r = postTraiter(an, MACRON.texte);
+  assert.equal(r.ironie_detectee, true, r.journal_sigma.join('\n'));
+  assert.equal(r.pec[0].adhesion, 'feinte');
+  assert.equal(r.pec[0].adhesion_avant_inversion, 'partielle');
+  assert.equal(r.pec[1].adhesion, 'partielle');   // sans marqueur de cadre : pas touchée
+});
+
 test('canon_norm : même résultat que le positif tombe sur N1 ou sur N3', () => {
   const surN1 = MACRON.analyse(); surN1.operations[1].notion_id = 'N1';
   const a = postTraiter(surN1, MACRON.texte), b = postTraiter(MACRON.analyse(), MACRON.texte);
@@ -295,18 +306,25 @@ test('canon_norm : deux canons distincts (macron / dette) ne forment pas de pair
   assert.equal(r.pec[0].adhesion, 'totale');
 });
 
-test('POL-25 (texte réel) : « son plan génial » rattaché à N3 /MACRONISME/ ⇒ inversion déclenchée',
+test('POL-25 (texte réel) : positif placé sur une notion /MACRONISME/, négatif sur Macron ⇒ la paire se forme sous « macron »',
   { skip: POL25_FIXTURE() ? false : 'tests/fixtures/ ne contient pas d’export de POL-25' }, () => {
+  // indépendant de la forme de l'export (ids et notions varient d'une analyse à l'autre) :
+  // on ajoute une notion /MACRONISME/, on y déplace le positif, et on s'assure d'un négatif sur la notion « macron »
   const c = POL25_FIXTURE();
   const a = versSortieModele(c);
-  const or = { 'totalement insolvable': 'negative', 'le petit Manu': 'negative' };
-  a.operations.forEach(o => { o.orientation = or[o.ajout] || 'neutre'; o.hyperbole = /^Jupiter/.test(o.ajout); });
-  a.operations = a.operations.filter(o => o.ajout !== 'son plan génial');
-  a.operations.push({ notion_id: 'N3', notion: 'le macronisme', ajout: 'son plan génial', op: 'γ2', pec_ref: null, marquage: 'aucun', orientation: 'positive', hyperbole: false, risk: null });
+  const A2 = A.get('canonKey');
+  const macron = (a.notions || []).find(n => A2(n.canon || n.label) === 'macron');
+  assert.ok(macron, 'aucune notion de canon « macron » dans l’export');
+  a.notions.push({ id: 'NX', label: '/MACRONISME/', termes: ['le macronisme'] });
+  a.operations = a.operations.filter(o => o.ajout !== 'son plan génial' && o.orientation !== 'positive');
+  a.operations.push({ notion_id: 'NX', notion: 'le macronisme', ajout: 'son plan génial', op: 'γ2', pec_ref: null, marquage: 'aucun', orientation: 'positive', hyperbole: false, risk: null });
+  if(!a.operations.some(o => o.notion_id === macron.id && o.orientation === 'negative'))
+    a.operations.push({ notion_id: macron.id, notion: 'Macron', ajout: 'totalement insolvable', op: 'θ3', pec_ref: null, marquage: 'aucun', orientation: 'negative', hyperbole: false, risk: null });
   const r = postTraiter(a, c.texte);
   assert.equal(r.ironie_detectee, true, r.journal_sigma.join('\n'));
   assert.equal(r.antiphrase[0].canon_norm, 'macron');
-  assert.equal(r.pec.find(p => /si j['’]ai bien compris/i.test(p.text || '')).adhesion, 'feinte');
+  assert.ok(r.antiphrase[0].notions_regroupees.includes('NX'));
+  assert.equal(r.antiphrase[0].paire.positif.ajout, 'son plan génial');
 });
 
 test('chemin interactif (analyzeWithAI) : même règle σ que le lot, via appliquerSigma', async () => {
