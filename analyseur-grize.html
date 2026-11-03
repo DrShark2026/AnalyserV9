@@ -246,7 +246,7 @@
 <div class="wrap">
   <div class="topbar">
     <div>
-      <a href="index.html" style="font-family:'JetBrains Mono', monospace; font-size:.75rem; color:var(--ink-soft); text-decoration:none;" id="back-link">← le survivant — histoire d'une thèse</a>
+      <a href="https://drshark2026.github.io/AnalyserV9/" target="_blank" rel="noopener" style="font-family:'JetBrains Mono', monospace; font-size:.75rem; color:var(--ink-soft); text-decoration:none;" id="back-link">← le survivant — histoire d'une thèse</a>
       <h1 id="title">Analyseur d'opérations logico-discursives — Grize, Charconnet 1999</h1>
       <p class="sub" id="subtitle">Repérer les opérations logico-discursives et suivre la progression des classes-objets, thème / phore</p>
     </div>
@@ -992,14 +992,14 @@ function buildAISystemPrompt(){
     "Exemples authentiques du corpus de la thèse :",
     fewshot,
     "",
-    "1. NOTIONS (α). Liste toutes les notions que le texte ancre réellement, sans présupposer qu’il y en a deux : un texte peut n’en ancrer qu’une — texte monadique, résultat normal —, deux, ou davantage (θ5 à discours intermédiaire). Identifiant \"N1\", \"N2\"… et étiquette de 1 à 4 mots, style \"/NOTION/\". Ajoute \"termes\" : 1 à 6 expressions copiées mot pour mot du texte qui désignent la notion elle-même (groupes nominaux, sigles), sigles et formes abrégées compris (\"V/A/K\", \"IA\"), jamais un mot isolé et courant. Les termes sont des variantes de FORME de la même désignation (pluriel, sigle, forme abrégée, reprise du même nom) : jamais une paraphrase, une glose ou une périphrase qui la traduit en d’autres mots (pour /REMIGRATION/, \"l’expulsion des étrangers\" n’est pas un terme mais une glose du journaliste). N’invente jamais une notion que le texte ne pose pas : ce serait commettre le biais que cet outil détecte.",
+    "1. NOTIONS (α). Liste toutes les notions que le texte ancre réellement, sans présupposer qu’il y en a deux : un texte peut n’en ancrer qu’une — texte monadique, résultat normal —, deux, ou davantage (θ5 à discours intermédiaire). Identifiant \"N1\", \"N2\"… et étiquette de 1 à 4 mots, style \"/NOTION/\". Ajoute \"termes\" : 1 à 6 expressions copiées mot pour mot du texte qui désignent la notion elle-même (groupes nominaux, sigles), sigles et formes abrégées compris (\"V/A/K\", \"IA\"), jamais un mot isolé et courant. Les termes sont des variantes de FORME de la même désignation (pluriel, sigle, forme abrégée, reprise du même nom) : jamais une paraphrase, une glose ou une périphrase qui la traduit en d’autres mots (pour /REMIGRATION/, \"l’expulsion des étrangers\" n’est pas un terme mais une glose du journaliste). N’invente jamais une notion que le texte ne pose pas : ce serait commettre le biais que cet outil détecte. Ajoute enfin \"canon\" : la même notion sous sa forme la plus nue et la plus stable d’un texte à l’autre, 1 à 3 mots en minuscules, sans article, sans prénom ni titre, au singulier sauf nom propre pluriel (\"macron\", \"gilets jaunes\", \"mobilisation\", \"intelligence artificielle\") : deux textes qui parlent de la même chose doivent donner le même canon.",
     "2. PRISE EN CHARGE (σ, tableau \"pec\"). Pour les passages significatifs — en priorité ceux qui portent sur une notion empruntée ou une assimilation —, décris l’attitude de l’AUTEUR DU TEXTE ENTIER, jamais celle de la personne citée envers ses propres mots. \"source\" : locuteur (en son nom propre) | nommee | vague (\"on\", \"certains\", \"les experts\", \"des études\") | effacee (tournure impersonnelle qui rend la source introuvable) | enonciateur_mis_en_scene (discours direct, entre guillemets, prêté à un énonciateur fictif ou générique que l\u2019auteur fait parler : \"le banquier\", \"un ministre\", \"le Français moyen\" — adhésion suspendue, jamais totale). \"adhesion\" : totale | partielle (concession, restriction) | suspendue (rapporté sans se prononcer) | contestee (mise en cause du point de vue du premier concepteur de la notion) | refutee. \"modalite\" : le marqueur de modalisation, ou null. \"fonction\" : autorite (l’auteur s’appuie sur la source pour étayer SA thèse) | concession | refutation | rapport | null. Ajoute \"notion_id\" : la notion sur laquelle porte la prise en charge, ou null ; et \"portee\" : \"notion\" si le passage met en doute la notion elle-même — sa validité, son existence, sa pertinence (\"la théorie des styles d\u2019apprentissage est débattue\") —, \"propos\" s\u2019il tient à distance une affirmation faite à son sujet (\"Mistral affirme que son modèle est parmi les meilleurs\"). Un journaliste qui rapporte une citation sans la commenter : adhésion suspendue, fonction rapport. \"risk\" d’une entrée σ : pour une source effacee ou vague, ou locuteur sans appui, risk medium si aucune justification n’apparaît dans la même phrase ou une phrase proche — source nommée, donnée vérifiable, raisonnement explicite (y compris a fortiori ou conditionnel : \"si trois chercheurs ont pu le faire, nous devons supposer…\"), renvoi à un fait établi dans le texte ; une reformulation ou une autre tournure vague ne justifie rien. Une source nommée invoquée HORS de son domaine de compétence (une juridiction citée sur l’économie, un acteur sur la médecine), en fonction autorite : risk medium, l’autorité est empruntée. Signale toujours une autorité invoquée sans source identifiable (\"des études montrent\", \"research shows\") avec adhésion totale : c’est un λ sans source. Sinon risk null.",
     "3. MARQUAGE ET RISQUE — règle qui s’applique aux étapes 4 et 5. Principe directeur : une assimilation non marquée est un risque par défaut, même bien établie et souvent répétée en vulgarisation. Pour chaque assimilation candidate (ρ3, θ5, θ4, emprunt de vocabulaire à une autre notion), décide dans cet ordre :",
     "(a) MENTION OU USAGE — si le texte parle de la métaphore au lieu de l’employer (modalisation autonymique : terme court entre guillemets de distance ; cadre métalinguistique \"X are called Y\", \"referred to as\", \"the term\", \"the Y metaphor\", \"on appelle\", \"le terme\" ; inventaire de métaphores proposées par d’autres) : c’est une mention, risk null. Le même terme repris ensuite hors guillemets dans la voix du locuteur redevient un usage.",
     "(b) NÉGATION — si le rapprochement est nié ou refusé (\"X, not Y\", \"ne… pas\", \"rather than\", \"contrairement à\") : risk null, c’est un marquage fort. Attention : une SUBSTITUTION n’est pas une négation. Quand \"plutôt que\", \"au lieu de\", \"à la place de\", \"remplacer X par Y\" font de X et Y deux candidats au même rôle (\"des robots plutôt que des étrangers\" pour la main-d’œuvre), le texte les range dans une même classe : c’est un θ5, marquage \"aucun\" si l’auteur l’assume, et non \"negation\". La négation porte sur une assimilation refusée (\"le modèle prédit plutôt qu’il ne pense\") ; la substitution pose une équivalence de fonction.",
     "(c) λ — si l’assimilation se trouve dans un discours inséré (citation de toute forme, discours rapporté, croyance attribuée, conditionnel, formule de cadrage : \"should be considered\", \"so-called\", \"qualifié de\") : l’adhésion σ de l’auteur décide. Suspendue, contestée ou réfutée : risk null. Partielle : au plus medium. Totale, surtout en fonction autorité (\"comme l’a montré X, le génome est un texte\") : la citation légitime au lieu de protéger — signale l’assimilation comme non marquée.",
     "(d) MARQUEUR LEXICAL — \"comme\", \"tel\", \"à la manière de\", ou verbe de dérivation (\"s’inspirer de\", \"imiter\", \"emprunter à\", \"calqué sur\", \"à l’image de\", \"par analogie avec\") : risk null, sauf si la suite reprend le rapprochement comme une identité — c’est alors la suite qu’on signale.",
-    "(e) LEXICALISATION — terme devenu l’unique désignation technique disponible dans son domaine, sans alternative littérale vivante (\"transcription\" en biologie moléculaire, \"neurone artificiel\", \"sandbox escape\") : risk null, et relève-le en mnémonique (étape 6). Mais si le cadre syntaxique lui prête un motif, une intention ou un sentiment (\"why its agents escaped\", \"wanted to\", \"pourquoi il s’est échappé\"), la métaphore morte est réanimée : signale-la en θ5 en citant ce cadre. Un terme seulement fréquent en vulgarisation (\"le génome est un texte\") n’est pas lexicalisé ; dans le doute, signale. Une expression idiomatique figée du discours ordinaire (\"dans la course\", \"le vent en poupe\", \"prendre le train en marche\", \"les géants du secteur\") n’est jamais un risque high : isolée, marquage \"lexicalise\" ; filée sur plusieurs phrases au point d’organiser le texte, risk medium au plus. PÉJORATIF OUVERT : une dévalorisation affichée (insulte, sobriquet, jugement de valeur explicite : \"tas de ferraille\", \"techno-bourrins\", \"usine à gaz\") est une prise de position explicite que le lecteur voit, non une assimilation cachée : risk medium au plus, et relève-la dans σ comme prise en charge du locuteur. IRONIE : une marque d’ironie ou d’antiphrase (\"mais oui, bien sûr\", \"on y croit\", \"rien que ça\", \"yeah, right\") est une réfutation : crée une entrée σ adhesion refutee, fonction refutation, portee propos, sur la phrase visée.",
+    "(e) LEXICALISATION — terme devenu l’unique désignation technique disponible dans son domaine, sans alternative littérale vivante (\"transcription\" en biologie moléculaire, \"neurone artificiel\", \"sandbox escape\") : risk null, et relève-le en mnémonique (étape 6). Mais si le cadre syntaxique lui prête un motif, une intention ou un sentiment (\"why its agents escaped\", \"wanted to\", \"pourquoi il s’est échappé\"), la métaphore morte est réanimée : signale-la en θ5 en citant ce cadre. Un terme seulement fréquent en vulgarisation (\"le génome est un texte\") n’est pas lexicalisé ; dans le doute, signale. Une expression idiomatique figée du discours ordinaire (\"dans la course\", \"le vent en poupe\", \"prendre le train en marche\", \"les géants du secteur\") n’est jamais un risque high : isolée, marquage \"lexicalise\" ; filée sur plusieurs phrases au point d’organiser le texte, risk medium au plus. PÉJORATIF OUVERT : une dévalorisation affichée (insulte, sobriquet, jugement de valeur explicite : \"tas de ferraille\", \"techno-bourrins\", \"usine à gaz\") est une prise de position explicite que le lecteur voit, non une assimilation cachée : risk medium au plus, et relève-la dans σ comme prise en charge du locuteur. IRONIE : une marque d’ironie ou d’antiphrase (\"mais oui, bien sûr\", \"on y croit\", \"rien que ça\", \"yeah, right\") est une réfutation : crée une entrée σ adhesion refutee, fonction refutation, portee propos, sur la phrase visée. GUILLEMETS ASSUMÉS : des guillemets qui introduisent la catégorie propre du locuteur, qu\u2019il revendique (\"we have to see LFI as “new reformists”\", \"c\u2019est bien une “remigration”\"), ne sont pas une mention : marquage lambda_endosse, le risque reste. FIGURE LUDIQUE : une image plaisante et visiblement personnelle du locuteur (\"Noël avant l\u2019heure pour les révolutionnaires\", une métaphore de boxe) affiche sa position et ne cache rien : risk medium au plus. ÉTIQUETTE POLITIQUE : qualifier un adversaire par une catégorie classante non marquée, dans la voix du locuteur (\"fasciste\", \"facho\", \"extrême droite\", \"extrême gauche\", \"islamo-gauchiste\", \"woke\", \"far right\", \"radical left\"), est un θ1 à relever avec risk medium, QUEL QUE SOIT LE CAMP du locuteur ; il en va de même pour les étiquettes de la presse américaine (\"progressive\", \"liberal\", \"leftist\", \"right-wing\", \"conservative\") et pour \"gauchiste\" ; l\u2019étiquette que le locuteur applique à son propre camp (\"the radical left\" sous la plume d\u2019un soutien de LFI, \"la droite\" chez un élu LR) n\u2019est pas un risque. Quand l\u2019étiquette vise un parti (\"the fascist Rassemblement National\"), crée la notion de ce parti et rattache-lui l\u2019opération ; les désignations des migrants (\"illegal immigrant\", \"clandestin\", \"sans-papiers\", \"undocumented\") sont des choix lexicaux de camp, à relever en θ1 sans risque ; si l\u2019étiquette est l\u2019autodésignation du parti ou une décision de justice citée, risk null. SUPERLATIF DE JUGEMENT : un superlatif absolu dans la voix du locuteur, sans source (\"the most Islamophobic country in Western Europe\", \"le pays le plus raciste\"), est une prise en charge totale : entrée σ avec risk medium, ET entrée a_verifier. ESSENTIALISATION : attribuer à un groupe entier une qualité \"par nature\", \"toujours\", \"en tous lieux\", \"by definition\" (\"l\u2019extrême droite est par nature…\", \"l\u2019islam est par essence…\", \"la gauche a toujours…\") est une généralisation essentialiste : risk high, QUEL QUE SOIT LE GROUPE visé. ANALOGIE HISTORIQUE : rapprocher un acteur présent d\u2019un épisode historique chargé (Munich, Vichy, Pétain, \"divine surprise\", les années 30, l\u2019appeasement) pour en tirer la conclusion est un θ5 : relève-le avec risk high si le rapprochement porte la conclusion sans être argumenté, medium s\u2019il est explicitement discuté. \"L\u2019histoire nous l\u2019a enseigné\" est une autorité à source effacée : risk medium. PRÉTÉRITION : \"X n\u2019est peut-être pas Y, mais…\", \"je ne dirai pas que…\", \"rien n\u2019est dit, mais…\", \"I\u2019m not saying…, but\" affirment Y en feignant de ne pas l\u2019affirmer : la négation est apparente, Y reste attribué. Ce n\u2019est PAS une négation (b) : relève l\u2019opération sur Y avec risk high et crée une entrée σ adhesion totale, modalite \"prétérition\". EN VOIE DE LEXICALISATION : les termes venus des laboratoires d\u2019IA et repris par la presse (\"frontier\", \"agent\", \"agentic\", \"AI race\", \"alignment\", \"hallucination\", \"guardrails\", \"reasoning\") ne sont ni des métaphores vives ni des termes établis : marquage lexicalise, risk medium au plus ; si le cadre les réanime (\"pushes the frontier\", \"agents going off the rails\"), relève le θ5 avec risk medium. Ne relève pas ces mots dans leur sens ordinaire (la frontière d\u2019un pays, des agents de police) ni dans un nom propre (le magazine \"Frontières\"). SUPER INTELLIGENCE : depuis le décret américain de septembre 2026, \"Super Intelligence\" ou \"SI\" remplace officiellement \"artificial intelligence\" ; c\u2019est un choix lexical de camp, à relever en θ1 sans risque (reprise s\u2019il est employé sans guillemets, mention s\u2019il est cité) ; \"superintelligence\" (le concept de Bostrom) reste un terme en voie de lexicalisation. QUESTION : une assimilation posée dans une interrogation (\"moment démocratique ou combat algorithmique ?\") est soumise au lecteur, non assertée : risk medium au plus. VERBE DE PAROLE ÉVALUATIF : quand le verbe qui introduit des paroles rapportées les juge (\"a-t-il éructé\", \"vociféré\", \"asséné\", \"avoue\", \"prétend\", \"ranted\", \"claimed\", \"admitted\"), c\u2019est une prise de position du locuteur sur l\u2019énonciateur cité : entrée σ avec risk medium, modalite = le verbe.",
     "(f) Sinon : \"risk\":{\"level\":\"high\"|\"medium\",\"label\":\"<15 mots maximum>\"}.",
     "RÈGLE CONTRAIGNANTE : chaque entrée de \"operations\" et de \"determinations\" porte un champ \"marquage\" qui dit LEQUEL de ces cas s\u2019applique, décidé AVANT le risque — \"mention\" (a), \"negation\" (b), \"lambda_distance\" (c, adhésion suspendue, contestée ou réfutée), \"lambda_endosse\" (c, adhésion totale, surtout en fonction autorité), \"marqueur_lexical\" (d), \"lexicalise\" (e), ou \"aucun\" (f). Un \"risk\" non null n\u2019est permis QUE si \"marquage\" vaut \"aucun\" ou \"lambda_endosse\" ; pour les cinq autres valeurs, \"risk\" est null sans exception, le principe directeur ne s\u2019appliquant qu\u2019au cas (f). Une analogie filée sur plusieurs phrases reste marquée si son marqueur est posé une fois (\"de la même manière que...\", \"ressemble à...\", \"s\u2019inspire de...\") : ne signale alors que les reprises ultérieures qui abandonnent le marqueur.",
     "Un passage que σ tient à distance ne porte jamais de risque, ni dans \"operations\" ni dans \"determinations\".",
@@ -1011,7 +1011,7 @@ function buildAISystemPrompt(){
     "8. VERDICT (\"risque_global\", décidé en dernier). true si une opération ou une détermination de niveau high porte sur l’assimilation centrale du texte, ou si au moins deux risques subsistent, medium compris ; false si les risques éventuels sont isolés et périphériques. En cas de doute réel, true.",
     "",
     "SORTIE. Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ou après ni balises markdown, en produisant les sections dans cet ordre exact :",
-    "{\"notions\":[{\"id\":\"N1\",\"label\":\"...\",\"termes\":[\"...\"]}],\"pec\":[{\"text\":\"<extrait exact>\",\"notion_id\":\"N1\"|null,\"portee\":\"notion|propos\",\"source\":\"locuteur|nommee|vague|effacee|enonciateur_mis_en_scene\",\"adhesion\":\"totale|partielle|suspendue|contestee|refutee\",\"modalite\":\"<marqueur>\"|null,\"fonction\":\"autorite|concession|refutation|rapport\"|null,\"risk\":{\"level\":\"medium\",\"label\":\"<15 mots maximum>\"}|null}],\"operations\":[{\"notion_id\":\"N1\",\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"orientation\":\"positive|negative|neutre\",\"hyperbole\":true|false,\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"determinations\":[{\"notion_ids\":[\"N1\",\"N2\"],\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"ρ3|θ5|...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"mnemoniques\":[{\"terme\":\"...\",\"domaine_source\":\"...\"}],\"a_verifier\":[{\"text\":\"...\",\"raison\":\"<10 mots maximum>\"}],\"risque_global\":true|false}",
+    "{\"notions\":[{\"id\":\"N1\",\"label\":\"...\",\"canon\":\"...\",\"termes\":[\"...\"]}],\"pec\":[{\"text\":\"<extrait exact>\",\"notion_id\":\"N1\"|null,\"portee\":\"notion|propos\",\"source\":\"locuteur|nommee|vague|effacee|enonciateur_mis_en_scene\",\"adhesion\":\"totale|partielle|suspendue|contestee|refutee\",\"modalite\":\"<marqueur>\"|null,\"fonction\":\"autorite|concession|refutation|rapport\"|null,\"risk\":{\"level\":\"medium\",\"label\":\"<15 mots maximum>\"}|null}],\"operations\":[{\"notion_id\":\"N1\",\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"orientation\":\"positive|negative|neutre\",\"hyperbole\":true|false,\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"determinations\":[{\"notion_ids\":[\"N1\",\"N2\"],\"notion\":\"...\",\"ajout\":\"...\",\"op\":\"ρ3|θ5|...\",\"pec_ref\":0|null,\"marquage\":\"mention|negation|lambda_distance|lambda_endosse|marqueur_lexical|lexicalise|aucun\",\"risk\":{\"level\":\"high\",\"label\":\"<15 mots maximum>\"}|null}],\"mnemoniques\":[{\"terme\":\"...\",\"domaine_source\":\"...\"}],\"a_verifier\":[{\"text\":\"...\",\"raison\":\"<10 mots maximum>\"}],\"risque_global\":true|false}",
     "Au plus 8 entrées au total entre \"operations\" et \"determinations\", et 6 dans \"pec\". Rédige \"label\" et \"notion\" dans la langue du texte analysé ; \"ajout\" et \"text\" restent des copies exactes du texte source. Le JSON doit toujours être complet et valide, quitte à raccourcir les labels ; aucun raisonnement hors du JSON.",
   ].join('\n');
 }
@@ -1146,7 +1146,7 @@ async function analyzeWithAI(){
     }
     // --- compatibilité : le nouveau schéma renvoie "notions" (N dynamique) + "operations" (internes) + "determinations" (relationnelles \u03c1/\u03b85)
     // le mode texte seul reste affiché sur deux colonnes fixes (thème/phore) en attendant sa propre généralisation.
-    const notionsArr = Array.isArray(parsed) ? [] : (parsed.notions || []);
+    const notionsArr = canonNotions(Array.isArray(parsed) ? [] : (parsed.notions || []));
     const themeId = notionsArr[0] && notionsArr[0].id;
     const themeSuggestion = notionsArr[0] && notionsArr[0].label;
     const phoreSuggestion = notionsArr[1] && notionsArr[1].label;
@@ -1202,16 +1202,24 @@ function updateAIStatus(isError, notionApplied, detail, addedCount, sigma){
   el.textContent = msg;
 }
 
-async function analyzeOneForBatch(texte){
-  const systemPrompt = buildAISystemPrompt();
-  const userPrompt = `Texte à analyser :\n${texte}`;
-  const parsed = await callClaudeJSONWithRetry(systemPrompt, userPrompt);
-  return postTraiter(parsed, texte);
+// v17.3 : les lots de la veille portent deux champs, « texte » (titre + résumé RSS) et « texte_complet ».
+// On analyse le texte complet quand il existe, coupé à une fin de phrase au-delà de TEXTE_MAX caractères.
+const TEXTE_MAX = 15000;
+function texteAAnalyser(ex){
+  const resume = String(ex.texte || '');
+  const complet = String(ex.texte_complet || '').trim();
+  let t = complet.length > resume.length ? complet : resume;
+  const source = (t === complet && complet) ? 'complet' : 'resume';
+  let tronque = false;
+  if(t.length > TEXTE_MAX){
+    const cut = t.lastIndexOf('.', TEXTE_MAX);
+    t = t.slice(0, cut > TEXTE_MAX * 0.7 ? cut + 1 : TEXTE_MAX);
+    tronque = true;
+  }
+  return { texte: t, source, tronque };
 }
-
-// Libellé canonique des notions (repris de l'artefact v17.9) : minuscules, sans accents, sans article ni barre,
-// plus quelques alias. Sert à suivre une notion d'un texte à l'autre, et à regrouper N1 /EMMANUEL MACRON/ et
-// N3 /MACRONISME/ sous « macron » dans l'inversion σ.
+// v17.9 : libellé canonique des notions, pour suivre une même notion d'un jour à l'autre.
+// Le modèle propose "canon" ; on normalise (minuscules, sans accents, sans article ni barre) et on applique quelques alias.
 const CANON_ALIAS = {
   'emmanuel macron':'macron', 'president macron':'macron', 'pouvoir macroniste':'macron', 'macronie':'macron', 'macronisme':'macron',
   'ia':'intelligence artificielle', 'ai':'intelligence artificielle', 'artificial intelligence':'intelligence artificielle',
@@ -1229,6 +1237,12 @@ function canonKey(t){
 function canonNotions(notions){
   (notions||[]).forEach(n => { n.canon_norm = canonKey(n.canon || n.label); });
   return notions;
+}
+async function analyzeOneForBatch(texte){
+  const systemPrompt = buildAISystemPrompt();
+  const userPrompt = `Texte à analyser :\n${texte}`;
+  const parsed = await callClaudeJSONWithRetry(systemPrompt, userPrompt);
+  return postTraiter(parsed, texte);
 }
 
 // Prise en charge σ : polyphonie puis inversion (antiphrase). Point d'entrée unique, appelé par le lot
@@ -1248,14 +1262,14 @@ function appliquerSigma(texte, notions, ops, dets, pec){
 
 // Contrôles déterministes appliqués à la sortie du modèle : commun au lot, à la démo et aux tests (tests/).
 function postTraiter(parsed, texte){
-  const notions = Array.isArray(parsed) ? [] : (parsed.notions || []);
+  const notions = canonNotions(Array.isArray(parsed) ? [] : (parsed.notions || []));
   const ops = Array.isArray(parsed) ? parsed : (parsed.operations || []);
   const dets = Array.isArray(parsed) ? [] : (parsed.determinations || []);
   const pec = Array.isArray(parsed) ? [] : (parsed.pec || []);
   const aVerifier = Array.isArray(parsed) ? [] : (parsed.a_verifier || []);
   const mnemoniques = Array.isArray(parsed) ? [] : (parsed.mnemoniques || []);
   const sigma = appliquerSigma(texte, notions, ops, dets, pec);
-  const nNeutralises = enforceMarquage(ops, dets) + enforceSigmaCoherence(ops, dets, pec) + enforceAutonymy(ops, dets, texte) + enforceFigees(ops, dets, texte) + enforcePejoratifs(ops, dets) + enforceIronie(ops, dets, pec, texte);
+  const nNeutralises = enforceMarquage(ops, dets) + enforceSigmaCoherence(ops, dets, pec) + enforceAutonymy(ops, dets, texte, pec) + enforceFigees(ops, dets, texte) + enforcePejoratifs(ops, dets) + enforceEtiquettes(ops, dets, texte) + enforceLexicalisation(ops, dets, texte) + enforceQuestions(ops, dets, texte) + enforceSuperIntelligence(ops, dets, texte) + enforceGuillemets(ops, dets, texte) + enforceAnalogieAnnoncee(ops, dets, texte) + enforceRefutationTitre(ops, dets, pec, texte) + enforceIronie(ops, dets, pec, texte) + enforceConcession(ops, dets, texte) + enforceDoublons(ops, dets);
   const nIntrouvables = checkExtracts(texte, ops, dets, pec, aVerifier);
   enforceAutoriteEmpruntee(pec, aVerifier);
   // recomputed rather than trusted: the model states the rule but applies it unevenly
@@ -1375,7 +1389,11 @@ function checkPecConsistency(texte, notions, pec){
   // Le doute doit porter sur la notion elle-même (sa validité, son existence), pas sur un propos tenu à son sujet :
   // « Mistral affirme que son modèle est parmi les meilleurs » met en doute un propos, pas l'existence du modèle.
   // Sans le champ "portee" (analyses antérieures), on écarte le simple rapport, qui suspend sans douter.
-  const porteSurNotion = p => p.portee ? p.portee === 'notion'
+  // v17.4 : une concession (« sounds a bit silly, but it gets the relationship right », « despite the warnings… »)
+  // accorde une réserve pour la dépasser : la position finale est l'adhésion, continuer d'employer la notion est cohérent.
+  // Et le simple rapport (adhésion suspendue, fonction rapport) suspend sans douter, même si le modèle a mis portée « notion ».
+  const porteSurNotion = p => (p.fonction === 'concession' || (p.fonction === 'rapport' && p.adhesion === 'suspendue')) ? false
+                                     : p.portee ? p.portee === 'notion'
                                        : (p.adhesion !== 'suspendue' && p.fonction !== 'rapport');
   // une seule analyse par notion : la première réserve qui la concerne fait foi
   const parNotion = new Map();
@@ -1391,6 +1409,9 @@ function checkPecConsistency(texte, notions, pec){
     const notion = notions.find(n => n.id === nid);
     const termes = _expandTermes(_filtreGloses(notion)).sort((a,b) => b.length - a.length);
     if(!termes.length) return;
+    // v17.1 : la réserve doit nommer la notion (« Le débat n'est pas tranché » ne doute pas de l'existence de l'IA).
+    const pNorm = ' ' + normForMatch(p.text) + ' ';
+    if(!termes.some(t => { const k = normForMatch(t); return k && pNorm.includes(' ' + k + ' '); })) return;
     const posReserve = loc ? loc.start : -1;
     // toutes les occurrences, les plus longues d'abord, sans chevauchement
     const prises = [];
@@ -1438,6 +1459,9 @@ const FIGEES = [
   {famille:'combat',      re:/(^|[^\p{L}])(bras de fer|bataille|battles?|arms race|course aux armements|guerre des prix|price war)(?![\p{L}])/iu},
   {famille:'géant',       re:/(^|[^\p{L}])(géants?|giants?|mastodontes?|poids lourds?|heavyweights?)(?![\p{L}])/iu},
   {famille:'ruée',        re:/(^|[^\p{L}])(ruée vers l.or|gold rush|eldorado)(?![\p{L}])/iu},
+  {famille:'gilets jaunes', re:/(^|[^\p{L}])(actes? (?:[IVXLC]+|\d+)|nouvel acte|acte des gilets jaunes)(?![\p{L}])/iu},
+  {famille:'politique',   re:/(^|[^\p{L}])(dauphins?|dauphine|poulains?|bras droit|barons?|éléphants? du PS|feuille de route|ligne rouge|red lines?|heir apparent|front-?runner)(?![\p{L}])/iu},
+  {famille:'alerte',      re:/(^|[^\p{L}])(wake-?up calls?|signal d.alarme|sonnettes? d.alarme|coup de semonce|canary in the coal ?mine|red flags?|tip of the iceberg|partie émergée de l.iceberg)(?![\p{L}])/iu},
   {famille:'élan',        re:/(^|[^\p{L}])(coup d.accélérateur|passer la vitesse supérieure|game[- ]changer|change la donne)(?![\p{L}])/iu}
 ];
 function enforceFigees(ops, dets, texte){
@@ -1460,7 +1484,7 @@ function enforceFigees(ops, dets, texte){
 
 // Péjoratif ouvert : une dévalorisation affichée (« tas de ferraille », « techno-bourrins ») est une prise
 // de position que le lecteur voit ; elle ne peut pas compter comme assimilation cachée : plafonnée à moyen.
-const PEJORATIFS_RE = /(^|[^\p{L}])(tas de ferraille|ferraille|bourrins?|techno-\p{L}+|usine à gaz|bidules?|machins?|gourous?|charlatans?|poudre de perlimpinpin|foutaises?|bullshit|snake oil|junk|hype|scams?|claptrap|gadgets?)(?![\p{L}])/iu;
+const PEJORATIFS_RE = /(^|[^\p{L}])(tas de ferraille|ferraille|(?:méga)?boucheries?|bourrins?|techno-\p{L}+|usine à gaz|bidules?|machins?|gourous?|charlatans?|poudre de perlimpinpin|foutaises?|bullshit|snake oil|junk|hype|scams?|claptrap|gadgets?)(?![\p{L}])/iu;
 const PEJORATIF_LABEL_RE = /(dévalori|péjorati|dénigr|disparag|pejorat)/i;
 function enforcePejoratifs(ops, dets){
   let n = 0;
@@ -1470,6 +1494,263 @@ function enforcePejoratifs(ops, dets){
     if(PEJORATIFS_RE.test(a) || PEJORATIF_LABEL_RE.test(o.risk.label || '')){
       o.risk_avant_pejoratif = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_pejoratif = true; n++;
     }
+  });
+  return n;
+}
+
+// Étiquettes politiques : catégories classantes appliquées à un camp. Plafonnées à « moyen » quel que soit le camp,
+// et relevées automatiquement si le modèle les a manquées (hors guillemets courts). Les désignations des migrants
+// (« illegal immigrant », « clandestin », « sans-papiers », « undocumented ») sont des choix lexicaux de camp :
+// relevées sans risque, pour être comptées des deux côtés.
+const ETIQUETTES_RE = /(^|[^\p{L}])(extrêmes?[- ]droites?|ultra-?droites?|extrêmes?[- ]gauches?|ultra-?gauches?|far[- ]right|far[- ]left|radical[- ]left|radical[- ]right|alt-right|fascist(?:es?|s)?|fachos?|islamo-?gauchis\p{L}*|wokes?|wokisme|MAGA|antifas?)(?![\p{L}])/giu;
+// v17 : étiquettes descriptives courantes dans la presse américaine (et « gauchiste ») : plafonnées à « moyen »
+// comme les autres, mais pas relevées automatiquement (ce sont aussi des désignations neutres).
+const ETIQUETTES_DOUCES_RE = /(^|[^\p{L}])(progressives?|liberals?|leftists?|left-wing|right-wing|rightists?|conservatives?|socialists?|communists?|gauchistes?|droitards?)(?![\p{L}])/giu;
+const LEXIQUE_MIGR_RE = /(^|[^\p{L}])(illegal (?:immigrants?|aliens?|migrants?)|illegals|clandestins?|sans-papiers|undocumented(?: immigrants?| migrants?)?)(?![\p{L}])/giu;
+function enforceEtiquettes(ops, dets, texte){
+  texte = String(texte||'');
+  let n = 0;
+  const all = [...(ops||[]), ...(dets||[])];
+  const test = (re, s) => { re.lastIndex = 0; const r = re.test(s); re.lastIndex = 0; return r; };
+  all.forEach(o => {
+    const aj = String(o.ajout||'');
+    if(o.risk && o.risk.level === 'high' && (test(ETIQUETTES_RE, aj) || test(ETIQUETTES_DOUCES_RE, aj))){
+      o.risk_avant_etiquette = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_etiquette = true; n++;
+    } else if(o.risk && o.risk.level === 'high' && (test(LEXIQUE_MIGR_RE, aj) || test(LEXIQUE_MIGR_RE, String(o.notion||'')))){
+      // v17 : la désignation des migrants est comptée à part (choix lexical) ; l'opération qui la porte reste au plus « moyen ».
+      o.risk_avant_lexique = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_lexique_migr = true; n++;
+    }
+  });
+  const quoted = quotedSpans(texte);
+  const vus = new Set();
+  const scan = (re, risk, flag, label) => {
+    re.lastIndex = 0; let m;
+    while((m = re.exec(texte)) !== null){
+      const t = m[2]; const k = normForMatch(t);
+      if(vus.has(k) || quoted.some(q => q.includes(k))) continue;
+      // v17.1 : « clandestin » adjectif hors contexte migratoire (« forum clandestin », « travail clandestin ») n'est pas une désignation des migrants.
+      if(flag === 'choix_lexical_migration' && /^clandestin/i.test(t)){
+        const avant = texte.slice(Math.max(0, m.index + m[1].length - 12), m.index + m[1].length).toLowerCase();
+        const nom = /(^|[^\p{L}])(un|le|les|des|ces|aux|du|de)\s+$/u.test(avant);
+        const ctx = /(immigr|migrant|migratoire|étranger|etranger|sans-papiers|expuls|oqtf|asile|régularis|regularis)/i.test(texte);
+        if(!nom && !ctx) continue;
+      }
+      vus.add(k);
+      const deja = all.find(o => normForMatch(o.ajout).includes(k));
+      if(deja){
+        const neutralise = Object.keys(deja).some(c => c.startsWith('neutralise_'));
+        if(!neutralise && !deja.risk){ deja[flag] = true; if(risk){ deja.risk = { level:'medium', label }; n++; } }
+        continue;
+      }
+      const d = { notion_ids: [], notion: '(étiquette)', ajout: t, op: 'θ1', pec_ref: null, marquage: 'aucun', risk: risk ? { level:'medium', label } : null };
+      d[flag] = true; (dets).push(d); if(risk) n++;
+    }
+    re.lastIndex = 0;
+  };
+  if(Array.isArray(dets)){
+    scan(ETIQUETTES_RE, true, 'ajout_etiquette', 'Étiquette politique non marquée (relevée automatiquement)');
+    scan(LEXIQUE_MIGR_RE, false, 'choix_lexical_migration', '');
+  }
+  return n;
+}
+
+// Termes en voie de lexicalisation (vocabulaire de l'IA venu des laboratoires et repris par la presse) :
+// ni métaphore vive, ni terme technique établi. Plafonnés à « moyen » s'ils portent un risque, et relevés
+// dans tous les cas (champ en_voie_lexicalisation) pour suivre leur figement dans le temps.
+const LEXICALISATION_RE = /(^|[^\p{L}])(frontier|frontière|frontières|agents?|agentic|agentique|ai race|course à l'ia|course à l’ia|alignment|alignement|hallucinations?|hallucine\p{L}*|guardrails?|garde-fous?|reasoning|raisonnement|superintelligence|godfather of ai|parrain de l'ia|parrain de l’ia)(?![\p{L}])/giu;
+// v17 : termes ambigus (sens courant hors IA : frontière politique, agents de police, raisonnement ordinaire…)
+// relevés seulement si le texte parle d'IA ; noms propres (« Frontières », magazine) exclus.
+const LEXI_SANS_AMBIGUITE = new Set(['agentic','agentique','ai race',"course à l'ia",'course à l’ia','superintelligence','godfather of ai',"parrain de l'ia",'parrain de l’ia']);
+const CONTEXTE_IA_RE = /(^|[^\p{L}])(IA|AI|A\.I\.|intelligence artificielle|artificial intelligence|LLMs?|chatbots?|modèles? de langage|language models?|GPT|Claude|Gemini|OpenAI|Anthropic|DeepMind|machine learning|apprentissage automatique)(?![\p{L}])/u;
+function lexiNomPropre(texte, idx, mot){
+  if(!mot || mot[0] !== mot[0].toUpperCase() || mot[0] === mot[0].toLowerCase()) return false;
+  const avant = texte.slice(Math.max(0, idx-2), idx);
+  if(/[«"“'‘]\s?$/.test(avant)) return true;
+  const prec = texte.slice(0, idx).replace(/\s+$/,'');
+  return prec.length > 0 && !/[.!?:\n…]$/.test(prec);
+}
+function enforceLexicalisation(ops, dets, texte){
+  texte = String(texte||'');
+  let n = 0;
+  const all = [...(ops||[]), ...(dets||[])];
+  const iaCtx = CONTEXTE_IA_RE.test(texte);
+  const admis = (k, idx, mot) => (iaCtx || LEXI_SANS_AMBIGUITE.has(k)) && !(idx >= 0 && lexiNomPropre(texte, idx, mot));
+  all.forEach(o => {
+    LEXICALISATION_RE.lastIndex = 0;
+    const m = LEXICALISATION_RE.exec(String(o.ajout||''));
+    LEXICALISATION_RE.lastIndex = 0;
+    if(!m) return;
+    if(!admis(m[2].toLowerCase(), texte.indexOf(m[2]), m[2])) return;
+    o.en_voie_lexicalisation = m[2].toLowerCase();
+    if(o.risk && o.risk.level === 'high'){ o.risk_avant_lexicalisation = o.risk; o.risk = { level:'medium', label: o.risk.label }; n++; }
+  });
+  if(!Array.isArray(dets)) return n;
+  const vus = new Set(all.filter(o => o.en_voie_lexicalisation).map(o => o.en_voie_lexicalisation));
+  LEXICALISATION_RE.lastIndex = 0; let m;
+  while((m = LEXICALISATION_RE.exec(texte)) !== null){
+    const k = m[2].toLowerCase();
+    if(vus.has(k) || !admis(k, m.index + m[1].length, m[2])) continue; vus.add(k);
+    dets.push({ notion_ids: [], notion: '(lexicalisation)', ajout: m[2], op: 'θ1', pec_ref: null, marquage: 'lexicalise', risk: null, en_voie_lexicalisation: k });
+  }
+  LEXICALISATION_RE.lastIndex = 0;
+  return n;
+}
+
+// v17 : question. Une assimilation posée dans une phrase interrogative (« moment démocratique ou combat
+// algorithmique ? ») est soumise au lecteur, non assertée : plafonnée à « moyen ».
+function enforceQuestions(ops, dets, texte){
+  texte = String(texte||'');
+  const questions = (texte.match(/[^.!?\n]+\?/g) || []).map(q => normForMatch(q));
+  if(!questions.length) return 0;
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!(o.risk && o.risk.level === 'high')) return;
+    const a = normForMatch(o.ajout);
+    if(a && questions.some(q => q.includes(a))){ o.risk_avant_question = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_question = true; n++; }
+  });
+  return n;
+}
+
+// v17 : « Super Intelligence » / « SI », label officiel américain (décret de septembre 2026) remplaçant
+// « artificial intelligence ». Relevé comme choix lexical, sans risque ; employé hors guillemets, c'est une
+// reprise du label (adhésion), entre guillemets une mention. « superintelligence » (concept) reste en lexicalisation.
+const DENOMINATION_RE = /(renomm\w*|rebaptis\w*|appel\w*|nomm\w*|dénomm\w*|qualifi\w*\s+de|rebrand\w*|renam\w*|call(?:s|ed|ing)?\s+(?:it|the technology)|dubb\w*|term(?:ed)?|prononç\w*|prononc\w*|pronounc\w*)[^.!?]{0,40}$/iu;
+const SUPER_INT_RE = /(^|[^\p{L}])([Ss]uper[- ][Ii]ntelligences?|SI)(?![\p{L}])/gu;
+function enforceSuperIntelligence(ops, dets, texte){
+  texte = String(texte||'');
+  if(!Array.isArray(dets)) return 0;
+  const iaCtx = CONTEXTE_IA_RE.test(texte) || /super[- ]intelligence/iu.test(texte);
+  const quoted = quotedSpans(texte);
+  SUPER_INT_RE.lastIndex = 0; let m; let vu = false;
+  while((m = SUPER_INT_RE.exec(texte)) !== null){
+    if(m[2] === 'SI' && !iaCtx) continue;
+    if(vu) continue; vu = true;
+    const k = normForMatch(m[2]);
+    // v17.7 : un verbe de dénomination juste avant (« renommer l'IA, super intelligence », « renaming the technology »)
+    // fait du label une mention, même sans guillemets : on parle du mot, on ne l'emploie pas.
+    const avant = texte.slice(Math.max(0, m.index - 70), m.index + 1);
+    const denom = DENOMINATION_RE.test(avant);
+    const cite = denom || quoted.some(q => q.includes(k));
+    dets.push({ notion_ids: [], notion: '(label officiel US)', ajout: m[2], op: 'θ1', pec_ref: null, marquage: cite ? 'lambda_distance' : 'aucun', risk: null, choix_lexical_si: cite ? 'mention' : 'reprise' });
+  }
+  SUPER_INT_RE.lastIndex = 0;
+  return 0;
+}
+
+// v17.2 : ajout entièrement entre guillemets (« acte IV »). Le lecteur voit que le terme est emprunté :
+// même assumés (lambda_endosse), des guillemets ne sont pas une reprise « sans distance » : plafonné à « moyen ».
+const GUILL_OUVR = /^[\s]*[«“"‘]/u, GUILL_FERM = /[»”"’][\s.,;:!?]*$/u;
+function enforceGuillemets(ops, dets, texte){
+  texte = String(texte||'');
+  const quoted = quotedSpans(texte);
+  const longQuoted = quotedSpansAll(texte);
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!(o.risk && o.risk.level === 'high')) return;
+    const brut = String(o.ajout || '');
+    const a = normForMatch(brut);
+    if(!a) return;
+    const entoure = GUILL_OUVR.test(brut) && GUILL_FERM.test(brut);
+    // v17.8 : un ajout d'au moins deux mots contenu dans une citation plus longue (« Les comparutions immédiates : un broyeur de vie… »)
+    // est du discours rapporté : plafonné à moyen, comme une citation courte.
+    const dansCitation = a.split(' ').length >= 2 && longQuoted.some(q => (' ' + q + ' ').includes(' ' + a + ' '));
+    if(entoure || quoted.includes(a) || dansCitation){
+      if(dansCitation && !entoure && !quoted.includes(a)) o.dans_citation = true;
+      o.risk_avant_guillemets = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_guillemets = true; n++;
+    }
+  });
+  return n;
+}
+
+// v17.2 : doublons. Le modèle relève parfois le même ajout deux fois, en opération et en détermination
+// (« la machine à broyer » en θ3 et en ρ3), ou sous deux découpes (« étouffer » / « étouffer par la force »).
+// Pour une même notion, si un ajout est inclus dans l'autre, on ne garde que le risque le plus fort
+// (à égalité, l'ajout le plus long) ; l'autre est conservé, risque nul, marqué doublon.
+// v17.8 : concession hypothétique. « Perhaps there are risks to full RSI if you are close to building a godlike
+// intelligence, but for the time being it seems… » : l'ajout est concédé puis écarté par l'auteur dans la même
+// phrase (marqueur concessif ou « si/if » avant, « mais/but » après). Plafonné à moyen.
+const CONCESSIF_AVANT_RE = /(^| )(perhaps|maybe|admittedly|granted|of course|to be sure|it s true|peut [eê]tre|certes|sans doute|bien s[uû]r|il est vrai que|on peut admettre)( |$)/;
+const HYPOTHESE_AVANT_RE = /(^| )(if|even if|si|s il|m[eê]me si)( |$)/;
+const ADVERSATIF_APRES_RE = /(^| )(but|yet|however|still|mais|pourtant|cependant|toutefois|reste que|neanmoins|néanmoins)( |$)/;
+function enforceConcession(ops, dets, texte){
+  const phrases = String(texte||'').split(/(?<=[.!?\n])\s+/).map(normForMatch);
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!(o.risk && o.risk.level === 'high')) return;
+    const a = normForMatch(o.ajout || '');
+    if(!a) return;
+    for(const ph of phrases){
+      const i = ph.indexOf(a);
+      if(i < 0) continue;
+      const avant = ph.slice(0, i).replace(/-/g,' '), apres = ph.slice(i + a.length);
+      if((CONCESSIF_AVANT_RE.test(avant) || HYPOTHESE_AVANT_RE.test(avant)) && ADVERSATIF_APRES_RE.test(apres)){
+        o.risk_avant_concession = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_concession = true; n++;
+      }
+      break;
+    }
+  });
+  return n;
+}
+
+function enforceDoublons(ops, dets){
+  const rang = r => r ? (r.level === 'high' ? 2 : r.level === 'medium' ? 1 : 0) : 0;
+  const items = [...(ops||[]), ...(dets||[])].filter(o => o.risk && normForMatch(o.ajout));
+  let n = 0;
+  for(let i = 0; i < items.length; i++){
+    for(let j = i + 1; j < items.length; j++){
+      const x = items[i], y = items[j];
+      if(!x.risk || !y.risk) continue;
+      const ax = ' ' + normForMatch(x.ajout) + ' ', ay = ' ' + normForMatch(y.ajout) + ' ';
+      // v17.5 : même ajout exact rattaché à deux notions (« mégaboucherie » sous deux notions) = doublon aussi
+      const memeNotion = normForMatch(x.notion) === normForMatch(y.notion);
+      if(!(memeNotion ? (ax.includes(ay) || ay.includes(ax)) : ax === ay)) continue;
+      const gardeX = rang(x.risk) > rang(y.risk) || (rang(x.risk) === rang(y.risk) && ax.length >= ay.length);
+      const perdant = gardeX ? y : x, gagnant = gardeX ? x : y;
+      perdant.risk_avant_doublon = perdant.risk; perdant.risk = null; perdant.doublon_de = gagnant.ajout; n++;
+    }
+  }
+  return n;
+}
+
+// v17.5 : analogie annoncée dans le titre (« Leftists Should Learn to Organize Like Evangelicals »).
+// Le marqueur est posé une fois pour tout l'article : un θ5/ρ3 entre deux notions qui développe ce rapprochement
+// n'est pas une assimilation cachée : plafonné à « moyen ».
+const MARQUEUR_TITRE_RE = /(^|[^\p{L}])(like|comme|à la manière d[eu]|à l.image d[eu]|façon|learn(?:ing)? from|s.inspirer d[eu]|ce que .{3,40} peut apprendre)(?![\p{L}])/iu;
+// v17.6 : l'annonce peut aussi se trouver dans le corps du texte, par une formule explicite de mise en analogie
+// (« il y a un autre personnage qu'on oublie », « l'analogie avec », « think of it as ») : pas un simple « comme ».
+const ANNONCE_ANALOGIE_RE = /(un autre personnage|opposer un autre|l.analogie avec|la comparaison avec|on peut (?:le |la |les |l.)?comparer|comparons|pensons à|prenons l.exemple d[eu]|the analogy|compare (?:it|this|them) to|think of (?:it|this|them) as|a better (?:analogy|metaphor|comparison))/iu;
+function enforceAnalogieAnnoncee(ops, dets, texte){
+  const titre = String(texte||'').split('\n')[0] || '';
+  const annonceTitre = titre.length <= 200 && MARQUEUR_TITRE_RE.test(titre);
+  if(!annonceTitre && !ANNONCE_ANALOGIE_RE.test(String(texte||''))) return 0;
+  let n = 0;
+  (dets||[]).forEach(o => {
+    if(!(o.risk && o.risk.level === 'high')) return;
+    if(!/θ5|ρ3/.test(String(o.op||''))) return;
+    if(!Array.isArray(o.notion_ids) || o.notion_ids.length < 2) return;
+    o.risk_avant_analogie = o.risk; o.risk = { level:'medium', label: o.risk.label }; o.plafonne_analogie_titre = true; n++;
+  });
+  return n;
+}
+
+// v17.6 : réfutation dans le titre (« IA : et si on arrêtait de parler de moment Frankenstein ? »,
+// « Arrêtons de comparer… », « Stop calling it… »). Le titre récuse une analogie : entrée σ réfutée (portée « propos »,
+// pour ne pas déclencher le contrôle 4) et risques neutralisés sur les ajouts compris dans le segment récusé.
+const REFUT_TITRE_RE = /(et si on arrêtait de|arrêtons de|cessons de|il faut en finir avec|en finir avec|non,? ce n.est pas|stop (?:calling|saying|comparing)|let.s stop|enough with|it.s not)\s+(.{3,120})/iu;
+function enforceRefutationTitre(ops, dets, pec, texte){
+  const titre = String(texte||'').split('\n')[0] || '';
+  if(titre.length > 220) return 0;
+  const m = titre.match(REFUT_TITRE_RE);
+  if(!m || !Array.isArray(pec)) return 0;
+  const vise = normForMatch(m[2]);
+  if(!pec.some(p => p.adhesion === 'refutee' && normForMatch(p.text).includes(vise.slice(0, 30)))){
+    pec.push({ text: titre.trim(), notion_id: null, portee: 'propos', source: 'locuteur', adhesion: 'refutee', modalite: m[1], fonction: 'refutation', risk: null, ajout_refutation_titre: true });
+  }
+  let n = 0;
+  [...(ops||[]), ...(dets||[])].forEach(o => {
+    if(!o.risk) return;
+    const a = normForMatch(o.ajout);
+    if(a && vise.includes(a)){ o.risk_avant_refutation = o.risk; o.risk = null; o.neutralise_refutation_titre = true; n++; }
   });
   return n;
 }
@@ -1844,6 +2125,16 @@ function quotedSpans(text){
   }
   return spans;
 }
+// v17.8 : toutes les citations, quelle que soit leur longueur (guillemets français avec espaces insécables compris).
+function quotedSpansAll(text){
+  const spans = [];
+  const re = /[\u201c"\u00ab]([^\u201c\u201d"\u00ab\u00bb]{1,1500})[\u201d"\u00bb]/g;
+  let m; while((m = re.exec(String(text||''))) !== null){
+    const sp = normForMatch(m[1]);
+    if(sp) spans.push(sp);
+  }
+  return spans;
+}
 // Integrity: every extract the model returns must actually occur in the source text.
 // Paraphrased, merged or invented extracts are flagged (not deleted), so they stay visible.
 function checkExtracts(texte, ops, dets, pec, aVerifier){
@@ -1864,16 +2155,19 @@ function checkExtracts(texte, ops, dets, pec, aVerifier){
   return n;
 }
 
-function enforceAutonymy(ops, dets, texte){
+function enforceAutonymy(ops, dets, texte, pec){
   const spans = quotedSpans(texte);
   if(!spans.length) return 0;
-  const inQuotes = w => spans.some(sp => (' ' + sp + ' ').includes(' ' + w + ' '));
+  // Guillemets assumés : un terme cité que le locuteur prend en charge totalement (σ locuteur, adhésion totale) n'est pas une mention.
+  const assumes = (pec||[]).filter(e => e && e.adhesion === 'totale' && (e.source === 'locuteur' || !e.source)).map(e => ' ' + normForMatch(e.text) + ' ');
+  const inSpan = (sp, w) => (' ' + sp + ' ').includes(' ' + w + ' ') && !assumes.some(a => a.includes(' ' + w + ' '));
   let n = 0;
   [...(ops||[]), ...(dets||[])].forEach(o => {
     if(!o.risk) return;
     const words = normForMatch(o.ajout || o.text).split(' ').filter(w => w.length >= 4 && !STOP_AUTO.has(w));
     if(words.length < 1) return;
-    const q = words.filter(inQuotes).length;
+    // Les mots doivent se trouver dans UNE MÊME citation (sinon "left" et "France" pris dans deux citations éloignées suffisaient).
+    const q = Math.max(0, ...spans.map(sp => words.filter(w => inSpan(sp, w)).length));
     if(q >= 2 || (q >= 1 && words.length <= 2)){
       o.risk_avant_autonymie = o.risk; o.risk = null; o.neutralise_autonymie = true; n++;
     }
@@ -1898,6 +2192,13 @@ async function runBatch(){
       exemples = [{ id: null, texte: raw, verite_terrain: null }];
     }
   }catch(e){
+    // v17.3 : copie depuis la vue JSON de Firefox (« 0\t\nid\t… ») : ce n'est pas un texte, on s'arrête.
+    if(/^\s*\d+\t\s*\n\s*id\t/.test(raw) || /\ntexte\t["'`]/.test(raw)){
+      document.getElementById('batch-status').textContent = lang==='en'
+        ? 'This looks like a copy of Firefox\'s JSON view, not JSON. Open the file in a text editor (or the « Raw Data » tab) and copy again.'
+        : 'Ceci ressemble à une copie de la vue JSON de Firefox, pas à du JSON. Ouvre le fichier dans un éditeur de texte (ou l\'onglet « Données brutes ») et recopie.';
+      return;
+    }
     // pas du JSON valide : on traite l'entrée comme un texte brut unique
     exemples = [{ id: null, texte: raw, verite_terrain: null }];
   }
@@ -1920,8 +2221,9 @@ async function runBatch(){
     statusEl.textContent = STRINGS[lang].batchRunning.replace('{n}', i+1).replace('{total}', exemples.length);
     let r;
     try{
-      r = await analyzeOneForBatch(ex.texte || '');
-      r = { ...ex, ...r };
+      const ta = texteAAnalyser(ex);
+      r = await analyzeOneForBatch(ta.texte);
+      r = { ...ex, ...r, version_analyseur: '17.9', texte_analyse: ta.texte, source_analyse: ta.source, tronque: ta.tronque, n_mots_analyses: ta.texte.split(/\s+/).filter(Boolean).length };
     }catch(e){
       r = { ...ex, double_alpha: null, n_theme_ops: null, n_phore_ops: null, risk_detected: null, erreur: e.message };
     }
@@ -1967,7 +2269,7 @@ function renderBatchOpsForNotion(ops, notionId){
     const notion = escapeHtmlBatch(o.notion || '?');
     const ajout = escapeHtmlBatch(o.ajout || '');
     const riskBadge = o.risk ? `<span class="batch-op-risk ${o.risk.level==='high'?'risque-oui':'risque-ambigu'}">${escapeHtmlBatch(o.risk.label||'')}</span>` : '';
-    const neutral = o.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(o.marquage||'')})</span>` : (o.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (o.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : (o.neutralise_fige ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: isolated set phrase' : 'risque neutralisé : expression figée isolée'}</span>` : (o.plafonne_fige ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: extended set phrase' : 'plafonné à moyen : expression figée filée'} (${escapeHtmlBatch(o.plafonne_fige)})</span>` : (o.plafonne_pejoratif ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: overt pejorative' : 'plafonné à moyen : péjoratif ouvert'}</span>` : (o.neutralise_ironie ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: ironic refutation' : 'risque neutralisé : réfutation ironique'}</span>` : ''))))));
+    const neutral = o.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(o.marquage||'')})</span>` : (o.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (o.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : (o.neutralise_fige ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: isolated set phrase' : 'risque neutralisé : expression figée isolée'}</span>` : (o.plafonne_fige ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: extended set phrase' : 'plafonné à moyen : expression figée filée'} (${escapeHtmlBatch(o.plafonne_fige)})</span>` : (o.plafonne_pejoratif ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: overt pejorative' : 'plafonné à moyen : péjoratif ouvert'}</span>` : (o.neutralise_ironie ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: ironic refutation' : 'risque neutralisé : réfutation ironique'}</span>` : (o.plafonne_etiquette ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: political label' : 'plafonné à moyen : étiquette politique'}</span>` : (o.ajout_etiquette ? `<span class="batch-neutral">${lang==='en' ? 'political label (auto-detected)' : 'étiquette politique (relevée automatiquement)'}</span>` : (o.choix_lexical_migration ? `<span class="batch-neutral">${lang==='en' ? 'lexical choice (migration)' : 'choix lexical (migration)'}</span>` : (o.en_voie_lexicalisation ? `<span class="batch-neutral">${lang==='en' ? 'term being lexicalised' : 'en voie de lexicalisation'} (${escapeHtmlBatch(o.en_voie_lexicalisation)})</span>` : (o.plafonne_question ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: question' : 'plafonné à moyen : question'}</span>` : (o.plafonne_lexique_migr ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: migration term' : 'plafonné à moyen : désignation des migrants'}</span>` : (o.choix_lexical_si ? `<span class="batch-neutral">${lang==='en' ? 'official US label' : 'label officiel US'} (${escapeHtmlBatch(o.choix_lexical_si)})</span>` : (o.plafonne_guillemets ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: quoted term' : 'plafonné à moyen : terme entre guillemets'}</span>` : (o.doublon_de ? `<span class="batch-neutral">${lang==='en' ? 'duplicate of' : 'doublon de'} « ${escapeHtmlBatch(o.doublon_de)} »</span>` : (o.plafonne_analogie_titre ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: announced analogy' : 'plafonné à moyen : analogie annoncée'}</span>` : (o.neutralise_refutation_titre ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: analogy refuted in the title' : 'risque neutralisé : analogie récusée dans le titre'}</span>` : '')))))))))))))))));
     return `<div class="batch-op-line"><span class="batch-op-tag">${escapeHtmlBatch(o.op||'')}</span> {${notion}} \u21a6 {${notion}, ${ajout}}${riskBadge}${neutral}${o.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}</div>`;
   }).join('');
 }
@@ -1980,7 +2282,7 @@ function renderBatchDeterminations(dets, notions){
     const ajout = escapeHtmlBatch(d.ajout || '');
     const refs = (d.notion_ids||[]).map(labelFor).map(escapeHtmlBatch).join(' + ');
     const riskBadge = d.risk ? `<span class="batch-op-risk ${d.risk.level==='high'?'risque-oui':'risque-ambigu'}">${escapeHtmlBatch(d.risk.label||'')}</span>` : '';
-    const neutral = d.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(d.marquage||'')})</span>` : (d.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (d.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : (d.neutralise_fige ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: isolated set phrase' : 'risque neutralisé : expression figée isolée'}</span>` : (d.plafonne_fige ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: extended set phrase' : 'plafonné à moyen : expression figée filée'} (${escapeHtmlBatch(d.plafonne_fige)})</span>` : (d.plafonne_pejoratif ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: overt pejorative' : 'plafonné à moyen : péjoratif ouvert'}</span>` : (d.neutralise_ironie ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: ironic refutation' : 'risque neutralisé : réfutation ironique'}</span>` : ''))))));
+    const neutral = d.neutralise_marquage ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralMarquage} (${escapeHtmlBatch(d.marquage||'')})</span>` : (d.neutralise_sigma ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralSigma}</span>` : (d.neutralise_autonymie ? `<span class="batch-neutral">${STRINGS[lang].batchNeutralAuto}</span>` : (d.neutralise_fige ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: isolated set phrase' : 'risque neutralisé : expression figée isolée'}</span>` : (d.plafonne_fige ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: extended set phrase' : 'plafonné à moyen : expression figée filée'} (${escapeHtmlBatch(d.plafonne_fige)})</span>` : (d.plafonne_pejoratif ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: overt pejorative' : 'plafonné à moyen : péjoratif ouvert'}</span>` : (d.neutralise_ironie ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: ironic refutation' : 'risque neutralisé : réfutation ironique'}</span>` : (d.plafonne_etiquette ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: political label' : 'plafonné à moyen : étiquette politique'}</span>` : (d.ajout_etiquette ? `<span class="batch-neutral">${lang==='en' ? 'political label (auto-detected)' : 'étiquette politique (relevée automatiquement)'}</span>` : (d.choix_lexical_migration ? `<span class="batch-neutral">${lang==='en' ? 'lexical choice (migration)' : 'choix lexical (migration)'}</span>` : (d.en_voie_lexicalisation ? `<span class="batch-neutral">${lang==='en' ? 'term being lexicalised' : 'en voie de lexicalisation'} (${escapeHtmlBatch(d.en_voie_lexicalisation)})</span>` : (d.plafonne_question ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: question' : 'plafonné à moyen : question'}</span>` : (d.plafonne_lexique_migr ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: migration term' : 'plafonné à moyen : désignation des migrants'}</span>` : (d.choix_lexical_si ? `<span class="batch-neutral">${lang==='en' ? 'official US label' : 'label officiel US'} (${escapeHtmlBatch(d.choix_lexical_si)})</span>` : (d.plafonne_guillemets ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: quoted term' : 'plafonné à moyen : terme entre guillemets'}</span>` : (d.doublon_de ? `<span class="batch-neutral">${lang==='en' ? 'duplicate of' : 'doublon de'} « ${escapeHtmlBatch(d.doublon_de)} »</span>` : (d.plafonne_analogie_titre ? `<span class="batch-neutral">${lang==='en' ? 'capped at medium: announced analogy' : 'plafonné à moyen : analogie annoncée'}</span>` : (d.neutralise_refutation_titre ? `<span class="batch-neutral">${lang==='en' ? 'risk neutralised: analogy refuted in the title' : 'risque neutralisé : analogie récusée dans le titre'}</span>` : '')))))))))))))))));
     return `<div class="batch-op-line"><span class="batch-op-tag">${escapeHtmlBatch(d.op||'')}</span> [${refs}] \u2192 {${notion}, ${ajout}}${riskBadge}${neutral}${d.extrait_introuvable ? `<span class="batch-missing">${STRINGS[lang].batchMissing}</span>` : ''}</div>`;
   }).join('');
 }
@@ -2041,7 +2343,7 @@ function attachCorrection(card, r){
     btn.disabled = true;
     st.textContent = lang==='en' ? 'Writing the correction…' : 'Rédaction de la correction…';
     try{
-      const corr = await callClaudeJSONWithRetry('', buildCorrectionPrompt(r.texte || '', r));
+      const corr = await callClaudeJSONWithRetry('', buildCorrectionPrompt(r.texte_analyse || r.texte || '', r));
       r.correction = corr;
       renderCorrection(box, corr);
     }catch(e){
@@ -2058,7 +2360,7 @@ function appendBatchCard(container, r){
   const card = document.createElement('div');
   card.className = 'batch-card ' + (correct === true ? 'ok' : (correct === false ? 'bad' : ''));
 
-  const citationTxt = escapeHtmlBatch(r.texte || '');
+  const citationTxt = escapeHtmlBatch(r.texte_analyse || r.texte || '');
   const erreurLigne = r.erreur ? `<div class="batch-card-erreur">Erreur : ${escapeHtmlBatch(String(r.erreur).slice(0,300))}</div>` : '';
 
   const risqueClasse = r.risk_detected === true ? 'risque-oui' : (r.risk_detected === false ? 'risque-non' : 'risque-ambigu');
