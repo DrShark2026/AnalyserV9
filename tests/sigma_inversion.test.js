@@ -11,6 +11,8 @@ const A = chargerAnalyseur();
 const postTraiter = A.get('postTraiter');
 const clone = o => JSON.parse(JSON.stringify(o));
 
+const POL25_FIXTURE = () => chercherCas('POL-25');
+
 // ---------- cas synthétiques (écrits pour les tests, pas tirés du corpus) ----------
 
 const ANTIPHRASE = {
@@ -239,6 +241,100 @@ test('un « certes … mais » prononcé par un énonciateur mis en scène ne co
   assert.equal(r.ironie_detectee, false, r.journal_sigma.join('\n'));
   assert.equal(r.pec.length, 1);
   assert.ok(r.journal_sigma.some(l => /ignoré \(dans la réplique/.test(l)));
+});
+
+// ---------- regroupement par canon_norm : /EMMANUEL MACRON/ et /MACRONISME/ ne font qu'une notion pour la paire ----------
+const MACRON = {
+  texte: "[Rubrique] Si j'ai bien compris…\n\n" +
+         "Si j'ai bien compris, Emmanuel Macron devrait rembourser la dette.\n\n" +
+         "Le Président est désormais totalement insolvable.\n\n" +
+         "Le macronisme et son plan génial n'ont jamais pu fonctionner à plein régime.",
+  analyse: () => ({
+    notions: [
+      { id: 'N1', label: '/EMMANUEL MACRON/', termes: ['Emmanuel Macron', 'le Président'] },
+      { id: 'N2', label: '/DETTE PUBLIQUE/', termes: ['la dette'] },
+      { id: 'N3', label: '/MACRONISME/', termes: ['le macronisme'] }
+    ],
+    pec: [{ text: "Si j'ai bien compris, Emmanuel Macron devrait rembourser la dette.", notion_id: 'N1', portee: 'propos', source: 'locuteur', adhesion: 'totale', modalite: "Si j'ai bien compris", fonction: null, risk: null }],
+    operations: [
+      { notion_id: 'N1', notion: 'Emmanuel Macron', ajout: 'totalement insolvable', op: 'θ3', marquage: 'aucun', orientation: 'negative', hyperbole: false, risk: null },
+      // le positif tombe sur N3 (macronisme), pas sur N1 : c'est le cas observé sur POL-25
+      { notion_id: 'N3', notion: 'le macronisme', ajout: 'son plan génial', op: 'γ2', marquage: 'aucun', orientation: 'positive', hyperbole: false, risk: null }
+    ],
+    determinations: []
+  })
+};
+
+test('canon_norm : positif sur N3 /MACRONISME/, négatif sur N1 /EMMANUEL MACRON/ ⇒ la paire se forme sous « macron »', () => {
+  const r = postTraiter(MACRON.analyse(), MACRON.texte);
+  assert.equal(r.ironie_detectee, true, r.journal_sigma.join('\n'));
+  assert.ok(r.figure_detectee.includes('antiphrase'));
+  assert.equal(r.notions.find(n => n.id === 'N1').canon_norm, 'macron');
+  assert.equal(r.notions.find(n => n.id === 'N3').canon_norm, 'macron');
+  const s = r.antiphrase[0];
+  assert.equal(s.canon_norm, 'macron');
+  assert.deepEqual([...s.notions_regroupees].sort(), ['N1', 'N3']);
+  assert.equal(s.paire.positif.ajout, 'son plan génial');
+  assert.equal(s.paire.negatif.ajout, 'totalement insolvable');
+  assert.equal(r.pec[0].adhesion, 'feinte');
+  assert.ok(r.journal_sigma.some(l => /déclenchée sur N1\+N3 .*canon « macron »/.test(l)));
+});
+
+test('canon_norm : même résultat que le positif tombe sur N1 ou sur N3', () => {
+  const surN1 = MACRON.analyse(); surN1.operations[1].notion_id = 'N1';
+  const a = postTraiter(surN1, MACRON.texte), b = postTraiter(MACRON.analyse(), MACRON.texte);
+  assert.equal(a.ironie_detectee, true);
+  assert.equal(b.ironie_detectee, true);
+  assert.equal(a.pec[0].adhesion, b.pec[0].adhesion);
+});
+
+test('canon_norm : deux canons distincts (macron / dette) ne forment pas de paire', () => {
+  const an = MACRON.analyse(); an.operations[1].notion_id = 'N2';   // positif sur /DETTE PUBLIQUE/
+  const r = postTraiter(an, MACRON.texte);
+  assert.equal(r.ironie_detectee, false, r.journal_sigma.join('\n'));
+  assert.equal(r.pec[0].adhesion, 'totale');
+});
+
+test('POL-25 (texte réel) : « son plan génial » rattaché à N3 /MACRONISME/ ⇒ inversion déclenchée',
+  { skip: POL25_FIXTURE() ? false : 'tests/fixtures/ ne contient pas d’export de POL-25' }, () => {
+  const c = POL25_FIXTURE();
+  const a = versSortieModele(c);
+  const or = { 'totalement insolvable': 'negative', 'le petit Manu': 'negative' };
+  a.operations.forEach(o => { o.orientation = or[o.ajout] || 'neutre'; o.hyperbole = /^Jupiter/.test(o.ajout); });
+  a.operations = a.operations.filter(o => o.ajout !== 'son plan génial');
+  a.operations.push({ notion_id: 'N3', notion: 'le macronisme', ajout: 'son plan génial', op: 'γ2', pec_ref: null, marquage: 'aucun', orientation: 'positive', hyperbole: false, risk: null });
+  const r = postTraiter(a, c.texte);
+  assert.equal(r.ironie_detectee, true, r.journal_sigma.join('\n'));
+  assert.equal(r.antiphrase[0].canon_norm, 'macron');
+  assert.equal(r.pec.find(p => /si j['’]ai bien compris/i.test(p.text || '')).adhesion, 'feinte');
+});
+
+test('chemin interactif (analyzeWithAI) : même règle σ que le lot, via appliquerSigma', async () => {
+  const B = chargerAnalyseur();
+  const sortie = clone(ANTIPHRASE.analyse);
+  B.ctx.__sortie = JSON.stringify(sortie);
+  B.ctx.__texte = ANTIPHRASE.texte;
+  // modèle simulé, texte chargé ; le reste de la page (DOM) est factice
+  require('vm').runInContext(`
+    callClaudeJSONWithRetry = async () => JSON.parse(__sortie);
+    fullTextGlobal = __texte; tokens = __texte.split(/(\\s+)/); aiLoading = false;`, B.ctx);
+  await B.get('analyzeWithAI')();
+  const sigma = B.get('sigmaInteractif');
+  assert.ok(sigma, 'appliquerSigma non appelée par le chemin interactif');
+  assert.equal(sigma.ironie_detectee, true, sigma.journal_sigma.join('\n'));
+  assert.ok(sigma.figure_detectee.includes('antiphrase'));
+  const pm = B.get('pecMarkers');
+  assert.equal(pm[0].adhesion, 'feinte');
+  assert.equal(pm[1].sourceSigma, 'enonciateur_mis_en_scene');
+  assert.equal(pm[1].adhesion, 'suspendue');
+});
+
+test('lot et interactif donnent le même verdict σ', async () => {
+  const lot = postTraiter(clone(ANTIPHRASE.analyse), ANTIPHRASE.texte);
+  const a = clone(ANTIPHRASE.analyse);
+  const direct = A.get('appliquerSigma')(ANTIPHRASE.texte, a.notions, a.operations, a.determinations, a.pec);
+  assert.deepEqual(JSON.parse(JSON.stringify(direct)), JSON.parse(JSON.stringify({ ironie_detectee: lot.ironie_detectee, figure_detectee: lot.figure_detectee, antiphrase: lot.antiphrase, journal_sigma: lot.journal_sigma })));
+  assert.deepEqual(JSON.parse(JSON.stringify(a.pec)), JSON.parse(JSON.stringify(lot.pec)));
 });
 
 test('la démo intégrée (texte factuel sur l’IA) reste sans ironie', () => {

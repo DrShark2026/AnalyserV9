@@ -63,7 +63,8 @@ Deux contrôles touchent la prise en charge elle-même :
   opérations ne sont pas réécrites. Quand le marqueur est dans une ligne d'en-tête (« [Rubrique]
   Si j'ai bien compris… »), la fenêtre devient le document entier, mais seules les entrées σ qui
   portent le marqueur ou l'un des deux ajouts basculent. Un marqueur prononcé par un énonciateur
-  mis en scène ne compte pas ;
+  mis en scène ne compte pas. La paire se cherche par notion canonique (`canon_norm`, même règle
+  que l'artefact) : /EMMANUEL MACRON/ et /MACRONISME/ ne font qu'un sous « macron » ;
 - **polyphonie** — un discours direct prêté à un énonciateur fictif ou générique (« le banquier »)
   n'est pas pris en charge par le locuteur : source `enonciateur_mis_en_scene`, adhésion suspendue.
   L'énonciateur est reconnu par un verbe de parole ou un deux-points, ou par la phrase qui précède

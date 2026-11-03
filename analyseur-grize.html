@@ -413,6 +413,7 @@ const STRINGS = {
     batchNeutralMarquage:'risque neutralisé : marquage déclaré',
     batchMissing:'extrait introuvable tel quel dans le texte',
     batchMnemoHeader:'Mnémoniques de souhait (McDermott) — termes techniques d\u2019origine humaine employés sans marque — pas un verdict de risque',
+    sigmaIronie:'Ironie détectée ({f}) : adhésion feinte sur les σ concernées.',
     sigmaAdhesion:{totale:'adhésion totale', partielle:'adhésion partielle', suspendue:'suspendue', contestee:'contestée', refutee:'réfutée', feinte:'adhésion feinte'},
     sigmaSource:{locuteur:'source : locuteur', nommee:'source nommée', vague:'source vague', effacee:'source effacée', enonciateur_mis_en_scene:'énonciateur mis en scène'},
     sigmaFonction:{autorite:'argument d\u2019autorité', concession:'concession', refutation:'réfutation', rapport:'rapport', antiphrase:'antiphrase'},
@@ -475,6 +476,7 @@ const STRINGS = {
     batchNeutralMarquage:'risk neutralised: declared marking',
     batchMissing:'extract not found verbatim in the text',
     batchMnemoHeader:'Wishful mnemonics (McDermott) — technical terms of human origin used unmarked — not a risk verdict',
+    sigmaIronie:'Irony detected ({f}): feigned endorsement on the σ entries concerned.',
     sigmaAdhesion:{totale:'full endorsement', partielle:'partial', suspendue:'suspended', contestee:'contested', refutee:'refuted', feinte:'feigned endorsement'},
     sigmaSource:{locuteur:'source: speaker', nommee:'named source', vague:'vague source', effacee:'effaced source', enonciateur_mis_en_scene:'staged speaker'},
     sigmaFonction:{autorite:'argument from authority', concession:'concession', refutation:'refutation', rapport:'report', antiphrase:'antiphrasis'},
@@ -635,6 +637,7 @@ let currentCandidateOp = null;
 let learningLog = { corrections: [], riskFeedback: [] };
 let aiCandidates = [];
 let pecMarkers = [];
+let sigmaInteractif = null;   // dernier résultat d'appliquerSigma en mode interactif (ironie_detectee, figure_detectee, journal)
 let aiPendingRisk = null;
 let aiLoading = false;
 let lastBatchResults = [];
@@ -959,6 +962,14 @@ function renderPEC(){
     txt.textContent = '« ' + m.text + ' »';
     row.appendChild(badge);
     row.appendChild(txt);
+    if(m.adhesion === 'feinte' || m.adhesion === 'suspendue'){
+      const adh = document.createElement('span');
+      adh.className = 'batch-sigma-tag adh-' + m.adhesion;
+      adh.textContent = (STRINGS[lang].sigmaAdhesion || {})[m.adhesion] || m.adhesion;
+      if(m.fonction === 'antiphrase') adh.textContent += ' · ' + ((STRINGS[lang].sigmaFonction || {}).antiphrase || 'antiphrase');
+      if(m.sourceSigma === 'enonciateur_mis_en_scene') adh.textContent += ' · ' + ((STRINGS[lang].sigmaSource || {}).enonciateur_mis_en_scene || '') + (m.enonciateur ? ' (' + m.enonciateur + ')' : '');
+      row.appendChild(adh);
+    }
     if(m.risk){
       const riskBadge = document.createElement('span');
       riskBadge.className = 'risk-badge medium' + (m.source === 'ai' ? ' ai-src' : '');
@@ -1162,10 +1173,13 @@ async function analyzeWithAI(){
       addedCount++;
     });
     const pecArr = Array.isArray(parsed) ? [] : (parsed.pec || []);
-    const srcToCat = { locuteur:'je', nommee:'certains', vague:'certains', effacee:'impersonnel' };
-    pecMarkers = pecArr.map(p=>({ text: p.text, category: p.category || srcToCat[p.source] || 'impersonnel', risk: p.risk || null, source: 'ai' }));
+    // même règle σ que le lot : polyphonie et inversion (antiphrase) avant l'affichage
+    sigmaInteractif = appliquerSigma(fullTextGlobal, notionsArr, opsArr, detArr, pecArr);
+    const srcToCat = { locuteur:'je', nommee:'certains', vague:'certains', effacee:'impersonnel', enonciateur_mis_en_scene:'certains' };
+    pecMarkers = pecArr.map(p=>({ text: p.text, category: p.category || srcToCat[p.source] || 'impersonnel', risk: p.risk || null, source: 'ai',
+                                   adhesion: p.adhesion || null, fonction: p.fonction || null, sourceSigma: p.source || null, enonciateur: p.enonciateur || null }));
     aiLoading = false;
-    updateAIStatus(false, notionApplied, null, addedCount);
+    updateAIStatus(false, notionApplied, null, addedCount, sigmaInteractif);
     renderTokens();
     renderClasses();
     renderPEC();
@@ -1176,7 +1190,7 @@ async function analyzeWithAI(){
   }
 }
 
-function updateAIStatus(isError, notionApplied, detail, addedCount){
+function updateAIStatus(isError, notionApplied, detail, addedCount, sigma){
   const el = document.getElementById('ai-status');
   if(!el) return;
   if(aiLoading){ el.textContent = STRINGS[lang].aiLoading; return; }
@@ -1184,6 +1198,7 @@ function updateAIStatus(isError, notionApplied, detail, addedCount){
   let msg = '';
   if(addedCount){ msg = STRINGS[lang].aiAutoAdded.replace('{n}', addedCount); }
   if(notionApplied){ msg = (msg ? msg + ' ' : '') + STRINGS[lang].aiNotionApplied; }
+  if(sigma && sigma.ironie_detectee){ msg = (msg ? msg + ' ' : '') + STRINGS[lang].sigmaIronie.replace('{f}', sigma.figure_detectee.join(', ')); }
   el.textContent = msg;
 }
 
@@ -1194,6 +1209,43 @@ async function analyzeOneForBatch(texte){
   return postTraiter(parsed, texte);
 }
 
+// Libellé canonique des notions (repris de l'artefact v17.9) : minuscules, sans accents, sans article ni barre,
+// plus quelques alias. Sert à suivre une notion d'un texte à l'autre, et à regrouper N1 /EMMANUEL MACRON/ et
+// N3 /MACRONISME/ sous « macron » dans l'inversion σ.
+const CANON_ALIAS = {
+  'emmanuel macron':'macron', 'president macron':'macron', 'pouvoir macroniste':'macron', 'macronie':'macron', 'macronisme':'macron',
+  'ia':'intelligence artificielle', 'ai':'intelligence artificielle', 'artificial intelligence':'intelligence artificielle',
+  'la france insoumise':'lfi', 'france insoumise':'lfi', 'insoumis':'lfi',
+  'rassemblement national':'rn', 'jean luc melenchon':'melenchon', 'marine le pen':'le pen',
+  'mouvement des gilets jaunes':'gilets jaunes', 'gilet jaune':'gilets jaunes',
+  'manifestations du 17 octobre':'17 octobre', 'mobilisation du 17 octobre':'17 octobre', 'journee du 17 octobre':'17 octobre'
+};
+function canonKey(t){
+  let k = String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[\/«»"“”()]/g,' ').replace(/[’']/g,' ').replace(/[^a-z0-9 -]+/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim();
+  k = k.replace(/^(le|la|les|l|un|une|des|du|de la|de l|the|a|an) /,'');
+  return CANON_ALIAS[k] || k;
+}
+function canonNotions(notions){
+  (notions||[]).forEach(n => { n.canon_norm = canonKey(n.canon || n.label); });
+  return notions;
+}
+
+// Prise en charge σ : polyphonie puis inversion (antiphrase). Point d'entrée unique, appelé par le lot
+// (postTraiter), par l'analyse interactive (analyzeWithAI) et par les tests. Modifie pec sur place.
+// Ordre : une réplique mise en scène, déjà suspendue, n'est pas « feinte ».
+function appliquerSigma(texte, notions, ops, dets, pec){
+  canonNotions(notions);
+  const polyphonie = enforcePolyphonie(texte, pec);
+  const inversion = enforceInversionSigma(texte, notions, ops, dets, pec);
+  return {
+    ironie_detectee: inversion.ironie_detectee,
+    figure_detectee: inversion.figure_detectee,
+    antiphrase: inversion.antiphrase,
+    journal_sigma: [...polyphonie.journal, ...inversion.journal]
+  };
+}
+
 // Contrôles déterministes appliqués à la sortie du modèle : commun au lot, à la démo et aux tests (tests/).
 function postTraiter(parsed, texte){
   const notions = Array.isArray(parsed) ? [] : (parsed.notions || []);
@@ -1202,9 +1254,7 @@ function postTraiter(parsed, texte){
   const pec = Array.isArray(parsed) ? [] : (parsed.pec || []);
   const aVerifier = Array.isArray(parsed) ? [] : (parsed.a_verifier || []);
   const mnemoniques = Array.isArray(parsed) ? [] : (parsed.mnemoniques || []);
-  // polyphonie puis inversion : une réplique mise en scène, déjà suspendue, n'est pas « feinte »
-  const polyphonie = enforcePolyphonie(texte, pec);
-  const inversion = enforceInversionSigma(texte, notions, ops, dets, pec);
+  const sigma = appliquerSigma(texte, notions, ops, dets, pec);
   const nNeutralises = enforceMarquage(ops, dets) + enforceSigmaCoherence(ops, dets, pec) + enforceAutonymy(ops, dets, texte) + enforceFigees(ops, dets, texte) + enforcePejoratifs(ops, dets) + enforceIronie(ops, dets, pec, texte);
   const nIntrouvables = checkExtracts(texte, ops, dets, pec, aVerifier);
   enforceAutoriteEmpruntee(pec, aVerifier);
@@ -1217,10 +1267,10 @@ function postTraiter(parsed, texte){
     n_operations_internes: ops.length,
     n_determinations: dets.length,
     risk_detected: risqueDetecte,
-    ironie_detectee: inversion.ironie_detectee,
-    figure_detectee: inversion.figure_detectee,
-    antiphrase: inversion.antiphrase,
-    journal_sigma: [...polyphonie.journal, ...inversion.journal],
+    ironie_detectee: sigma.ironie_detectee,
+    figure_detectee: sigma.figure_detectee,
+    antiphrase: sigma.antiphrase,
+    journal_sigma: sigma.journal_sigma,
     notions: notions,
     operations: ops,
     determinations: dets,
@@ -1539,6 +1589,10 @@ function enforceInversionSigma(texte, notions, ops, dets, pec){
   const phrases = _phrasesAvecPos(texte);
   const fenetres = _fenetres(texte);
   const labelDe = id => ((notions||[]).find(n => n.id === id) || {}).label || id;
+  // la paire se cherche par notion CANONIQUE : /EMMANUEL MACRON/ et /MACRONISME/ (canon_norm « macron ») ne font qu'un,
+  // que l'ajout positif tombe sur l'une ou sur l'autre. Sans canon_norm, la clé est l'id.
+  const cleDe = id => { const n = (notions||[]).find(x => x.id === id); return (n && n.canon_norm) ? 'canon:' + n.canon_norm : id; };
+  const idsDe = cle => { const ids = (notions||[]).filter(n => cleDe(n.id) === cle).map(n => n.id); return ids.length ? ids : [cle]; };
 
   // ajouts localisés, par notion (une détermination compte pour chacune de ses notions)
   const ajouts = [];
@@ -1580,9 +1634,11 @@ function enforceInversionSigma(texte, notions, ops, dets, pec){
 
     // (2) co-prédication contradictoire non tranchée, notion par notion
     const parNotion = {};
-    ajouts.filter(dans).forEach(a => a.nids.forEach(nid => { if(nid) (parNotion[nid] = parNotion[nid] || []).push(a); }));
-    Object.entries(parNotion).forEach(([nid, liste]) => {
-      if(vus.has(nid)) return;
+    ajouts.filter(dans).forEach(a => [...new Set(a.nids.filter(Boolean).map(cleDe))].forEach(cle => { (parNotion[cle] = parNotion[cle] || []).push(a); }));
+    Object.entries(parNotion).forEach(([cle, liste]) => {
+      if(vus.has(cle)) return;
+      const ids = idsDe(cle), nid = ids[0];
+      const canon = cle.startsWith('canon:') ? cle.slice(6) : null;
       const orient = liste.map(a => ({ a, or: _orientation(a.o) }));
       const pos = orient.filter(x => x.or.valeur === 'positive');
       const neg = orient.filter(x => x.or.valeur === 'negative');
@@ -1601,10 +1657,10 @@ function enforceInversionSigma(texte, notions, ops, dets, pec){
         if(paire) break;
       }
       if(!paire){
-        if(tranchees) res.journal.push(`σ-inversion non déclenchée sur ${nid} : ${tranchees} paire(s) opposée(s), toutes tranchées par un concessif`);
+        if(tranchees) res.journal.push(`σ-inversion non déclenchée sur ${ids.join('+')} : ${tranchees} paire(s) opposée(s), toutes tranchées par un concessif`);
         return;
       }
-      vus.add(nid);
+      vus.add(cle);
 
       // action : entrées σ de la fenêtre, totales, portant sur N (ou sans notion, ou porteuses du marqueur)
       const touchees = [];
@@ -1612,14 +1668,14 @@ function enforceInversionSigma(texte, notions, ops, dets, pec){
         const pp = pecPos[i];
         if(pp < f.start || pp >= f.end || p.adhesion !== 'totale') return;
         const porteMarqueur = MARQUEURS_CADRE.some(mk => mk.re.test(String(p.text||'')));
-        if(p.notion_id && p.notion_id !== nid && !porteMarqueur) return;
+        if(p.notion_id && !ids.includes(p.notion_id) && !porteMarqueur) return;
         // fenêtre = document entier : on ne bascule pas toute la chronique, seulement les σ qui portent le cadre ou la paire
         if(f.englobant && !porteMarqueur){
           const t = String(p.text||'').toLowerCase();
           if(![paire.positif.ajout, paire.negatif.ajout].some(x => x && t.includes(String(x).toLowerCase()))) return;
         }
         p.adhesion_avant_inversion = p.adhesion; p.fonction_avant_inversion = p.fonction ?? null;
-        p.adhesion = 'feinte'; p.fonction = 'antiphrase'; p.inversion_sigma = nid;
+        p.adhesion = 'feinte'; p.fonction = 'antiphrase'; p.inversion_sigma = nid;  // première notion du groupe canonique
         touchees.push(i);
       });
       // le marqueur de cadre doit être couvert par une entrée σ : sinon on l'ajoute (comme le fait enforceIronie)
@@ -1638,11 +1694,11 @@ function enforceInversionSigma(texte, notions, ops, dets, pec){
 
       res.ironie_detectee = true;
       if(!res.figure_detectee.includes('antiphrase')) res.figure_detectee.push('antiphrase');
-      const support = { notion_id: nid, notion: labelDe(nid), fenetre: f.englobant ? 'document (en-tête)' : 'paragraphe',
+      const support = { notion_id: nid, notion: ids.map(labelDe).join(' + '), notions_regroupees: ids, canon_norm: canon, fenetre: f.englobant ? 'document (en-tête)' : 'paragraphe',
                         marqueurs: marqueurs.map(({ type, extrait, ref }) => ref ? { type, extrait, ref } : { type, extrait }),
                         paire, pec: touchees };
       res.antiphrase.push(support);
-      res.journal.push(`σ-inversion déclenchée sur ${nid} (${support.notion}), fenêtre ${support.fenetre} : marqueurs [${support.marqueurs.map(m => m.type + ' « ' + m.extrait + ' »').join(' ; ')}] ; paire {${paire.positif.ajout}} (+) vs {${paire.negatif.ajout}} (−) ; σ basculées : [${touchees.join(', ')}]`);
+      res.journal.push(`σ-inversion déclenchée sur ${ids.join('+')} (${support.notion}${canon ? ', canon « ' + canon + ' »' : ''}), fenêtre ${support.fenetre} : marqueurs [${support.marqueurs.map(m => m.type + ' « ' + m.extrait + ' »').join(' ; ')}] ; paire {${paire.positif.ajout}} (+) vs {${paire.negatif.ajout}} (−) ; σ basculées : [${touchees.join(', ')}]`);
     });
   });
   res.journal.forEach(l => console.info(l));
