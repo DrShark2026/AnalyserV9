@@ -24,6 +24,8 @@ par theme_defaut), comptent alors dans mots_reperes et le score, et le nom de
 la famille va dans sous_theme. Les « _pas_seuls » (« Claude » pour l'IA) ne
 comptent que si l'article a déjà le thème par un autre mot, ou si le fil a ce
 thème pour theme_defaut : Claude Monet ne fait pas un article sur l'IA.
+Un article déjà dans registre.json n'est pas repris : la clé est le sha1 du lien
+normalisé (comme dans dossier.py), un ancien registre est réindexé à la lecture.
 
 Usage :
     python3 collect_rss.py                 # collecte normale
@@ -43,6 +45,7 @@ import json
 import re
 import sys
 import unicodedata
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -51,6 +54,7 @@ ICI = Path(__file__).resolve().parent
 SORTIE = ICI / "corpus"
 REGISTRE = ICI / "registre.json"
 UA = "Mozilla/5.0 (veille-analyseur-grize; usage de recherche)"
+SUIVI = re.compile(r"^(utm_|at_|xtor$|oc$|fbclid$|gclid$)")   # paramètres de suivi, retirés des liens
 PROCHE = 8   # « près de » pour exclure_pres_de : nombre de mots au plus entre les deux
 
 
@@ -83,6 +87,33 @@ def date_iso(brut):
         return dt.datetime.fromisoformat(brut.replace("Z", "+00:00")).date().isoformat()
     except Exception:
         return None
+
+
+def normaliser(url):
+    """Lien comparable : https, hôte en minuscules sans « www. », sans fragment, sans / final ni paramètres
+    de suivi (utm_…, xtor, fbclid…). Un identifiant qui n'est pas une adresse web (guid urn:…) reste tel quel."""
+    p = urllib.parse.urlsplit(url.strip())
+    if p.scheme.lower() not in ("http", "https") or not p.netloc:
+        return url.strip()
+    hote = p.netloc.lower().removeprefix("www.")
+    requete = urllib.parse.urlencode([(k, v) for k, v in urllib.parse.parse_qsl(p.query) if not SUIVI.match(k)])
+    return urllib.parse.urlunsplit(("https", hote, p.path.rstrip("/"), requete, ""))
+
+
+def cle_lien(lien):
+    """Clé du registre : début du sha1 du lien normalisé."""
+    return hashlib.sha1(normaliser(lien).encode()).hexdigest()[:16]
+
+
+def lire_registre():
+    """registre.json, réindexé par cle_lien : les entrées d'avant la normalisation (clé du lien brut)
+    changent de clé ; deux liens qui ne diffèrent que par le suivi n'en font qu'un (le premier vu reste)."""
+    if not REGISTRE.exists():
+        return {}
+    registre = {}
+    for v in sorted(json.loads(REGISTRE.read_text("utf-8")).values(), key=lambda v: v.get("vu_le", "")):
+        registre.setdefault(cle_lien(v["lien"]), v)
+    return registre
 
 
 def motif(mot, exact_max=3):
@@ -217,7 +248,7 @@ def main():
     sous_motifs = {th: {nom: [(m, mot_entier(m)) for m in mots] for nom, mots in familles.items()}
                    for th, familles in mots_cles.get("_sous_themes", {}).items()}
 
-    registre = json.loads(REGISTRE.read_text("utf-8")) if REGISTRE.exists() else {}
+    registre = lire_registre()
     aujourdhui = dt.date.today()
     limite = (aujourdhui - dt.timedelta(days=args.jours)).isoformat() if args.jours else None
 
@@ -237,7 +268,7 @@ def main():
                 continue
             if limite and a["date"] and a["date"] < limite:
                 continue
-            cle = hashlib.sha1(a["lien"].encode()).hexdigest()[:16]
+            cle = cle_lien(a["lien"])
             if cle in registre:
                 continue
             if sans_accents(a["resume"]) == sans_accents(a["titre"]):

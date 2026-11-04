@@ -10,7 +10,7 @@ python3 collect_rss.py --test      # vérifie que chaque fil répond
 python3 collect_rss.py --jours 3   # collecte les articles des 3 derniers jours
 ```
 
-Le résultat arrive dans `corpus/veille_AAAA-MM-JJ.json`, prêt à coller dans l'analyseur. Un article déjà vu n'est jamais repris deux fois (voir `registre.json`).
+Le résultat arrive dans `corpus/veille_AAAA-MM-JJ.json`, prêt à coller dans l'analyseur. Un article déjà vu n'est jamais repris deux fois (voir `registre.json`) : les liens y sont comparés normalisés, comme dans `dossier.py` (https, sans « www. », sans fragment, sans / final ni paramètres de suivi `utm_…`, `xtor`, `fbclid`…).
 
 Chaque article indique pourquoi il a été retenu : `mots_reperes` (les mots-clés trouvés), `score` (nombre de passages repérés, ceux du titre comptent double) et `dans_titre` (vrai si un mot-clé figure dans le titre). Rien n'est exclu sur ces critères : un score de 1 sans mot dans le titre signale en général une simple mention en passant.
 

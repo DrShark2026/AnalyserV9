@@ -60,7 +60,8 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from collect_rss import ICI, SORTIE, UA, date_iso, lire_reponse, mot_entier, motif, nettoyer_html, sans_accents
+from collect_rss import (ICI, SORTIE, UA, date_iso, lire_reponse, mot_entier, motif, nettoyer_html, normaliser,
+                         sans_accents)
 from lots import avec_chapo
 
 EDITIONS = {"fr": {"hl": "fr", "gl": "FR", "ceid": "FR:fr"},
@@ -70,7 +71,6 @@ EDITIONS = {"fr": {"hl": "fr", "gl": "FR", "ceid": "FR:fr"},
 TRANCHE = 7              # jours par requête
 PLAFOND = 100            # Google Actualités ne rend pas plus de 100 résultats : la tranche est alors refaite jour par jour
 DELAI_GOOGLE = 2.0       # secondes entre deux requêtes à Google
-SUIVI = re.compile(r"^(utm_|at_|xtor$|oc$|fbclid$|gclid$)")
 
 _derniere = 0.0
 
@@ -118,13 +118,6 @@ def resoudre(lien):
                  ("f.req=" + urllib.parse.quote(json.dumps([[req]]))).encode())
     url = json.loads(json.loads(rep.split("\n\n", 1)[1])[0][2])[1]
     return url if url.startswith("http") else None
-
-
-def normaliser(url):
-    p = urllib.parse.urlsplit(url)
-    hote = p.netloc.lower().removeprefix("www.")
-    requete = urllib.parse.urlencode([(k, v) for k, v in urllib.parse.parse_qsl(p.query) if not SUIVI.match(k)])
-    return urllib.parse.urlunsplit(("https", hote, p.path.rstrip("/"), requete, ""))
 
 
 def domaine(url):
