@@ -1243,7 +1243,39 @@ async function analyzeOneForBatch(texte){
   const systemPrompt = buildAISystemPrompt();
   const userPrompt = `Texte à analyser :\n${texte}`;
   const parsed = await callClaudeJSONWithRetry(systemPrompt, userPrompt);
-  return postTraiter(parsed, texte);
+  const r = postTraiter(parsed, texte);
+  await ajouterPolarite(texte, r.pec);
+  return r;
+}
+
+// v17.11 : polarité des PEC en seconde passe. Demandée dans le prompt d'extraction, elle faisait redécouper
+// les passages σ (variance de pec accrue) : on la demande à part, sur les PEC finales, sans montrer
+// source ni adhesion au modèle pour qu'il ne les aligne pas. Additif : n'écrit que polarite / cible_polarite.
+const POLARITES = ['positif','negatif','neutre','mixte'];
+function buildPolaritePrompt(){
+  return [
+    "Tu reçois un texte et une liste numérotée de passages extraits de ce texte. Pour chaque passage, donne sa POLARITÉ.",
+    "\"polarite\" : positif | negatif | neutre | mixte — la valence de la PROPOSITION portée par le passage envers sa cible, PAS la connotation isolée des mots : \"il n’y a aucun danger\" est positif.",
+    "\"cible_polarite\" : un mot qui nomme ce que la proposition évalue (IA, entreprise, technologie, humanité, régulation…), ou null si aucune cible n’est identifiable.",
+    "IMPÉRATIFS : (1) évalue la proposition elle-même, quelle que soit la personne qui l’énonce et que l’auteur y adhère ou non : la polarité ne dit rien de l’adhésion ni de la source ; (2) \"neutre\" par défaut quand le passage n’a pas de charge évaluative claire : ne sur-polarise pas ; (3) passage portant sur Claude ou Anthropic : décris la polarité de ce que dit le texte, sans la valider (conflit d’intérêts) ; (4) ne modifie ni ne redécoupe les passages : une entrée par numéro reçu.",
+    "SORTIE. Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ou après : {\"polarites\":[{\"i\":0,\"polarite\":\"positif|negatif|neutre|mixte\",\"cible_polarite\":\"...\"|null}]}"
+  ].join('\n');
+}
+async function ajouterPolarite(texte, pec){
+  if(!pec || !pec.length) return;
+  const liste = pec.map((p, i) => `${i}. ${String(p.text || '')}`).join('\n');
+  try{
+    const out = await callClaudeJSONWithRetry(buildPolaritePrompt(), `Texte :\n${texte}\n\nPassages :\n${liste}`);
+    (out && Array.isArray(out.polarites) ? out.polarites : []).forEach(e => {
+      const p = pec[e && e.i];
+      if(!p || !POLARITES.includes(e.polarite)) return;
+      p.polarite = e.polarite;
+      if(e.cible_polarite) p.cible_polarite = String(e.cible_polarite);
+    });
+  }catch(e){
+    // la polarité est accessoire : son échec ne fait pas échouer l'analyse
+    pec.forEach(p => { if(!p.polarite) p.polarite_erreur = String(e && e.message || e).slice(0, 120); });
+  }
 }
 
 // Prise en charge σ : polyphonie puis inversion (antiphrase). Point d'entrée unique, appelé par le lot
@@ -2228,7 +2260,7 @@ async function runBatch(){
     try{
       const ta = texteAAnalyser(ex);
       r = await analyzeOneForBatch(ta.texte);
-      r = { ...ex, ...r, version_analyseur: '17.10', texte_analyse: ta.texte, source_analyse: ta.source, tronque: ta.tronque, n_mots_analyses: ta.texte.split(/\s+/).filter(Boolean).length };
+      r = { ...ex, ...r, version_analyseur: '17.11', texte_analyse: ta.texte, source_analyse: ta.source, tronque: ta.tronque, n_mots_analyses: ta.texte.split(/\s+/).filter(Boolean).length };
     }catch(e){
       r = { ...ex, double_alpha: null, n_theme_ops: null, n_phore_ops: null, risk_detected: null, erreur: e.message };
     }
