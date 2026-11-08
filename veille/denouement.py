@@ -16,7 +16,7 @@ Sans option : écarte ces doublons du cœur (même URL normalisée, comme dossie
 la même source ; pour les pièces OR-ADD, même titre), relève les mnémoniques de la fiche
 (mnemoniques_fiche : indices, n'influent pas sur la sélection), rattache chaque article aux actes de la
 fiche par des indices lexicaux (actes, actes_indices : I soupçon, II Jaenada, III Fitoussi), reconnaît
-les cibles connues (OR-DEN-01 à 07) et numérote les autres articles à partir de OR-DEN-08, par date.
+les cibles connues (OR-DEN-01 à 07 ; une cible déjà dans le cœur y est seulement signalée, dans_coeur) et numérote les autres articles à partir de OR-DEN-08, par date.
 
 Garde-fous de la fiche : les pièces réservées aux abonnés marquées vo_manuelle (Fitoussi du 07/11,
 phrase d'IA de Jaenada du 04/11) ont un texte vide et texte_a_fournir « VO à fournir manuellement »,
@@ -26,7 +26,10 @@ les seules métadonnées de la fiche. Aucun texte n'est traduit ni reconstitué.
 
 Sortie, dans corpus/dossiers/orelien_denouement/ :
     resultats_orelien_denouement_AAAA-MM-JJ.json   méta (fiche, doublons écartés, cibles, décomptes) + toutes les entrées
-    lot_17-11_orelien_denouement_AAAA-MM-JJ.json   les seules entrées qui ont un texte, à coller dans l'analyseur
+    lot_17-11_orelien_denouement_AAAA-MM-JJ.json      les seules entrées qui ont un texte, à coller dans l'analyseur
+    lot_17-11_orelien_denouement_ia_AAAA-MM-JJ.json   les mêmes, sans celles qui ne citent jamais l'IA (mentionne_ia :
+                                                      IA, AI, intelligence artificielle, ChatGPT, Claude, généré par…),
+                                                      surtout des articles sur le Goncourt sans rapport avec l'affaire
 """
 import argparse
 import collections
@@ -50,8 +53,9 @@ ACTES = {   # indices lexicaux, cherchés sans accents ni majuscules dans titre,
     "III": r"\bfitoussi\b|\bpangram\b|balance ton claude",
 }
 DETECTEUR = r"\bpangram\b|detecteur|detector|gptzero|originality"
+IA = r"\bia\b|\bai\b|intelligence artificielle|artificial intelligence|chatgpt|\bclaude\b|generee?s? par|generated"
 
-# Cibles connues de la fiche. source : fragment du nom de la source ; date : à un jour près ;
+# Cibles connues de la fiche. source : motif cherché dans le nom de la source ; date : à un jour près ;
 # titre : motifs qui doivent TOUS figurer dans le titre ; corps : motifs qui doivent TOUS figurer
 # dans le titre ou le texte. vo_manuelle : texte jamais versé depuis la collecte.
 CIBLES = {
@@ -66,9 +70,10 @@ CIBLES = {
                   "titre_fiche": "Philippe Jaenada (Goncourt 2026) a écrit une phrase avec l'IA dans son livre pour jouer avec le lecteur"},
     "OR-DEN-04": {"acte": "II", "date": "2026-11-03", "titre": [r"goncourt", r"jaenada|inconnue du quai de javel"],
                   "titre_fiche": "Couverture de la remise du Goncourt 2026 à Philippe Jaenada pour « L'Inconnue du quai de Javel »"},
-    "OR-DEN-05": {"acte": "I", "corps": [r"nothomb|beigbeder", r"orelien"],
+    "OR-DEN-05": {"acte": "I", "corps": [r"orelien", r"(nothomb|beigbeder)[^.]{0,150}tres bien|tres bien[^.]{0,150}(nothomb|beigbeder)"
+                                         r"|(nothomb|beigbeder) (le |l.)?defend|defense (d.|de )(amelie |frederic )?(nothomb|beigbeder)"],
                   "titre_fiche": "Défenses d'Amélie Nothomb et Frédéric Beigbeder (« le texte de Thélyson est très bien ») — source à retrouver"},
-    "OR-DEN-06": {"acte": None, "corps": [r"kasparov"],
+    "OR-DEN-06": {"acte": None, "source": r"reddit|twitter|^x$|x\.com", "corps": [r"kasparov"],
                   "titre_fiche": "Le contre-texte « moment Kasparov » (fil Reddit/X : échecs, ping-pong, théâtre/cinéma, peinture/photographie) — à archiver"},
     "OR-DEN-07": {"acte": "III", "corps": [r"balance ton claude|pangram", r"orelien|fitoussi"],
                   "titre_fiche": "Le compte X « Balance ton Claude » (Fitoussi) et la révélation du verdict Pangram sur le roman d'Orélien"},
@@ -130,7 +135,7 @@ def amorcer():
 
 def correspond(a, c):
     t, p = sans_accents(titre_de(a)), plein(a)
-    if c.get("source") and c["source"] not in sans_accents(a["source"]):
+    if c.get("source") and not re.search(c["source"], sans_accents(a["source"])):
         return None
     if c.get("date"):
         if not a.get("date"):
@@ -167,10 +172,11 @@ def main():
     idx = coeur()
     mnemo = [(m, re.compile(r"(?<!\w)" + re.escape(sans_accents(m)) + r"(?!\w)")) for m in fiche["mnemoniques_collecte"]]
 
-    articles, ecartes = [], []
+    articles, ecartes, doublons = [], [], []
     for a in lire(DOSSIER / f"lot_{NOM}.json"):
         if (deja := dans_coeur(a, idx)):
             ecartes.append({"id": a["id"], "doublon_de": deja, "source": a["source"], "titre": titre_de(a)})
+            doublons.append((a, deja))
             continue
         p = plein(a)
         a["id_dossier"] = a["id"]
@@ -179,6 +185,7 @@ def main():
         a["actes"] = [n for n in ACTES if indices[n]]
         a["actes_indices"] = {n: v for n, v in indices.items() if v}
         a["mentionne_detecteur"] = bool(re.search(DETECTEUR, p))
+        a["mentionne_ia"] = bool(re.search(IA, p))
         if raisons.get(a["id"], "").startswith("réservé aux abonnés"):
             a["reserve_abonnes"] = True
         articles.append(a)
@@ -190,11 +197,17 @@ def main():
             codes[code] = cands[0][1]
         cibles_meta[code] = {"titre_fiche": c["titre_fiche"], "trouve": bool(cands),
                              "candidats": [articles[i]["id_dossier"] for _, i in cands]}
+        if not cands and (dans := sorted((k, deja) for a, deja in doublons if (k := correspond(a, c)))):
+            cibles_meta[code]["dans_coeur"] = dans[0][1]    # déjà collectée et analysée : pas de VO à fournir
 
     entrees = []
     for code, c in CIBLES.items():
         if code not in codes:
-            entrees.append(entree_vide(code, c))
+            e = entree_vide(code, c)
+            if cibles_meta[code].get("dans_coeur"):
+                e.update(trouve="dans_coeur", doublon_de=cibles_meta[code]["dans_coeur"], statut_texte="dans_coeur")
+                del e["texte_a_fournir"]
+            entrees.append(e)
             continue
         a = articles[codes[code]]
         a.update(id=code, code=code, cible=True, trouve=True, titre_fiche=c["titre_fiche"])
@@ -211,12 +224,13 @@ def main():
         entrees.append(a)
 
     a_analyser = [a for a in entrees if a.get("texte")]
+    a_analyser_ia = [a for a in a_analyser if a.get("mentionne_ia")]
     jour = dt.date.today().isoformat()
     compte_actes = collections.Counter(n for a in entrees for n in a["actes"])
     resultats = {
         "dossier": NOM,
         "produit": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
-        "analyseur": "17.11 (à passer : lot_17-11_" + NOM + f"_{jour}.json)",
+        "analyseur": "17.11 (à passer : lot_17-11_" + NOM + f"_ia_{jour}.json, ou lot_17-11_{NOM}_{jour}.json pour tout)",
         "fiche": {k: fiche[k] for k in ("titre", "date_debut", "date_fin", "langues", "note")},
         "collecte": {"date": meta_dossier.get("collecte"), "requetes": meta_dossier.get("requetes"),
                      "editions": list(meta_dossier.get("editions", {})), "jours": meta_dossier.get("jours"),
@@ -228,11 +242,12 @@ def main():
                        "actes : indices lexicaux automatiques, à relire"],
         "doublons_du_coeur_ecartes": ecartes,
         "cibles": cibles_meta,
-        "decomptes": {"entrees": len(entrees), "articles_collectes": len(articles), "a_analyser": len(a_analyser),
+        "decomptes": {"entrees": len(entrees), "articles_collectes": len(articles), "a_analyser": len(a_analyser), "a_analyser_ia": len(a_analyser_ia),
                       "vo_a_fournir": sum(1 for a in entrees if a.get("texte_a_fournir")),
                       "doublons_du_coeur": len(ecartes),
                       "par_acte": {n: compte_actes.get(n, 0) for n in ACTES},
                       "hors_actes": sum(1 for a in entrees if not a["actes"]),
+                      "sans_mention_ia": sum(1 for a in entrees if a.get("lien") and not a.get("mentionne_ia")),
                       "par_source": dict(collections.Counter(a["source"] for a in entrees if a.get("lien")).most_common()),
                       "statuts_texte": dict(collections.Counter(a.get("statut_texte", "") for a in entrees))},
         "articles": entrees,
@@ -240,13 +255,15 @@ def main():
     sortie = DOSSIER / f"resultats_{NOM}_{jour}.json"
     ecrire_json(sortie, resultats)
     ecrire_json(DOSSIER / f"lot_17-11_{NOM}_{jour}.json", a_analyser)
+    ecrire_json(DOSSIER / f"lot_17-11_{NOM}_ia_{jour}.json", a_analyser_ia)
 
     d = resultats["decomptes"]
     print(f"{sortie.name} : {d['entrees']} entrées ({d['articles_collectes']} articles collectés hors cœur, "
-          f"{d['doublons_du_coeur']} doublons du cœur écartés), {d['a_analyser']} à analyser, {d['vo_a_fournir']} VO à fournir")
+          f"{d['doublons_du_coeur']} doublons du cœur écartés), {d['a_analyser']} à analyser (dont {d['a_analyser_ia']} qui citent l'IA), {d['vo_a_fournir']} VO à fournir")
     print("  actes : " + ", ".join(f"{n} {k}" for n, k in d["par_acte"].items()) + f", hors actes {d['hors_actes']}")
     for code, c in cibles_meta.items():
-        print(f"  {code} {'trouvée ' if c['trouve'] else 'MANQUANTE'} {c['titre_fiche'][:70]}")
+        etat = "trouvée " if c["trouve"] else "dans le cœur" if c.get("dans_coeur") else "MANQUANTE"
+        print(f"  {code} {etat} {c['titre_fiche'][:70]}")
 
 
 if __name__ == "__main__":
