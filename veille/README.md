@@ -79,6 +79,21 @@ L'étape 1 s'arrête après le décompte, pour le regarder avant d'ouvrir les ar
 
 Tout est écrit dans `corpus/dossiers/<nom>/` : `lot_<nom>.json` (même format que les lots), `comptage.csv` (date, source, pays) et `meta.json` (date et heure de collecte, requêtes exactes, tranches, nombre de résultats par requête, plafonds atteints). Même jour par jour, une recherche peut atteindre le plafond de 100 : `meta.json` le note, et le décompte de ces jours est un minimum. Le flux de Google Actualités est réservé par ses conditions à un usage personnel et non commercial dans un lecteur de flux.
 
+### Dénouement de l'affaire Orélien
+
+```bash
+python3 dossier.py orelien_denouement "Thélyson Orélien" "Samuel Fitoussi" … --jusqu-au 2026-11-07 --jours 19 --garder
+python3 denouement.py --amorcer                              # avant l'étape 2
+.venv/bin/python dossier.py orelien_denouement --textes      # étape 2
+python3 denouement.py                                        # tri et codage OR-DEN
+```
+
+`denouement.py` prolonge `dossier.py` pour le dossier `orelien_denouement`, d'après sa fiche `corpus/dossiers/orelien_denouement/meta_orelien_denouement.json` (que `dossier.py` ne lit pas : les requêtes se donnent toujours en ligne de commande). Le corpus Orélien déjà collecté (lots `orelien` et `orelien_maj_1026`, pièces `OR-ADD-xx`) n'est pas repris : `--amorcer` recopie dans `textes.json` le texte déjà récupéré pour ces articles, que l'étape 2 ne rouvre donc pas, et le tri les écarte (même URL normalisée ou même titre dans la même source, comme `dossier.py` ; même titre seul pour les pièces `OR-ADD`), en les listant dans `doublons_du_coeur_ecartes`.
+
+Chaque article reçoit `mnemoniques_fiche` (les `mnemoniques_collecte` de la fiche trouvées dans le titre, le texte ou le texte complet, sans tenir compte des majuscules ni des accents ; elles n'influent pas sur la sélection), `actes` et `actes_indices` (I soupçon : Orélien, *C'était ça ou mourir*, Nothomb, Beigbeder ; II Jaenada : Jaenada, Goncourt, *L'Inconnue du quai de Javel* ; III Fitoussi : Fitoussi, Pangram, « balance ton Claude » ; indices lexicaux automatiques, à relire) et `mentionne_detecteur` (Pangram ou un autre détecteur cité : le verdict est décrit, jamais validé). Les cibles connues de la fiche reçoivent les codes `OR-DEN-01` à `OR-DEN-07` (règles dans `CIBLES` : source, date à un jour près, mots du titre ou du texte), les autres articles `OR-DEN-08` et suivants, par date ; le code devient l'`id`, l'ancien est gardé dans `id_dossier`. Les pièces réservées aux abonnés (chronique Fitoussi du 07/11, phrase d'IA de Jaenada du 04/11) ont un `texte` vide et `texte_a_fournir: "VO à fournir manuellement"`, même quand Google Actualités les trouve ; une cible introuvable a une entrée du même type, avec les seules métadonnées de la fiche (`titre_fiche`, `trouve: false`). Aucun texte n'est traduit ni reconstitué.
+
+Sortie dans `corpus/dossiers/orelien_denouement/` : `resultats_orelien_denouement_AAAA-MM-JJ.json` (méta : fiche, collecte, garde-fous, doublons écartés, cibles trouvées ou non, décomptes par acte et par source ; puis toutes les entrées) et `lot_17-11_orelien_denouement_AAAA-MM-JJ.json` (les seules entrées qui ont un texte, à coller dans l'analyseur).
+
 ## Automatisation
 
 Un minuteur systemd utilisateur lance la collecte (`--jours 2`), puis `complet.py`, puis `lots.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant. Avant de lancer quoi que ce soit, le service attend jusqu'à 2 minutes que la résolution DNS fonctionne (le réseau n'est souvent pas prêt au démarrage) ; passé ce délai, la collecte est lancée quand même. Si `complet.py` échoue, `lots.py` tourne quand même (préfixe `-` sur sa ligne du service). La sortie s'ajoute à `collecte.log` ; au premier lancement d'un nouveau mois, `tourner_log.sh` renomme le log du mois précédent en `collecte_AAAA-MM.log`.
