@@ -24,6 +24,11 @@ par theme_defaut), comptent alors dans mots_reperes et le score, et le nom de
 la famille va dans sous_theme. Les « _pas_seuls » (« Claude » pour l'IA) ne
 comptent que si l'article a déjà le thème par un autre mot, ou si le fil a ce
 thème pour theme_defaut : Claude Monet ne fait pas un article sur l'IA.
+Les « _suivis » ({thème: sous_theme}, chine_ia -> geopolitique_puces) sont des
+thèmes de suivi : ils font retenir un article et lui donnent ce sous_theme, sont
+cherchés dans tous les fils, mais ne comptent ni dans le score ni dans dans_titre,
+n'empêchent pas theme_defaut et n'entrent dans aucun lot ; le bilan donne leur
+nombre de nouveaux articles.
 Un article déjà dans registre.json n'est pas repris : la clé est le sha1 du lien
 normalisé (comme dans dossier.py), un ancien registre est réindexé à la lecture.
 
@@ -247,6 +252,7 @@ def main():
     pas_seuls = {th: set(mots) for th, mots in mots_cles.get("_pas_seuls", {}).items()}
     sous_motifs = {th: {nom: [(m, mot_entier(m)) for m in mots] for nom, mots in familles.items()}
                    for th, familles in mots_cles.get("_sous_themes", {}).items()}
+    suivis = mots_cles.get("_suivis", {})     # thème de suivi -> sous_theme (chine_ia -> geopolitique_puces)
 
     registre = lire_registre()
     aujourdhui = dt.date.today()
@@ -277,17 +283,19 @@ def main():
             trouves, mots, sous, zones = [], [], [], {"titre": [], "resume": []}
 
             def repere(th, rx):
-                """Vrai si le mot est dans le titre ou le chapô ; ses passages vont dans zones."""
+                """Vrai si le mot est dans le titre ou le chapô ; ses passages vont dans zones
+                (sauf pour un thème de suivi, qui ne compte pas dans le score)."""
                 trouve = False
                 for zone, t in (("titre", titre_norm), ("resume", resume_norm)):
                     exclus = [e.span() for rx_e in exclusions.get(th, []) for e in rx_e.finditer(t)]
                     spans = loin_de(hors_exclusions([m.span() for m in rx.finditer(t)], exclus), t, pres_de)
-                    zones[zone] += spans
+                    if th not in suivis:
+                        zones[zone] += spans
                     trouve = trouve or bool(spans)
                 return trouve
 
             for th, langs in motifs.items():
-                if "themes" in f and th not in f["themes"]:
+                if "themes" in f and th not in f["themes"] and th not in suivis:
                     continue     # thème que ce fil ne cherche pas (fils hors de France : pas d'analogies historiques)
                 seuls = pas_seuls.get(th, set())
                 for mot, rx in langs.get(f["langue"], []):
@@ -299,7 +307,7 @@ def main():
                         if mot in seuls and repere(th, rx):
                             trouves.append(th)
                             mots.append(mot)
-            par_defaut = not trouves and bool(f.get("theme_defaut"))
+            par_defaut = not set(trouves) - set(suivis) and bool(f.get("theme_defaut"))   # un suivi seul n'ôte pas theme_defaut
             if par_defaut:
                 trouves.append(f["theme_defaut"])
             for th, familles in sous_motifs.items():
@@ -310,6 +318,7 @@ def main():
                         if repere(th, rx):
                             sous.append(nom)
                             mots.append(mot)
+            sous += [nom for th, nom in suivis.items() if th in trouves]
             n_titre, n_resume = occurrences(zones["titre"]), occurrences(zones["resume"])
             if not trouves and not args.tous:
                 continue
@@ -358,6 +367,8 @@ def main():
         return 0
     if not retenus:
         print("\nAucun nouvel article retenu aujourd'hui.")
+        for th, nom in suivis.items():
+            print(f"Suivi {th} / {nom} : 0 nouvel article")
         return 0
 
     SORTIE.mkdir(exist_ok=True)
@@ -366,6 +377,9 @@ def main():
     fichier.write_text(json.dumps(anciens + retenus, ensure_ascii=False, indent=2), "utf-8")
     REGISTRE.write_text(json.dumps(registre, ensure_ascii=False, indent=1), "utf-8")
     print(f"\n{len(retenus)} nouveaux articles écrits dans {fichier.relative_to(ICI)}")
+    for th, nom in suivis.items():
+        n = sum(1 for a in retenus if th in a["themes"])
+        print(f"Suivi {th} / {nom} : {n} nouvel(s) article(s)")
     return 0
 
 
