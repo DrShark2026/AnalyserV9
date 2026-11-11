@@ -12,7 +12,9 @@ statut_texte « resume » : complet.py ne cherche pas leur texte. Un fil qui
 porte une liste « themes » n'est cherché que pour ces thèmes ; « pays » est
 recopié dans chaque article. « exclure_pres_de » écarte un mot repère du fil
 quand un des mots donnés en est séparé par PROCHE mots ou moins (« lycéen »
-près de « Parcoursup », « manifestation » près de « Bolsonaro » chez Europe 1). Un article
+près de « Parcoursup », « manifestation » près de « Bolsonaro » chez Europe 1) ;
+« _exclure_pres_de » de mots_cles.json fait de même pour tous les fils
+(« expulsé » près de « militants » ou « meeting »). Un article
 dont le titre ou le début du chapô contient « Sponsored », « Partner content »,
 « Contenu sponsorisé » ou « [Sponso] » porte categorie « sponsorise » : il
 n'entre dans aucun lot. « exclure_rubriques » marque hors_lots les articles du
@@ -249,6 +251,8 @@ def main():
     themes = {k: v for k, v in mots_cles.items() if not k.startswith("_") and k != "mnemoniques"}
     motifs = {th: {lg: [(m, mot_entier(m)) for m in mots] for lg, mots in langs.items()} for th, langs in themes.items()}
     exclusions = {th: [mot_entier(e) for e in exprs] for th, exprs in mots_cles.get("_exclusions", {}).items()}
+    pres_de_tous = [(mot_entier(m), [mot_entier(v) for v in voisins])
+                    for m, voisins in mots_cles.get("_exclure_pres_de", {}).items()]
     pas_seuls = {th: set(mots) for th, mots in mots_cles.get("_pas_seuls", {}).items()}
     sous_motifs = {th: {nom: [(m, mot_entier(m)) for m in mots] for nom, mots in familles.items()}
                    for th, familles in mots_cles.get("_sous_themes", {}).items()}
@@ -266,7 +270,8 @@ def main():
             echecs.append((f["nom"], str(e)[:120]))
             continue
         gardes = 0
-        pres_de = [(mot_entier(m), [mot_entier(v) for v in voisins]) for m, voisins in f.get("exclure_pres_de", {}).items()]
+        pres_de = pres_de_tous + [(mot_entier(m), [mot_entier(v) for v in voisins])
+                                  for m, voisins in f.get("exclure_pres_de", {}).items()]
         for a in articles:
             if not a["lien"] or not a["titre"]:
                 continue
