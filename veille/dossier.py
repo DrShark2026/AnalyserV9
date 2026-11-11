@@ -18,6 +18,10 @@ déjà résolus sont gardés dans liens.json : une nouvelle collecte ne les rede
 Google ne rend pas toujours les mêmes résultats : avec --garder, les articles de la
 liste précédente que la nouvelle collecte ne retrouve pas restent dans le lot, avec
 absent_depuis (date et heure de la première collecte où ils ont manqué).
+Le lot, comptage.csv et meta.json sont réécrits après chaque requête (toutes éditions) :
+une interruption ne perd que la requête en cours. Tant que la collecte n'est pas finie,
+meta.json porte « en_cours » (requêtes terminées et restantes) ; avec --garder, les
+articles de la liste précédente y sont repris sans absent_depuis, qui n'est posé qu'à la fin.
 
 Une source déjà dans feeds.json (même domaine, ou même nom avant « – ») donne
 pays, categorie, orientation, degre et posture_ia, quand tous ses fils sont
@@ -46,6 +50,7 @@ Usage :
 import argparse
 import base64
 import collections
+import copy
 import csv
 import datetime as dt
 import hashlib
@@ -70,7 +75,9 @@ EDITIONS = {"fr": {"hl": "fr", "gl": "FR", "ceid": "FR:fr"},
             "en": {"hl": "en-US", "gl": "US", "ceid": "US:en"}}
 TRANCHE = 7              # jours par requête
 PLAFOND = 100            # Google Actualités ne rend pas plus de 100 résultats : la tranche est alors refaite jour par jour
-DELAI_GOOGLE = 2.0       # secondes entre deux requêtes à Google
+DELAI_GOOGLE = 5.0       # secondes entre deux requêtes à Google
+PAUSE_BLOCAGE = 600      # secondes de pause quand Google répond 429 ou 503 (« Sorry… », trafic inhabituel)
+ESSAIS_BLOCAGE = 3       # pauses avant d'abandonner
 
 _derniere = 0.0
 
@@ -85,17 +92,19 @@ def google(url, corps=None):
     if corps is not None:
         entetes["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8"
     req = urllib.request.Request(url, data=corps, headers=entetes)
-    for essai in range(2):
+    for essai in range(ESSAIS_BLOCAGE + 1):
         try:
             with urllib.request.urlopen(req, timeout=20) as r:
                 return lire_reponse(r).decode("utf-8", errors="replace")
         except urllib.error.HTTPError as e:
-            if e.code != 429:
+            if e.code not in (429, 503):
                 raise
-            if essai:
-                raise SystemExit("Google répond 429 (trop de requêtes) deux fois de suite : arrêt, le lot n'est pas réécrit (liens.json garde les liens déjà résolus).")
-            print("    429 de Google : pause de 120 secondes")
-            time.sleep(120)
+            if essai == ESSAIS_BLOCAGE:
+                raise SystemExit(f"Google répond {e.code} après {ESSAIS_BLOCAGE} pauses : arrêt, le lot n'est pas réécrit "
+                                 "(liens.json garde les liens déjà résolus).")
+            print(f"    {e.code} de Google : pause de {PAUSE_BLOCAGE} secondes ({essai + 1}/{ESSAIS_BLOCAGE})", flush=True)
+            time.sleep(PAUSE_BLOCAGE)
+            _derniere = time.monotonic()
 
 
 def resoudre(lien):
@@ -168,7 +177,7 @@ def dans(rxs, titre_n):
     return min(len(rx.findall(titre_n)) for rx in rxs)
 
 
-def collecter(nom, requetes, jours, jusqu_au, liens_f, editions):
+def collecter(nom, requetes, jours, jusqu_au, liens_f, editions, apres_requete=None):
     feeds = json.loads((ICI / "feeds.json").read_text("utf-8"))["feeds"]
     mots_cles = json.loads((ICI / "mots_cles.json").read_text("utf-8"))
     mnemo = {lg: [(m, motif(m, exact_max=4)) for m in ms] for lg, ms in mots_cles.get("mnemoniques", {}).items()}
@@ -245,8 +254,23 @@ def collecter(nom, requetes, jours, jusqu_au, liens_f, editions):
         if provenance not in a["requetes"]:
             a["requetes"].append(provenance)
 
+    def faire_meta():
+        return {
+            "dossier": nom,
+            "collecte": maintenant.isoformat(timespec="seconds"),
+            "requetes": requetes,
+            "jours": jours,
+            "jusqu_au": (fin - dt.timedelta(days=1)).isoformat(),
+            "editions": editions,
+            "tranches": [[d0.isoformat(), (d1 - dt.timedelta(days=1)).isoformat()] for d0, d1 in tranches],
+            "recherches": journal,
+            "n_articles": len(articles),
+            "n_plafond_jour": sum(1 for j in journal if j["plafond_atteint"] and not j["refaite_par_jour"]),
+            "n_liens_non_resolus": sum(1 for a in articles if not a["lien_resolu"]),
+        }
+
     def rechercher():
-        for requete in requetes:
+        for i, requete in enumerate(requetes):
             for langue, ed in editions.items():
                 a_faire = list(tranches)
                 while a_faire:
@@ -272,6 +296,10 @@ def collecter(nom, requetes, jours, jusqu_au, liens_f, editions):
                         for t, l, s in grappe:
                             if (sans_accents(s), cle_titre(t)) != (sans_accents(source), cle_titre(titre)):
                                 ajouter(t, l, date, s, "", q + f" [{langue}, grappe]", langue.split("-")[0], grappe_de=lien_g)
+            if apres_requete and i < len(requetes) - 1:
+                ecrire_json(liens_f, {g: u for g, u in resolus.items() if u})
+                apres_requete(articles, {**faire_meta(), "en_cours": {"requetes_terminees": requetes[:i + 1],
+                                                                     "requetes_restantes": requetes[i + 1:]}})
 
     try:
         rechercher()
@@ -279,20 +307,7 @@ def collecter(nom, requetes, jours, jusqu_au, liens_f, editions):
         ecrire_json(liens_f, {g: u for g, u in resolus.items() if u})     # un échec sera retenté
 
     articles.sort(key=lambda a: (a["date"] or "", a["source"]))
-    meta = {
-        "dossier": nom,
-        "collecte": maintenant.isoformat(timespec="seconds"),
-        "requetes": requetes,
-        "jours": jours,
-        "jusqu_au": (fin - dt.timedelta(days=1)).isoformat(),
-        "editions": editions,
-        "tranches": [[d0.isoformat(), (d1 - dt.timedelta(days=1)).isoformat()] for d0, d1 in tranches],
-        "recherches": journal,
-        "n_articles": len(articles),
-        "n_plafond_jour": sum(1 for j in journal if j["plafond_atteint"] and not j["refaite_par_jour"]),
-        "n_liens_non_resolus": sum(1 for a in articles if not a["lien_resolu"]),
-    }
-    return articles, meta, tranches
+    return articles, faire_meta(), tranches
 
 
 def ecrire_json(fichier, donnees):
@@ -323,9 +338,10 @@ def par_semaine(articles, tranches):
         print(f"  dont {approx} daté(s) par leur grappe")
 
 
-def garder_precedents(articles, ancien, collecte):
+def garder_precedents(articles, ancien, collecte, marquer=True):
     """Ajoute aux articles ceux de la liste précédente qu'ils ne contiennent pas (même id, même URL
-    ou même titre dans la même source), avec absent_depuis : la collecte où ils ont manqué la première fois."""
+    ou même titre dans la même source), avec absent_depuis : la collecte où ils ont manqué la première fois
+    (marquer=False pendant la collecte, quand les requêtes restantes peuvent encore les retrouver)."""
     ids = {a["id"] for a in articles}
     urls = {normaliser(a["lien"]) for a in articles}
     titres = {(sans_accents(a["source"]), cle_titre(a["texte"].partition("\n\n")[0])) for a in articles}
@@ -334,7 +350,8 @@ def garder_precedents(articles, ancien, collecte):
         if a["id"] in ids or normaliser(a["lien"]) in urls \
                 or (sans_accents(a["source"]), cle_titre(a["texte"].partition("\n\n")[0])) in titres:
             continue
-        a.setdefault("absent_depuis", collecte)
+        if marquer:
+            a.setdefault("absent_depuis", collecte)
         gardes.append(a)
     articles.extend(gardes)
     return gardes
@@ -437,21 +454,35 @@ def main():
         ancien = json.loads((dossier / f"lot_{args.nom}.json").read_text("utf-8"))
         ecrire_json(liens_f, {urllib.parse.urlsplit(a["lien_google"]).path.rsplit("/", 1)[-1]: a["lien"]
                               for a in ancien if a.get("lien_resolu")})
-    articles, meta, tranches = collecter(args.nom, args.requetes, args.jours, args.jusqu_au, liens_f,
-                                       {e: EDITIONS[e] for e in args.editions})
+    ancien = ancienne_meta = None
     if args.garder and (dossier / f"lot_{args.nom}.json").exists():
         ancien = json.loads((dossier / f"lot_{args.nom}.json").read_text("utf-8"))
-        gardes = garder_precedents(articles, ancien, meta["collecte"])
-        articles.sort(key=lambda a: (a["date"] or "", a["source"]))
         ancienne_meta = json.loads((dossier / "meta.json").read_text("utf-8")) if (dossier / "meta.json").exists() else {}
-        if "reintegres" in ancienne_meta:
-            meta["reintegres"] = ancienne_meta["reintegres"]
-        meta["gardes_de_la_liste_precedente"] = [a["id"] for a in gardes]
-        meta["n_articles"] = len(articles)
+
+    def enregistrer(articles, meta, final):
+        articles = list(articles)
+        gardes = []
+        if ancien is not None:
+            gardes = garder_precedents(articles, ancien if final else copy.deepcopy(ancien), meta["collecte"], marquer=final)
+            if "reintegres" in ancienne_meta:
+                meta["reintegres"] = ancienne_meta["reintegres"]
+            meta["gardes_de_la_liste_precedente"] = [a["id"] for a in gardes]
+            meta["n_articles"] = len(articles)
+        articles.sort(key=lambda a: (a["date"] or "", a["source"]))
+        ecrire_json(dossier / f"lot_{args.nom}.json", articles)
+        ecrire_comptage(dossier / "comptage.csv", articles)
+        ecrire_json(dossier / "meta.json", meta)
+        if not final:
+            print(f"    lot enregistré : {len(articles)} articles ({len(meta['en_cours']['requetes_restantes'])} requête(s) restante(s))",
+                  flush=True)
+        return articles, gardes
+
+    articles, meta, tranches = collecter(args.nom, args.requetes, args.jours, args.jusqu_au, liens_f,
+                                         {e: EDITIONS[e] for e in args.editions},
+                                         apres_requete=lambda a, m: enregistrer(a, m, final=False))
+    articles, gardes = enregistrer(articles, meta, final=True)
+    if ancien is not None:
         print(f"\n{len(gardes)} article(s) de la liste précédente gardé(s), absents de cette collecte")
-    ecrire_json(dossier / f"lot_{args.nom}.json", articles)
-    ecrire_comptage(dossier / "comptage.csv", articles)
-    ecrire_json(dossier / "meta.json", meta)
     par_semaine(articles, tranches)
     print(f"\n{len(articles)} articles, {meta['n_liens_non_resolus']} lien(s) non résolu(s) "
           f"→ {dossier.relative_to(SORTIE.parent)}/")
