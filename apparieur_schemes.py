@@ -81,22 +81,36 @@ def theta5_reel(phrase, art, sch=None):
         return co.get("hyperonyme") or "(classe posée)"
     return None
 
+# Vocabulaire unique de prise en charge (σ) : 3 niveaux.
+#   assume   : le locuteur prend en charge (assertion non marquée, adhésion totale)
+#   suspendu : engagement retenu (conditionnel, soupçon, adhésion suspendue/partielle/contestée)
+#   attribue : reporté à une source (citation, « selon X », adhésion attribuée)
+_SIGMA = {
+    "totale": "assume", "assumee": "assume", "assumée": "assume",
+    "suspendue": "suspendu", "partielle": "suspendu", "contestee": "suspendu",
+    "contestée": "suspendu", "neutralisee": "suspendu", "neutralisée": "suspendu",
+    "attribuee": "attribue", "attribuée": "attribue", "citee": "attribue", "citée": "attribue",
+}
+
 def marquage_occurrence(refs):
-    adh = [r["adhesion"] for r in refs if r["adhesion"]]
+    """Niveau de PEC lu sur la σ réelle de l'analyseur (pec.adhesion)."""
+    adh = [_SIGMA.get(r["adhesion"], r["adhesion"]) for r in refs if r.get("adhesion")]
     if not adh:
         return None
     c = collections.Counter(adh)
-    for a in ("suspendue", "attribuee", "attribuée", "contestee", "partielle"):
+    for a in ("suspendu", "attribue"):     # suspension > attribution > assomption
         if a in c:
             return a
     return c.most_common(1)[0][0]
 
 def marquage_regex(phrase):
+    """Repli quand aucune σ ne couvre la phrase — même vocabulaire à 3 niveaux."""
     pl = phrase.lower()
-    if re.search(r"«[^»]{0,120}»", phrase): return "cite"
-    if re.search(r"\b(aurait|serait|suspect\w+|soupçonn\w+|présum\w+|accus\w+|dément|selon|all[ée]gation)", pl):
+    if re.search(r"\b(aurait|serait|suspect\w+|soupçonn\w+|présum\w+|all[ée]gu\w+|all[ée]gation|pourrait)", pl):
+        return "suspendu"
+    if re.search(r"«[^»]{0,160}»", phrase) or re.search(r"\b(selon|d['’]après|rapporte|affirme|dément)\b", pl):
         return "attribue"
-    return "non_marque"
+    return "assume"
 
 # --- degré de réalisation du θ5 ----------------------------------------------
 RE_APPOS = re.compile(r",\s+(?:cette?|un|une|le|la|les)\s+[A-ZÉÈÀ]")
