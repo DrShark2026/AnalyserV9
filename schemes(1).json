@@ -1,0 +1,92 @@
+{
+  "_meta": {
+    "description": "Catalogue de schèmes de pensée pour l'analyseur. Chaque match est un CANDIDAT à valider, jamais un verdict. On décrit le recours au schème, pas sa vérité.",
+    "version": "0.2",
+    "encodage_op": "unicode (θ5, ρ3, γ1…), aligné sur la sortie de l'analyseur",
+    "degres_theta5": ["evocation", "comparaison", "figure", "theta5_complet"],
+    "todo": "isotopies transverses (ex. l'argent) et méta-schèmes (ex. dramaturgie du boulevard) à modéliser à part des schèmes."
+  },
+  "schemes": [
+    {
+      "id": "espionnage_chinois",
+      "label": "Espionnage chinois (taupe / piège de Pékin)",
+      "valence": "capture",
+      "declencheurs": ["espionnage", "espionne?", "agent double", "\\btaupe\\b", "pi[èe]ges? amoureux", "honeypot", "renseignement", "recrut\\w+", "pour le compte de (la )?chine"],
+      "registre_attendu": ["information", "opinion"]
+    },
+    {
+      "id": "mata_hari",
+      "label": "Mata Hari / femme fatale-espionne (honeypot)",
+      "valence": "capture",
+      "declencheurs": ["mata ?hari", "femme fatale", "s[ée]ductrice", "sir[èe]ne", "hirondelle", "honeypot"],
+      "registre_attendu": ["opinion", "satire"],
+      "hyperonyme": ["espionnes de charme", "séductrices-espionnes", "lignée d'espionnes"]
+    },
+    {
+      "id": "liaisons_dangereuses",
+      "label": "Liaisons dangereuses (mélo de l'adultère)",
+      "valence": "capture",
+      "declencheurs": ["liaisons? dangereuses", "ma[îi]tresse", "amant", "infid[èe]le", "adult[èe]re", "relation extra ?-?conjugale"],
+      "registre_attendu": ["information", "opinion"]
+    },
+    {
+      "id": "divorcee_milliardaire",
+      "label": "La divorcée milliardaire (la femme trompée qui s'enrichit)",
+      "valence": "capture",
+      "declencheurs": ["divorce", "pension", "settlement", "communaut[ée] de biens", "MacKenzie", "Melinda", "croqueuse"],
+      "registre_attendu": ["opinion", "information"]
+    },
+    {
+      "id": "titan_dechu",
+      "label": "Le titan déchu / la chute du grand homme",
+      "valence": "capture",
+      "declencheurs": ["ind[ée]boulonnable", "in[ée]branlable", "sur la sellette", "d[ée]chu", "sa chute", "dans la tourmente", "face cach[ée]e"],
+      "registre_attendu": ["information", "opinion"]
+    },
+    {
+      "id": "homme_vs_machine",
+      "label": "L'homme contre la machine (Deep Blue–Kasparov)",
+      "valence": "capture",
+      "declencheurs": ["deep ?blue", "kasparov", "l'homme contre la machine", "homme ?vs ?machine", "alphago", "duel homme-machine"],
+      "registre_attendu": ["information", "opinion"],
+      "hyperonyme": ["l'homme contre la machine", "duel homme-machine"],
+      "carte_operations": [
+        {"op": "θ5", "du_phore": "le duel 1997", "vers_theme": "l'homme contre la machine", "cles": ["homme contre la machine", "duel homme-machine", "homme face à la machine"]},
+        {"op": "ρ3", "du_phore": "l'échiquier", "vers_theme": "le terrain de l'exploit", "cles": ["échecs", "échiquier", "partie", "coup"]},
+        {"op": "γ4", "du_phore": "la défaite de 1997", "vers_theme": "chaque nouveau jalon de l'IA", "cles": ["AlphaGo", "Go", "mathématiques", "littérature", "protéines"]}
+      ]
+    },
+    {
+      "id": "texte_genome",
+      "label": "Texte / génome — le vivant comme texte et code",
+      "valence": "decouverte",
+      "declencheurs": ["code g[ée]n[ée]tique", "lettres de l'ADN", "texte (de l')?ADN", "lire le g[ée]nome", "[ée]crire le g[ée]nome", "[ée]diter le g[ée]nome", "programme g[ée]n[ée]tique", "s[ée]quence"],
+      "registre_attendu": ["vulgarisation", "information"],
+      "hyperonyme": ["systèmes de communication"],
+      "carte_operations": [
+        {"op": "θ5", "du_phore": "texte / code / langage", "vers_theme": "systèmes de communication", "cles": ["code génétique", "langage de la vie", "texte de l'ADN", "systèmes de communication"]},
+        {"op": "ρ3", "du_phore": "alphabet (4 lettres)", "vers_theme": "A/T/C/G", "cles": ["lettres", "alphabet", "quatre lettres", "bases nucléotidiques"]},
+        {"op": "ρ3", "du_phore": "lire / écrire / éditer", "vers_theme": "manipulation du génome", "cles": ["lire le génome", "écrire", "épeler", "éditer", "réécrire", "CRISPR"]},
+        {"op": "γ1", "du_phore": "mots / phrases", "vers_theme": "gènes", "cles": ["mots", "phrases", "gènes"]},
+        {"op": "γ1", "du_phore": "volumes", "vers_theme": "chromosomes", "cles": ["volumes", "encyclopédie", "chromosomes"]},
+        {"op": "γ2", "du_phore": "lecture / copie", "vers_theme": "transcription / traduction / réplication", "cles": ["transcription", "traduction", "réplication", "copie"]},
+        {"op": "ρ4", "du_phore": "extension", "vers_theme": "génome de l'être humain", "cles": ["génome humain", "génome de l'être humain"]}
+      ]
+    },
+    {
+      "id": "langue_echecs",
+      "label": "Langue / jeu d'échecs (Saussure) — étalon découverte",
+      "valence": "decouverte",
+      "declencheurs": ["système de valeurs", "jeu de la langue", "partie d'échecs", "règle du jeu"],
+      "registre_attendu": ["savant"],
+      "hyperonyme": ["système de valeurs"],
+      "carte_operations": [
+        {"op": "θ5", "du_phore": "le jeu d'échecs", "vers_theme": "système de valeurs", "cles": ["système de valeurs", "jeu de la langue"]},
+        {"op": "ρ3", "du_phore": "les pièces", "vers_theme": "les termes / signes", "cles": ["pièces", "termes", "signes", "valeur positionnelle"]},
+        {"op": "ρ3", "du_phore": "la règle du jeu", "vers_theme": "les principes de la sémiologie", "cles": ["règle du jeu", "convention", "sémiologie"]},
+        {"op": "γ2", "du_phore": "un coup rejaillit sur tout l'échiquier", "vers_theme": "solidarité des valeurs", "cles": ["rejaillit", "solidarité", "tout le système"]},
+        {"op": "γ4", "du_phore": "succession / état", "vers_theme": "diachronie / synchronie", "cles": ["diachronie", "synchronie", "état de langue"]}
+      ]
+    }
+  ]
+}
