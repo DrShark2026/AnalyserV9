@@ -17,6 +17,8 @@ de contourner un paywall ou une protection anti-robot : une page réservée
 aux abonnés donne « partiel » (le début public), une page anti-robot « echec ».
 Si plusieurs articles d'une même source donnent exactement le même texte,
 c'est un bandeau ou une page générique, pas l'article : ils passent en « echec ».
+Les panneaux de consentement aux cookies listés dans CONSENTEMENT (Mediapart)
+sont retirés de la page avant l'extraction.
 Un article dont le titre, le début du chapô ou le début du texte complet porte
 une mention « Sponsored », « Partner content », « Contenu sponsorisé » ou
 « [Sponso] » (même règle que collect_rss.py) passe en categorie « sponsorise »
@@ -51,6 +53,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 import trafilatura
+from lxml import html as lxml_html
 
 from collect_rss import DEBUT_RESUME, SORTIE, UA, lire_reponse, sans_accents, sponsorise
 from lots import pour_un_lot
@@ -69,6 +72,10 @@ PAYWALL_TEXTE = re.compile(
 # Page de protection anti-robot servie à la place de l'article : échec, sans tentative de la franchir.
 ANTI_ROBOT = re.compile(r"please enable javascript to proceed|javascript is disabled in your browser"
                         r"|verify you are human|captcha-delivery\.com", re.I)
+
+# Panneaux de consentement aux cookies écrits dans le HTML de chaque page : trafilatura les prend
+# pour le corps de l'article (Mediapart : 592 mots identiques partout). Retirés avant l'extraction.
+CONSENTEMENT = ('//aside[@id="js-gateaux-secs"]',)     # Mediapart
 
 _derniere = 0.0
 _robots = {}
@@ -116,6 +123,20 @@ def passagere(e):
     return isinstance(e, (urllib.error.URLError, TimeoutError, ConnectionError, http.client.HTTPException))
 
 
+def sans_consentement(page):
+    """La page sans ses panneaux de consentement (CONSENTEMENT) ; telle quelle si rien à retirer."""
+    try:
+        doc = lxml_html.fromstring(page)
+    except Exception:
+        return page
+    panneaux = [el for xp in CONSENTEMENT for el in doc.xpath(xp)]
+    if not panneaux:
+        return page
+    for el in panneaux:
+        el.getparent().remove(el)
+    return lxml_html.tostring(doc, encoding="unicode")
+
+
 def traiter(article):
     """Renvoie (texte_complet, statut, raison, passager)."""
     url = article["lien"]
@@ -135,7 +156,7 @@ def traiter(article):
                 return None, "echec", f"{raison} ({essai + 1} essais)", True
             time.sleep(PAUSES[essai])
 
-    texte = trafilatura.extract(page, url=url, include_comments=False, include_tables=False)
+    texte = trafilatura.extract(sans_consentement(page), url=url, include_comments=False, include_tables=False)
     n = len(texte.split()) if texte else 0
     if ANTI_ROBOT.search(texte or "") or (n < MOTS_ECHEC and ANTI_ROBOT.search(page)):
         return None, "echec", "page anti-robot à la place de l'article", False
