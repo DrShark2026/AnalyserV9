@@ -9,3 +9,6 @@ veille/.venv/
 
 # Exports du traitement par lot pour les tests : articles de presse sous droits, à garder hors du dépôt
 tests/fixtures/*.json
+# Batches de l'analyseur et post-passe schèmes : corpus sous droits, hors dépôt
+resultats_batch_*.json
+*__schemes.json
