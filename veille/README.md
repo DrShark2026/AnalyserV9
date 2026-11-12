@@ -96,7 +96,7 @@ Sortie dans `corpus/dossiers/orelien_denouement/` : `resultats_orelien_denouemen
 
 ## Automatisation
 
-Un minuteur systemd utilisateur lance la collecte (`--jours 2`), puis `complet.py`, puis `lots.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant. Avant de lancer quoi que ce soit, le service attend jusqu'à 2 minutes que la résolution DNS fonctionne (le réseau n'est souvent pas prêt au démarrage) ; passé ce délai, la collecte est lancée quand même. Si `complet.py` échoue, `lots.py` tourne quand même (préfixe `-` sur sa ligne du service). La sortie s'ajoute à `collecte.log` ; au premier lancement d'un nouveau mois, `tourner_log.sh` renomme le log du mois précédent en `collecte_AAAA-MM.log`.
+Un minuteur systemd utilisateur lance la collecte (`--jours 2`), puis `complet.py`, puis `lots.py` chaque jour à 19h ; avec `Persistent=true`, une exécution manquée (machine éteinte) est rattrapée au démarrage suivant ; lancée avant 19 h alors que la veille n'a pas de corpus, elle écrit `veille_<veille>.json` (et les lots de ce jour-là) plutôt que le fichier du jour. Avant de lancer quoi que ce soit, le service attend jusqu'à 2 minutes que la résolution DNS fonctionne (le réseau n'est souvent pas prêt au démarrage) ; passé ce délai, la collecte est lancée quand même. Si `complet.py` échoue, `lots.py` tourne quand même (préfixe `-` sur sa ligne du service). La sortie s'ajoute à `collecte.log` ; au premier lancement d'un nouveau mois, `tourner_log.sh` renomme le log du mois précédent en `collecte_AAAA-MM.log`.
 
 ```bash
 systemctl --user list-timers veille.timer       # prochaine exécution

@@ -31,6 +31,9 @@ thèmes de suivi : ils font retenir un article et lui donnent ce sous_theme, son
 cherchés dans tous les fils, mais ne comptent ni dans le score ni dans dans_titre,
 n'empêchent pas theme_defaut et n'entrent dans aucun lot ; le bilan donne leur
 nombre de nouveaux articles.
+Une collecte lancée avant HEURE_COLLECTE (19 h, l'heure de veille.timer) alors que
+la veille n'a pas de corpus est un rattrapage : elle écrit veille_<veille>.json, et
+complet.py puis lots.py, qui prennent le dernier fichier, travaillent sur celui-là.
 Un article déjà dans registre.json n'est pas repris : la clé est le sha1 du lien
 normalisé (comme dans dossier.py), un ancien registre est réindexé à la lecture.
 
@@ -63,6 +66,7 @@ REGISTRE = ICI / "registre.json"
 UA = "Mozilla/5.0 (veille-analyseur-grize; usage de recherche)"
 SUIVI = re.compile(r"^(utm_|at_|xtor$|oc$|fbclid$|gclid$)")   # paramètres de suivi, retirés des liens
 PROCHE = 8   # « près de » pour exclure_pres_de : nombre de mots au plus entre les deux
+HEURE_COLLECTE = 19   # heure de veille.timer : avant elle, une collecte peut rattraper celle de la veille
 
 
 # ---------- utilitaires ----------
@@ -238,6 +242,16 @@ def lire_fil(octets):
 
 # ---------- programme principal ----------
 
+def jour_du_corpus(aujourdhui):
+    """Date du corpus à écrire. Avant HEURE_COLLECTE, si la veille n'a pas de corpus, la collecte
+    de la veille a été manquée (portable éteint) : celle-ci, lancée en rattrapage au démarrage par
+    Persistent=true, est datée de la veille. Sinon, du jour."""
+    hier = aujourdhui - dt.timedelta(days=1)
+    if dt.datetime.now().hour < HEURE_COLLECTE and not (SORTIE / f"veille_{hier.isoformat()}.json").exists():
+        return hier
+    return aujourdhui
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--jours", type=int, default=None, help="ne garder que les articles des N derniers jours")
@@ -260,6 +274,7 @@ def main():
 
     registre = lire_registre()
     aujourdhui = dt.date.today()
+    jour = jour_du_corpus(aujourdhui)
     limite = (aujourdhui - dt.timedelta(days=args.jours)).isoformat() if args.jours else None
 
     retenus, echecs, bilan = [], [], []
@@ -330,7 +345,7 @@ def main():
             mnemoniques = sorted(m for m, rx in mnemo.get(f["langue"], []) if rx.search(titre_norm) or rx.search(resume_norm))
             gardes += 1
             article = {
-                "id": f"{aujourdhui.isoformat()}-{cle}",
+                "id": f"{jour.isoformat()}-{cle}",
                 "source": f["nom"],
                 "categorie": "sponsorise" if sponsorise(titre_norm, resume_norm) else f["categorie"],
                 "pays": f.get("pays", ""),
@@ -377,7 +392,10 @@ def main():
         return 0
 
     SORTIE.mkdir(exist_ok=True)
-    fichier = SORTIE / f"veille_{aujourdhui.isoformat()}.json"
+    fichier = SORTIE / f"veille_{jour.isoformat()}.json"
+    if jour != aujourdhui:
+        print(f"\nRattrapage : pas de corpus du {jour.isoformat()} (collecte de {HEURE_COLLECTE} h manquée), "
+              f"articles écrits à cette date")
     anciens = json.loads(fichier.read_text("utf-8")) if fichier.exists() else []
     fichier.write_text(json.dumps(anciens + retenus, ensure_ascii=False, indent=2), "utf-8")
     REGISTRE.write_text(json.dumps(registre, ensure_ascii=False, indent=1), "utf-8")
