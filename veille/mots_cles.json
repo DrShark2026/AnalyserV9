@@ -1,51 +1,379 @@
 {
   "_note": "Un article est retenu si son titre ou son résumé contient au moins un mot d'un thème (sans tenir compte des majuscules ni des accents). Les mots sont cherchés entiers, au pluriel ou au féminin près : 'réfugié' prend 'réfugiés' et 'réfugiée', pas 'se réfugier'. '_exclusions' : par thème, expressions dans lesquelles un mot du thème ne compte pas. Ajoute ou retire des mots librement. 'mnemoniques' n'est pas un thème : ces mots ne font pas retenir un article, ils sont seulement relevés dans le champ 'mnemoniques_collecte' des articles (4 lettres ou moins : mot exact, pour que 'ment' ne prenne pas 'mentionne'). '_exclure_pres_de' : comme 'exclure_pres_de' de feeds.json, mais pour tous les fils : le mot ne compte pas quand un des mots donnés en est séparé par 8 mots ou moins ('militants expulsés' d'un meeting, pas d'un pays). '_pas_seuls' : par thème, des mots qui ne comptent que si l'article a déjà le thème par un autre mot, ou si le fil a ce thème pour 'theme_defaut' ('Claude' : Claude Monet, Marie-Claude). '_sous_themes' : par thème, des familles de mots (confinement, bulle pour 'ia') qui ne font pas retenir un article ; elles ne sont cherchées que dans un article qui a déjà le thème par un de ses mots (pas par 'theme_defaut' de feeds.json), comptent alors dans le score et 'mots_reperes', et le nom de la famille va dans le champ 'sous_theme'. '_suivis' : {thème: sous_theme} ; un thème de suivi (chine_ia : feuilleton puces et souveraineté) fait retenir un article et lui donne ce sous_theme, mais n'entre dans aucun lot, ne compte ni dans le score ni dans dans_titre, est cherché dans tous les fils (même ceux à liste 'themes') et n'empêche pas theme_defaut.",
   "_exclusions": {
-    "religion": ["Université catholique", "Institut catholique", "lève le voile", "lever le voile", "levé le voile", "lèvent le voile"]
+    "religion": [
+      "Université catholique",
+      "Institut catholique",
+      "lève le voile",
+      "lever le voile",
+      "levé le voile",
+      "lèvent le voile"
+    ]
   },
   "_exclure_pres_de": {
-    "expulsé": ["journaliste", "militant", "banderole", "salle", "meeting"],
-    "expulsion": ["journaliste", "militant", "banderole", "salle", "meeting"]
+    "expulsé": [
+      "journaliste",
+      "militant",
+      "banderole",
+      "salle",
+      "meeting"
+    ],
+    "expulsion": [
+      "journaliste",
+      "militant",
+      "banderole",
+      "salle",
+      "meeting"
+    ]
   },
   "_pas_seuls": {
-    "ia": ["Claude"],
-    "chine_ia": ["Starlink", "Beidou"]
+    "ia": [
+      "Claude"
+    ],
+    "chine_ia": [
+      "Starlink",
+      "Beidou"
+    ],
+    "presidentielle_2027": [
+      "Riner",
+      "Teddy Riner"
+    ]
   },
   "_sous_themes": {
     "ia": {
-      "confinement": ["confiner", "confinement", "bac à sable", "sandbox", "cage", "évasion", "s'échapper", "s’échapper", "escape", "air gap", "containment", "quarantaine", "boxing"],
-      "bulle": ["bulle", "bubble", "krach", "crash", "subprime", "dot-com", "bulle internet", "tulipe", "spéculation", "survalorisation"]
+      "confinement": [
+        "confiner",
+        "confinement",
+        "bac à sable",
+        "sandbox",
+        "cage",
+        "évasion",
+        "s'échapper",
+        "s’échapper",
+        "escape",
+        "air gap",
+        "containment",
+        "quarantaine",
+        "boxing"
+      ],
+      "bulle": [
+        "bulle",
+        "bubble",
+        "krach",
+        "crash",
+        "subprime",
+        "dot-com",
+        "bulle internet",
+        "tulipe",
+        "spéculation",
+        "survalorisation"
+      ]
     }
   },
   "_suivis": {
-    "chine_ia": "geopolitique_puces"
+    "chine_ia": "geopolitique_puces",
+    "presidentielle_2027": "course_2027"
   },
   "immigration": {
-    "fr": ["immigration", "immigré", "migrant", "migratoire", "étrangers en situation irrégulière", "personnes étrangères", "femmes étrangères", "travailleurs étrangers", "ressortissants étrangers", "droit des étrangers", "délinquance étrangère", "criminalité étrangère", "sans-papiers", "clandestin", "régularisation", "expulsion", "expulser", "expulsé", "OQTF", "droit d'asile", "demandeur d'asile", "remigration", "regroupement familial", "submersion", "appel d'air", "réfugié", "titre de séjour", "naturalisation", "frontière"],
-    "en": ["immigration", "immigrant", "migrant", "illegal alien", "undocumented", "deportation", "border", "asylum", "sanctuary", "green card", "migrants", "deport", "deported", "deportee", "refugee", "border crossing", "border wall", "birthright citizenship", "citizenship", "visa", "H-1B", "TPS", "mass deportation", "Immigration and Customs Enforcement"]
+    "fr": [
+      "immigration",
+      "immigré",
+      "migrant",
+      "migratoire",
+      "étrangers en situation irrégulière",
+      "personnes étrangères",
+      "femmes étrangères",
+      "travailleurs étrangers",
+      "ressortissants étrangers",
+      "droit des étrangers",
+      "délinquance étrangère",
+      "criminalité étrangère",
+      "sans-papiers",
+      "clandestin",
+      "régularisation",
+      "expulsion",
+      "expulser",
+      "expulsé",
+      "OQTF",
+      "droit d'asile",
+      "demandeur d'asile",
+      "remigration",
+      "regroupement familial",
+      "submersion",
+      "appel d'air",
+      "réfugié",
+      "titre de séjour",
+      "naturalisation",
+      "frontière"
+    ],
+    "en": [
+      "immigration",
+      "immigrant",
+      "migrant",
+      "illegal alien",
+      "undocumented",
+      "deportation",
+      "border",
+      "asylum",
+      "sanctuary",
+      "green card",
+      "migrants",
+      "deport",
+      "deported",
+      "deportee",
+      "refugee",
+      "border crossing",
+      "border wall",
+      "birthright citizenship",
+      "citizenship",
+      "visa",
+      "H-1B",
+      "TPS",
+      "mass deportation",
+      "Immigration and Customs Enforcement"
+    ]
   },
   "religion": {
-    "fr": ["islam", "musulman", "laïcité", "séparatisme", "voile", "abaya", "mosquée", "islamisme", "racines chrétiennes", "catholique", "antisémitisme", "musulmans", "chrétien", "juif", "religion", "laïque", "burkini", "évangélique", "charia", "loi islamique", "islamophobie", "islamophobe", "chrétienne", "juive"],
-    "en": ["islam", "muslim", "religious freedom", "mosque", "sharia", "christian nationalism", "antisemitism", "Islamic", "Muslims", "Christians", "evangelical", "people of faith", "faith leaders", "church and state", "religious liberty", "Jewish", "synagogue", "secularism", "laïcité", "Islamophobia"]
+    "fr": [
+      "islam",
+      "musulman",
+      "laïcité",
+      "séparatisme",
+      "voile",
+      "abaya",
+      "mosquée",
+      "islamisme",
+      "racines chrétiennes",
+      "catholique",
+      "antisémitisme",
+      "musulmans",
+      "chrétien",
+      "juif",
+      "religion",
+      "laïque",
+      "burkini",
+      "évangélique",
+      "charia",
+      "loi islamique",
+      "islamophobie",
+      "islamophobe",
+      "chrétienne",
+      "juive"
+    ],
+    "en": [
+      "islam",
+      "muslim",
+      "religious freedom",
+      "mosque",
+      "sharia",
+      "christian nationalism",
+      "antisemitism",
+      "Islamic",
+      "Muslims",
+      "Christians",
+      "evangelical",
+      "people of faith",
+      "faith leaders",
+      "church and state",
+      "religious liberty",
+      "Jewish",
+      "synagogue",
+      "secularism",
+      "laïcité",
+      "Islamophobia"
+    ]
   },
   "ia": {
-    "fr": ["intelligence artificielle", "IA", "ChatGPT", "OpenAI", "Anthropic", "Claude", "Mistral", "Gemini", "LLM", "LLMs", "AGI", "superintelligence", "agent IA"],
-    "en": ["artificial intelligence", "AI", "ChatGPT", "OpenAI", "Anthropic", "Gemini", "LLM", "LLMs", "AGI", "superintelligence", "AI agent"]
+    "fr": [
+      "intelligence artificielle",
+      "IA",
+      "ChatGPT",
+      "OpenAI",
+      "Anthropic",
+      "Claude",
+      "Mistral",
+      "Gemini",
+      "LLM",
+      "LLMs",
+      "AGI",
+      "superintelligence",
+      "agent IA"
+    ],
+    "en": [
+      "artificial intelligence",
+      "AI",
+      "ChatGPT",
+      "OpenAI",
+      "Anthropic",
+      "Gemini",
+      "LLM",
+      "LLMs",
+      "AGI",
+      "superintelligence",
+      "AI agent"
+    ]
   },
   "analogies_historiques": {
-    "fr": ["Pétain", "Vichy", "Munich", "collabo", "années 30", "années 1930", "années trente", "Weimar", "Chamberlain", "appeasement"],
-    "en": ["Pétain", "Vichy", "Munich", "collaborationist", "Nazi collaborator", "1930s", "Weimar", "Chamberlain", "appeasement"]
+    "fr": [
+      "Pétain",
+      "Vichy",
+      "Munich",
+      "collabo",
+      "années 30",
+      "années 1930",
+      "années trente",
+      "Weimar",
+      "Chamberlain",
+      "appeasement"
+    ],
+    "en": [
+      "Pétain",
+      "Vichy",
+      "Munich",
+      "collaborationist",
+      "Nazi collaborator",
+      "1930s",
+      "Weimar",
+      "Chamberlain",
+      "appeasement"
+    ]
   },
   "mouvements_sociaux": {
-    "fr": ["manifestation", "manifestant", "cortège", "gilets jaunes", "lycéen", "lycéens", "mobilisation", "grève", "black bloc", "casseurs", "ultragauche", "émeutiers", "émeute", "pillage", "pille", "pilleur", "pilleuse", "piller", "pillent", "pillaient", "pillera", "interpellations", "convergence des luttes", "maintien de l’ordre", "maintien de l'ordre", "lacrymogène", "recel", "revente", "Leboncoin", "le bon coin", "Vinted", "eBay", "merci le 17 octobre", "Rayan PSN"],
-    "en": ["protest", "protesters", "demonstration", "rioters", "riot", "on strike", "general strike", "strikers", "strike action", "labor strike", "labour strike", "walkout", "picket line", "yellow vests", "black bloc", "tear gas", "crackdown"]
+    "fr": [
+      "manifestation",
+      "manifestant",
+      "cortège",
+      "gilets jaunes",
+      "lycéen",
+      "lycéens",
+      "mobilisation",
+      "grève",
+      "black bloc",
+      "casseurs",
+      "ultragauche",
+      "émeutiers",
+      "émeute",
+      "pillage",
+      "pille",
+      "pilleur",
+      "pilleuse",
+      "piller",
+      "pillent",
+      "pillaient",
+      "pillera",
+      "interpellations",
+      "convergence des luttes",
+      "maintien de l’ordre",
+      "maintien de l'ordre",
+      "lacrymogène",
+      "recel",
+      "revente",
+      "Leboncoin",
+      "le bon coin",
+      "Vinted",
+      "eBay",
+      "merci le 17 octobre",
+      "Rayan PSN"
+    ],
+    "en": [
+      "protest",
+      "protesters",
+      "demonstration",
+      "rioters",
+      "riot",
+      "on strike",
+      "general strike",
+      "strikers",
+      "strike action",
+      "labor strike",
+      "labour strike",
+      "walkout",
+      "picket line",
+      "yellow vests",
+      "black bloc",
+      "tear gas",
+      "crackdown"
+    ]
   },
   "chine_ia": {
-    "fr": ["Nvidia", "Jensen Huang", "Megaspeed", "H200", "Beidou", "Starlink", "puces IA", "contrôle à l'export", "contrôle à l’export", "contournement embargo", "contournement de l'embargo", "contournement de l’embargo", "GPU Chine", "souveraineté technologique", "traçage des puces", "cloud souverain"],
-    "en": ["Nvidia", "Jensen Huang", "Nvidia Huang", "Megaspeed", "H200", "Beidou", "Starlink", "chip export controls", "AI chips China", "chip smuggling", "location tracking chips"]
+    "fr": [
+      "Nvidia",
+      "Jensen Huang",
+      "Megaspeed",
+      "H200",
+      "Beidou",
+      "Starlink",
+      "puces IA",
+      "contrôle à l'export",
+      "contrôle à l’export",
+      "contournement embargo",
+      "contournement de l'embargo",
+      "contournement de l’embargo",
+      "GPU Chine",
+      "souveraineté technologique",
+      "traçage des puces",
+      "cloud souverain"
+    ],
+    "en": [
+      "Nvidia",
+      "Jensen Huang",
+      "Nvidia Huang",
+      "Megaspeed",
+      "H200",
+      "Beidou",
+      "Starlink",
+      "chip export controls",
+      "AI chips China",
+      "chip smuggling",
+      "location tracking chips"
+    ]
+  },
+  "presidentielle_2027": {
+    "fr": [
+      "présidentielle",
+      "élection présidentielle",
+      "campagne présidentielle",
+      "course à l'Élysée",
+      "candidat à la présidentielle",
+      "candidate à la présidentielle",
+      "candidature à la présidentielle",
+      "primaire présidentielle",
+      "scrutin présidentiel"
+    ],
+    "en": [
+      "French presidential",
+      "2027 presidential",
+      "presidential campaign",
+      "presidential bid",
+      "Élysée race"
+    ]
   },
   "mnemoniques": {
-    "fr": ["réfléchit", "réflexion", "comprend", "pense", "raisonne", "hallucine", "hallucination", "veut", "décide", "conscience", "ment"],
-    "en": ["thinks", "thinking", "understands", "reasons", "reasoning", "hallucinates", "hallucination", "wants", "decides", "conscious", "lies"]
+    "fr": [
+      "réfléchit",
+      "réflexion",
+      "comprend",
+      "pense",
+      "raisonne",
+      "hallucine",
+      "hallucination",
+      "veut",
+      "décide",
+      "conscience",
+      "ment"
+    ],
+    "en": [
+      "thinks",
+      "thinking",
+      "understands",
+      "reasons",
+      "reasoning",
+      "hallucinates",
+      "hallucination",
+      "wants",
+      "decides",
+      "conscious",
+      "lies"
+    ]
   }
 }
