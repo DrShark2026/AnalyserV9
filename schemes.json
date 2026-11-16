@@ -1,92 +1,701 @@
 {
   "_meta": {
     "description": "Catalogue de schèmes de pensée pour l'analyseur. Chaque match est un CANDIDAT à valider, jamais un verdict. On décrit le recours au schème, pas sa vérité.",
-    "version": "0.2",
+    "version": "0.6",
     "encodage_op": "unicode (θ5, ρ3, γ1…), aligné sur la sortie de l'analyseur",
-    "degres_theta5": ["evocation", "comparaison", "figure", "theta5_complet"],
-    "todo": "isotopies transverses (ex. l'argent) et méta-schèmes (ex. dramaturgie du boulevard) à modéliser à part des schèmes."
+    "degres_theta5": [
+      "evocation",
+      "comparaison",
+      "figure",
+      "theta5_complet"
+    ],
+    "todo": "isotopies transverses (ex. l'argent) et méta-schèmes (ex. dramaturgie du boulevard) à modéliser à part des schèmes.",
+    "familles": [
+      "scheme_notion",
+      "topos",
+      "maxime",
+      "procede"
+    ],
+    "portees": [
+      "transversal",
+      "specifique_ia",
+      "domaine"
+    ]
   },
   "schemes": [
     {
       "id": "espionnage_chinois",
       "label": "Espionnage chinois (taupe / piège de Pékin)",
       "valence": "capture",
-      "declencheurs": ["espionnage", "espionne?", "agent double", "\\btaupe\\b", "pi[èe]ges? amoureux", "honeypot", "renseignement", "recrut\\w+", "pour le compte de (la )?chine"],
-      "registre_attendu": ["information", "opinion"]
+      "declencheurs": [
+        "espionnage",
+        "espionne?",
+        "agent double",
+        "\\btaupe\\b",
+        "pi[èe]ges? amoureux",
+        "honeypot",
+        "recrut\\w+ par (la )?chine",
+        "pour le compte de (la )?chine",
+        "services? de renseignement chinois"
+      ],
+      "registre_attendu": [
+        "information",
+        "opinion"
+      ],
+      "famille": "scheme_notion",
+      "portee": "transversal"
     },
     {
       "id": "mata_hari",
       "label": "Mata Hari / femme fatale-espionne (honeypot)",
       "valence": "capture",
-      "declencheurs": ["mata ?hari", "femme fatale", "s[ée]ductrice", "sir[èe]ne", "hirondelle", "honeypot"],
-      "registre_attendu": ["opinion", "satire"],
-      "hyperonyme": ["espionnes de charme", "séductrices-espionnes", "lignée d'espionnes"]
+      "declencheurs": [
+        "mata ?hari",
+        "femme fatale",
+        "s[ée]ductrice",
+        "sir[èe]ne",
+        "hirondelle",
+        "honeypot"
+      ],
+      "registre_attendu": [
+        "opinion",
+        "satire"
+      ],
+      "hyperonyme": [
+        "espionnes de charme",
+        "séductrices-espionnes",
+        "lignée d'espionnes"
+      ],
+      "famille": "scheme_notion",
+      "portee": "transversal"
     },
     {
       "id": "liaisons_dangereuses",
       "label": "Liaisons dangereuses (mélo de l'adultère)",
       "valence": "capture",
-      "declencheurs": ["liaisons? dangereuses", "ma[îi]tresse", "amant", "infid[èe]le", "adult[èe]re", "relation extra ?-?conjugale"],
-      "registre_attendu": ["information", "opinion"]
+      "declencheurs": [
+        "liaisons? dangereuses",
+        "(?<!pièce )(?<!carte )(?<!main )(?<!clé )ma[îi]tresse",
+        "amant",
+        "infid[èe]le",
+        "adult[èe]re",
+        "relation extra ?-?conjugale"
+      ],
+      "registre_attendu": [
+        "information",
+        "opinion"
+      ],
+      "famille": "scheme_notion",
+      "portee": "transversal"
     },
     {
       "id": "divorcee_milliardaire",
       "label": "La divorcée milliardaire (la femme trompée qui s'enrichit)",
       "valence": "capture",
-      "declencheurs": ["divorce", "pension", "settlement", "communaut[ée] de biens", "MacKenzie", "Melinda", "croqueuse"],
-      "registre_attendu": ["opinion", "information"]
+      "declencheurs": [
+        "divorce settlement",
+        "divorce record",
+        "pr[ée]nup\\w*",
+        "alimony",
+        "pension alimentaire",
+        "croqueuse de (milliards|diamants)",
+        "pactole du divorce",
+        "(plus (gros|grand)|record) divorce",
+        "settlement de (son |leur )?divorce"
+      ],
+      "registre_attendu": [
+        "opinion",
+        "information"
+      ],
+      "famille": "scheme_notion",
+      "portee": "transversal"
     },
     {
       "id": "titan_dechu",
       "label": "Le titan déchu / la chute du grand homme",
       "valence": "capture",
-      "declencheurs": ["ind[ée]boulonnable", "in[ée]branlable", "sur la sellette", "d[ée]chu", "sa chute", "dans la tourmente", "face cach[ée]e"],
-      "registre_attendu": ["information", "opinion"]
+      "declencheurs": [
+        "ind[ée]boulonnable",
+        "in[ée]branlable",
+        "sur la sellette",
+        "d[ée]chu",
+        "sa chute",
+        "dans la tourmente",
+        "face cach[ée]e"
+      ],
+      "registre_attendu": [
+        "information",
+        "opinion"
+      ],
+      "famille": "topos",
+      "portee": "transversal"
     },
     {
       "id": "homme_vs_machine",
       "label": "L'homme contre la machine (Deep Blue–Kasparov)",
       "valence": "capture",
-      "declencheurs": ["deep ?blue", "kasparov", "l'homme contre la machine", "homme ?vs ?machine", "alphago", "duel homme-machine"],
-      "registre_attendu": ["information", "opinion"],
-      "hyperonyme": ["l'homme contre la machine", "duel homme-machine"],
+      "declencheurs": [
+        "deep ?blue",
+        "kasparov",
+        "l'homme contre la machine",
+        "homme ?vs ?machine",
+        "alphago",
+        "duel homme-machine",
+        "l'homme (contre|face à) la machine",
+        "battre .{0,20}(aux échecs|au go)",
+        "intelligence (humaine|artificielle) (contre|vs)"
+      ],
+      "registre_attendu": [
+        "information",
+        "opinion"
+      ],
+      "hyperonyme": [
+        "l'homme contre la machine",
+        "duel homme-machine"
+      ],
       "carte_operations": [
-        {"op": "θ5", "du_phore": "le duel 1997", "vers_theme": "l'homme contre la machine", "cles": ["homme contre la machine", "duel homme-machine", "homme face à la machine"]},
-        {"op": "ρ3", "du_phore": "l'échiquier", "vers_theme": "le terrain de l'exploit", "cles": ["échecs", "échiquier", "partie", "coup"]},
-        {"op": "γ4", "du_phore": "la défaite de 1997", "vers_theme": "chaque nouveau jalon de l'IA", "cles": ["AlphaGo", "Go", "mathématiques", "littérature", "protéines"]}
-      ]
+        {
+          "op": "θ5",
+          "du_phore": "le duel 1997",
+          "vers_theme": "l'homme contre la machine",
+          "cles": [
+            "homme contre la machine",
+            "duel homme-machine",
+            "homme face à la machine"
+          ]
+        },
+        {
+          "op": "ρ3",
+          "du_phore": "l'échiquier",
+          "vers_theme": "le terrain de l'exploit",
+          "cles": [
+            "échecs",
+            "échiquier",
+            "partie",
+            "coup"
+          ]
+        },
+        {
+          "op": "γ4",
+          "du_phore": "la défaite de 1997",
+          "vers_theme": "chaque nouveau jalon de l'IA",
+          "cles": [
+            "AlphaGo",
+            "Go",
+            "mathématiques",
+            "littérature",
+            "protéines"
+          ]
+        }
+      ],
+      "famille": "scheme_notion",
+      "portee": "specifique_ia"
     },
     {
       "id": "texte_genome",
       "label": "Texte / génome — le vivant comme texte et code",
       "valence": "decouverte",
-      "declencheurs": ["code g[ée]n[ée]tique", "lettres de l'ADN", "texte (de l')?ADN", "lire le g[ée]nome", "[ée]crire le g[ée]nome", "[ée]diter le g[ée]nome", "programme g[ée]n[ée]tique", "s[ée]quence"],
-      "registre_attendu": ["vulgarisation", "information"],
-      "hyperonyme": ["systèmes de communication"],
+      "declencheurs": [
+        "code g[ée]n[ée]tique",
+        "lettres de l'ADN",
+        "texte (de l')?ADN",
+        "lire le g[ée]nome",
+        "[ée]crire le g[ée]nome",
+        "[ée]diter le g[ée]nome",
+        "programme g[ée]n[ée]tique",
+        "s[ée]quenc\\w*.{0,30}(ADN|nucl[ée]otide|g[ée]nome|\\bg[èe]ne|prot[ée]ine|acides amin[ée]s|chromosome)",
+        "(ADN|nucl[ée]otide|g[ée]nome|\\bg[èe]ne|prot[ée]ine|chromosome).{0,30}s[ée]quenc\\w*"
+      ],
+      "registre_attendu": [
+        "vulgarisation",
+        "information"
+      ],
+      "hyperonyme": [
+        "systèmes de communication"
+      ],
       "carte_operations": [
-        {"op": "θ5", "du_phore": "texte / code / langage", "vers_theme": "systèmes de communication", "cles": ["code génétique", "langage de la vie", "texte de l'ADN", "systèmes de communication"]},
-        {"op": "ρ3", "du_phore": "alphabet (4 lettres)", "vers_theme": "A/T/C/G", "cles": ["lettres", "alphabet", "quatre lettres", "bases nucléotidiques"]},
-        {"op": "ρ3", "du_phore": "lire / écrire / éditer", "vers_theme": "manipulation du génome", "cles": ["lire le génome", "écrire", "épeler", "éditer", "réécrire", "CRISPR"]},
-        {"op": "γ1", "du_phore": "mots / phrases", "vers_theme": "gènes", "cles": ["mots", "phrases", "gènes"]},
-        {"op": "γ1", "du_phore": "volumes", "vers_theme": "chromosomes", "cles": ["volumes", "encyclopédie", "chromosomes"]},
-        {"op": "γ2", "du_phore": "lecture / copie", "vers_theme": "transcription / traduction / réplication", "cles": ["transcription", "traduction", "réplication", "copie"]},
-        {"op": "ρ4", "du_phore": "extension", "vers_theme": "génome de l'être humain", "cles": ["génome humain", "génome de l'être humain"]}
-      ]
+        {
+          "op": "θ5",
+          "du_phore": "texte / code / langage",
+          "vers_theme": "systèmes de communication",
+          "cles": [
+            "code génétique",
+            "langage de la vie",
+            "texte de l'ADN",
+            "systèmes de communication"
+          ]
+        },
+        {
+          "op": "ρ3",
+          "du_phore": "alphabet (4 lettres)",
+          "vers_theme": "A/T/C/G",
+          "cles": [
+            "lettres",
+            "alphabet",
+            "quatre lettres",
+            "bases nucléotidiques"
+          ]
+        },
+        {
+          "op": "ρ3",
+          "du_phore": "lire / écrire / éditer",
+          "vers_theme": "manipulation du génome",
+          "cles": [
+            "lire le génome",
+            "écrire",
+            "épeler",
+            "éditer",
+            "réécrire",
+            "CRISPR"
+          ]
+        },
+        {
+          "op": "γ1",
+          "du_phore": "mots / phrases",
+          "vers_theme": "gènes",
+          "cles": [
+            "mots",
+            "phrases",
+            "gènes"
+          ]
+        },
+        {
+          "op": "γ1",
+          "du_phore": "volumes",
+          "vers_theme": "chromosomes",
+          "cles": [
+            "volumes",
+            "encyclopédie",
+            "chromosomes"
+          ]
+        },
+        {
+          "op": "γ2",
+          "du_phore": "lecture / copie",
+          "vers_theme": "transcription / traduction / réplication",
+          "cles": [
+            "transcription",
+            "traduction",
+            "réplication",
+            "copie"
+          ]
+        },
+        {
+          "op": "ρ4",
+          "du_phore": "extension",
+          "vers_theme": "génome de l'être humain",
+          "cles": [
+            "génome humain",
+            "génome de l'être humain"
+          ]
+        }
+      ],
+      "famille": "scheme_notion",
+      "portee": "domaine"
     },
     {
       "id": "langue_echecs",
       "label": "Langue / jeu d'échecs (Saussure) — étalon découverte",
       "valence": "decouverte",
-      "declencheurs": ["système de valeurs", "jeu de la langue", "partie d'échecs", "règle du jeu"],
-      "registre_attendu": ["savant"],
-      "hyperonyme": ["système de valeurs"],
+      "declencheurs": [
+        "système de valeurs",
+        "jeu de la langue",
+        "partie d'échecs",
+        "règle du jeu"
+      ],
+      "registre_attendu": [
+        "savant"
+      ],
+      "hyperonyme": [
+        "système de valeurs"
+      ],
       "carte_operations": [
-        {"op": "θ5", "du_phore": "le jeu d'échecs", "vers_theme": "système de valeurs", "cles": ["système de valeurs", "jeu de la langue"]},
-        {"op": "ρ3", "du_phore": "les pièces", "vers_theme": "les termes / signes", "cles": ["pièces", "termes", "signes", "valeur positionnelle"]},
-        {"op": "ρ3", "du_phore": "la règle du jeu", "vers_theme": "les principes de la sémiologie", "cles": ["règle du jeu", "convention", "sémiologie"]},
-        {"op": "γ2", "du_phore": "un coup rejaillit sur tout l'échiquier", "vers_theme": "solidarité des valeurs", "cles": ["rejaillit", "solidarité", "tout le système"]},
-        {"op": "γ4", "du_phore": "succession / état", "vers_theme": "diachronie / synchronie", "cles": ["diachronie", "synchronie", "état de langue"]}
-      ]
+        {
+          "op": "θ5",
+          "du_phore": "le jeu d'échecs",
+          "vers_theme": "système de valeurs",
+          "cles": [
+            "système de valeurs",
+            "jeu de la langue"
+          ]
+        },
+        {
+          "op": "ρ3",
+          "du_phore": "les pièces",
+          "vers_theme": "les termes / signes",
+          "cles": [
+            "pièces",
+            "termes",
+            "signes",
+            "valeur positionnelle"
+          ]
+        },
+        {
+          "op": "ρ3",
+          "du_phore": "la règle du jeu",
+          "vers_theme": "les principes de la sémiologie",
+          "cles": [
+            "règle du jeu",
+            "convention",
+            "sémiologie"
+          ]
+        },
+        {
+          "op": "γ2",
+          "du_phore": "un coup rejaillit sur tout l'échiquier",
+          "vers_theme": "solidarité des valeurs",
+          "cles": [
+            "rejaillit",
+            "solidarité",
+            "tout le système"
+          ]
+        },
+        {
+          "op": "γ4",
+          "du_phore": "succession / état",
+          "vers_theme": "diachronie / synchronie",
+          "cles": [
+            "diachronie",
+            "synchronie",
+            "état de langue"
+          ]
+        }
+      ],
+      "famille": "scheme_notion",
+      "portee": "domaine"
+    },
+    {
+      "id": "bulle_ia",
+      "label": "La bulle IA — survalorisation et dégonflement",
+      "valence": "capture",
+      "phore_theme": "la bulle économique/spéculative → les valorisations de l'IA",
+      "declencheurs": [
+        "bulle (de l'|financi[èe]re|sp[ée]culative|techno\\w*|IA|de l'IA)",
+        "d[ée]gonflement",
+        "[ée]clatement de la bulle",
+        "survalorisation",
+        "survalu\\w+"
+      ],
+      "note": "Cadrage déflationniste. Carte à construire (gonfler/dégonfler/éclater).",
+      "famille": "scheme_notion",
+      "portee": "specifique_ia"
+    },
+    {
+      "id": "abdication_cognitive",
+      "label": "L'abdication cognitive — l'IA érode le jugement",
+      "valence": "capture",
+      "phore_theme": "la délégation/l'atrophie → la pensée critique confiée à l'IA",
+      "declencheurs": [
+        "cognitive surrender",
+        "abdication cognitive",
+        "turn(ed|ing)? (their|your|our) brains? off",
+        "surrender\\w* .{0,25}critical thinking",
+        "outsourc\\w+ .{0,20}(thinking|judgment)",
+        "d[ée]l[èé]gu\\w+ .{0,20}(r[ée]flexion|jugement|esprit critique)",
+        "cerveau d[ée]branch"
+      ],
+      "note": "Repéré dans le papier Wired sur les randonneurs (« turn their brains off »). Schème IA distinctif.",
+      "famille": "scheme_notion",
+      "portee": "specifique_ia"
+    },
+    {
+      "id": "course_armements",
+      "label": "La course aux armements / guerre technologique",
+      "valence": "capture",
+      "phore_theme": "la course aux armements / guerre froide → la rivalité IA US-Chine",
+      "declencheurs": [
+        "course aux armements",
+        "arms race",
+        "course à l'IA",
+        "guerre (froide )?technologique",
+        "rivalit[ée] sino-am[ée]ricaine",
+        "guerre des puces"
+      ],
+      "note": "Cadrage géopolitique. Fréquent dans chine_ia.",
+      "famille": "scheme_notion",
+      "portee": "specifique_ia"
+    },
+    {
+      "id": "boite_pandore",
+      "label": "La boîte de Pandore — l'irréversible libéré",
+      "valence": "capture",
+      "phore_theme": "le mythe de Pandore / le génie de la lampe → la diffusion de l'IA",
+      "declencheurs": [
+        "bo[îi]te de pandore",
+        "pandora('s box)?",
+        "g[ée]nie (est )?sorti de (la lampe|sa lampe|la bouteille)",
+        "on ne (peut|pourra) plus revenir en arri[èe]re"
+      ],
+      "note": "Cadrage de l'irréversibilité.",
+      "famille": "topos",
+      "portee": "transversal"
+    },
+    {
+      "id": "ia_compagnon",
+      "label": "L'IA-compagnon — présence, intimité, solitude",
+      "valence": "mixte",
+      "phore_theme": "le compagnon / l'ami → l'assistant ou le robot IA",
+      "declencheurs": [
+        "robot-?compagnon",
+        "poup[ée]es? .{0,12}IA",
+        "compagnon (virtuel|IA|artificiel)",
+        "ami virtuel",
+        "IA de compagnie",
+        "tromper (la |leur )solitude",
+        "quelqu'un à qui parler"
+      ],
+      "note": "Double valence nette (présence réconfortante vs substitution du lien humain) — bon cas d'ambivalence découverte/capture. Repéré : poupées IA Corée, intimité DeepSeek.",
+      "famille": "scheme_notion",
+      "portee": "specifique_ia"
+    },
+    {
+      "id": "catastrophe_naturelle",
+      "label": "La catastrophe naturelle — l'événement qui ébranle un secteur",
+      "famille": "topos",
+      "portee": "transversal",
+      "valence": "dramatisation",
+      "phore_theme": "tempête / séisme / déferlante → tout événement qui secoue un milieu",
+      "declencheurs": [
+        "temp[êe]te",
+        "s[ée]isme",
+        "d[ée]ferlante",
+        "raz-de-marée",
+        "onde de choc",
+        "r[ée]pliques? sismiques?",
+        "faire des vagues",
+        "mettre de l'huile sur le feu",
+        "tsunami",
+        "ouragan",
+        "[ée]branl\\w+ (le|tout|son) (secteur|monde|milieu|paysage)",
+        "secou\\w+ (le|tout|son) (secteur|monde|milieu)"
+      ],
+      "note": "TOPOS transversal : s'applique à n'importe quel secteur ébranlé, rien de propre à l'IA. Sert d'étalon de fond pour faire ressortir les schèmes spécifiques."
+    },
+    {
+      "id": "scandale_spectacle",
+      "label": "Le scandale-spectacle — la polémique se nourrit de son bruit (Streisand)",
+      "famille": "topos",
+      "portee": "transversal",
+      "valence": "dramatisation",
+      "phore_theme": "le spectacle / la publicité → le scandale qui s'auto-amplifie",
+      "declencheurs": [
+        "effet streisand",
+        "le scandale (devient|fait) (publicit[ée]|vendre)",
+        "le combat devient spectacle",
+        "le spectacle attire",
+        "faire le buzz",
+        "\\bbuzz\\b",
+        "caisse de r[ée]sonance",
+        "la pol[ée]mique (fait vendre|dope)",
+        "toute publicit[ée] est bonne"
+      ],
+      "note": "TOPOS transversal : la logique de l'auto-amplification médiatique, valable hors IA."
+    },
+    {
+      "id": "champion_providentiel",
+      "label": "Le champion providentiel — l'outsider/athlète-sauveur",
+      "famille": "scheme_notion",
+      "portee": "transversal",
+      "valence": "mixte",
+      "phore_theme": "le champion sportif / l'outsider célèbre → le sauveur politique",
+      "declencheurs": [
+        "\\bZelensky\\b",
+        "\\bWeah\\b",
+        "à la (Zelensky|Weah)",
+        "outsider devenu",
+        "homme providentiel",
+        "champion\\w*.{0,20}(pr[ée]sident|pr[ée]sidentiel|politique|[ée]lection)",
+        "sportif.{0,20}(politique|pr[ée]sident)",
+        "crève l'écran",
+        "dieu vivant",
+        "idole absolue",
+        "candidat de poids"
+      ],
+      "note": "L'analyseur l'a posé en θ5 (« outsider devenu dirigeant ») sur Zelensky. Valence mixte : construit un sauveur, souvent retourné en soupçon."
+    },
+    {
+      "id": "candidat_telecommande",
+      "label": "Le candidat téléguidé — piloté par un pouvoir caché",
+      "famille": "scheme_notion",
+      "portee": "transversal",
+      "valence": "capture",
+      "phore_theme": "la télécommande / le pilotage → le candidat instrument d'un pouvoir caché",
+      "declencheurs": [
+        "pilot[ée]\\w* par",
+        "pilotage (élys[ée]en|par|de)",
+        "t[ée]l[ée]guid\\w+",
+        "int[ée]l[ée]guidable",
+        "t[ée]l[ée]command\\w+",
+        "à la manœuvre",
+        "manipul\\w+ par",
+        "l'[ÉE]lys[ée]e à la manœuvre",
+        "sous-marin de",
+        "torpill\\w+",
+        "homme de paille",
+        "candidat.{0,8}leurre"
+      ],
+      "note": "Attesté dans le lot Riner sous : pilotage/piloté/téléguidé/intéléguidable/à la manœuvre/manipulé. « sous-marin » et « torpille » = marqueurs du trope politique mais NON attestés dans ce lot (introduits par l'analyste), gardés pour la détection sur d'autres corpus."
+    },
+    {
+      "id": "machine_a_broyer",
+      "label": "La machine à broyer — le broyeur médiatique",
+      "famille": "topos",
+      "portee": "transversal",
+      "valence": "dramatisation",
+      "phore_theme": "la machine / le broyeur → l'exposition médiatique qui écrase",
+      "declencheurs": [
+        "machine à broyer",
+        "broyeur m[ée]diatique",
+        "broyer m[ée]diatique\\w*",
+        "machine à broyer m[ée]diatique"
+      ],
+      "note": "TOPOS transversal, cross-affaire : attesté chez Huang (« implacable machine à broyer médiatique ») ET Riner (Douillet)."
+    },
+    {
+      "id": "icare",
+      "label": "La chute d'Icare — voler trop près du soleil (hubris)",
+      "famille": "topos",
+      "portee": "transversal",
+      "valence": "dramatisation",
+      "phore_theme": "Icare / la tragédie grecque → l'ascension qui précède la chute",
+      "declencheurs": [
+        "\\bIcare\\b",
+        "se br[ûu]ler les ailes",
+        "(voler )?trop pr[èe]s du soleil",
+        "trag[ée]die grecque",
+        "hubris",
+        "hybris"
+      ],
+      "note": "TOPOS de la chute par orgueil, cousin de titan_dechu. Attesté chez Riner (« un Icare de plus », « une tragédie grecque »)."
+    },
+    {
+      "id": "machine_vs_vivant",
+      "label": "Machine ↔ vivant — l'auteur rabattu sur la machine, l'IA élevée au vivant",
+      "famille": "scheme_notion",
+      "portee": "specifique_ia",
+      "valence": "mixte",
+      "phore_theme": "la machine / le vivant → statut de l'auteur et de l'IA",
+      "declencheurs": [
+        "ne (fait|sait) que (copier|imiter|recracher|reproduire)",
+        "n'est qu'une machine",
+        "simple machine",
+        "sans (âme|style|sensibilité)",
+        "perroquet( statistique)?",
+        "recrach\\w+",
+        "\\brobot\\b",
+        "IA (vivante|qui pense|qui ressent|qui comprend|consciente)",
+        "conscience de l'IA",
+        "être vivant",
+        "dou[ée]+ de (conscience|sensibilité|pensée)",
+        "machine à (écrire|penser)"
+      ],
+      "note": "Axe BIDIRECTIONNEL : dégradation (auteur→machine, capture) ET animation (IA→vivant, souvent posée en θ5 « être vivant »). Se pose surtout en θ5 → déclencheurs partiels. Cœur de la thèse « seconde mort » : pour que l'auteur meure en machine, la machine prend vie."
+    },
+    {
+      "id": "facade_vernis",
+      "label": "Le vernis — le label prestigieux sur l'absence de substance",
+      "famille": "topos",
+      "portee": "transversal",
+      "valence": "capture",
+      "phore_theme": "le vernis / la façade → un label (scientifique, « IA »…) posé sur le vide",
+      "declencheurs": [
+        "vernis (scientifique|technologique|de respectabilité|d')",
+        "\\bfaçade\\b",
+        "poudre aux yeux",
+        "coquille vide",
+        "effet d'annonce",
+        "esbroufe",
+        "habillage marketing",
+        "sous le capot",
+        "window dressing",
+        "AI[- ]washing",
+        "IA-washing"
+      ],
+      "note": "Figure de démystification, transversale. Variante IA = « AI-washing » : le label « IA » collé sur un commodity (cf. Auren). Attesté : « un vernis scientifique posé sur une absence de rigueur »."
+    },
+    {
+      "id": "releve_ou_renoncement",
+      "label": "La relève ou le renoncement — la réaction humaine au verdict de la machine",
+      "valence": "mixte",
+      "declencheurs": [
+        "the game is up",
+        "it'?s pointless",
+        "what'?s the point",
+        "no point (in )?",
+        "à quoi bon",
+        "ne (sert|vaut) plus (à )?rien",
+        "ne vaut plus la peine",
+        "autant (arrêter|abandonner|renoncer)",
+        "throw in the towel",
+        "(might|may) as well (quit|give up|stop)",
+        "baisser les bras",
+        "se décourag\\w+",
+        "démoralis\\w+",
+        "renonce\\w+",
+        "c'est fini pour",
+        "advanced chess",
+        "centaure?",
+        "aller plus loin",
+        "study .{0,12} more",
+        "see the game .{0,20}differently",
+        "voir .{0,15}différemment",
+        "ally rather than",
+        "an ally,? not",
+        "valuable tool",
+        "outil précieux",
+        "enhance (our|human) abilit",
+        "augment\\w+ (our|human|nos)",
+        "collaborer avec",
+        "build upon",
+        "keep playing (just )?for fun",
+        "embrace it as",
+        "work with the machine",
+        "massively increase .{0,15}potential"
+      ],
+      "registre_attendu": "posture du sujet APRÈS le verdict (en aval de homme_vs_machine) : renoncement vs relève/centaure",
+      "hyperonyme": [],
+      "famille": "posture",
+      "portee": "specifique_ia",
+      "poles": {
+        "renoncement": [
+          "the game is up",
+          "it'?s pointless",
+          "what'?s the point",
+          "no point (in )?",
+          "à quoi bon",
+          "ne (sert|vaut) plus (à )?rien",
+          "ne vaut plus la peine",
+          "autant (arrêter|abandonner|renoncer)",
+          "throw in the towel",
+          "(might|may) as well (quit|give up|stop)",
+          "baisser les bras",
+          "se décourag\\w+",
+          "démoralis\\w+",
+          "renonce\\w+",
+          "c'est fini pour"
+        ],
+        "releve": [
+          "advanced chess",
+          "centaure?",
+          "aller plus loin",
+          "study .{0,12} more",
+          "see the game .{0,20}differently",
+          "voir .{0,15}différemment",
+          "ally rather than",
+          "an ally,? not",
+          "valuable tool",
+          "outil précieux",
+          "enhance (our|human) abilit",
+          "augment\\w+ (our|human|nos)",
+          "collaborer avec",
+          "build upon",
+          "keep playing (just )?for fun",
+          "embrace it as",
+          "work with the machine",
+          "massively increase .{0,15}potential"
+        ]
+      },
+      "note": "Schème de POSITION DE SUJET (ethos), pas de construction d'objet — d'où la famille 'posture' (5e tiroir proposé, à valider). En AVAL de [[homme_vs_machine]] : présuppose le verdict « la machine gagne » et code la réaction. Bipolaire : renoncement (« the game is up », « à quoi bon », dégoût, on arrête) vs relève/centaure (collaborer, « ally not enemy », « study Go more », aller plus loin). La fourche est une TRAJECTOIRE, pas un type : Kasparov (« a massacre, well-deserved » → advanced chess) et Sedol (accablé → « I must study Go more ») la traversent. Distinct de abdication_cognitive (délégation/érosion, l'humain continue diminué) et de ia_compagnon (affectif). Le champ 'poles' documente le partage ; l'apparieur actuel fire sur l'union (valence mixte) — un futur tool pourra taguer le pôle."
     }
   ]
 }
