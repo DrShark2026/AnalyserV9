@@ -34,6 +34,9 @@ nombre de nouveaux articles.
 Une collecte lancée avant HEURE_COLLECTE (19 h, l'heure de veille.timer) alors que
 la veille n'a pas de corpus est un rattrapage : elle écrit veille_<veille>.json, et
 complet.py puis lots.py, qui prennent le dernier fichier, travaillent sur celui-là.
+Un fil dont le certificat est refusé (réseau qui intercepte le HTTPS : portail
+Wi-Fi, filtre, antivirus) est retenté une fois, ATTENTE_CERTIFICAT (5 min) après la
+fin des autres fils ; pas en --test. La vérification du certificat n'est jamais levée.
 Un article déjà dans registre.json n'est pas repris : la clé est le sha1 du lien
 normalisé (comme dans dossier.py), un ancien registre est réindexé à la lecture.
 
@@ -53,8 +56,11 @@ import hashlib
 import html
 import json
 import re
+import ssl
 import sys
+import time
 import unicodedata
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -67,6 +73,7 @@ UA = "Mozilla/5.0 (veille-analyseur-grize; usage de recherche)"
 SUIVI = re.compile(r"^(utm_|at_|xtor$|oc$|fbclid$|gclid$)")   # paramètres de suivi, retirés des liens
 PROCHE = 8   # « près de » pour exclure_pres_de : nombre de mots au plus entre les deux
 HEURE_COLLECTE = 19   # heure de veille.timer : avant elle, une collecte peut rattraper celle de la veille
+ATTENTE_CERTIFICAT = 300   # secondes avant de retenter un fil dont le certificat a été refusé
 
 
 # ---------- utilitaires ----------
@@ -223,6 +230,43 @@ def texte_de(el, *noms):
     return ""
 
 
+def certificat_refuse(e):
+    """Vrai si l'erreur vient d'un certificat refusé (urlopen l'enveloppe dans une URLError)."""
+    if isinstance(e, urllib.error.URLError):
+        e = e.reason
+    return isinstance(e, ssl.SSLCertVerificationError)
+
+
+def lire_fils(feeds, echecs, attente=ATTENTE_CERTIFICAT):
+    """Donne (fil, articles) pour chaque fil lu ; les fils illisibles vont dans echecs.
+    Un certificat refusé tient souvent au réseau du moment (portail Wi-Fi, filtre qui
+    intercepte le HTTPS) : le fil est retenté une fois, attente secondes après les
+    autres (attente=0 : pas de nouvel essai)."""
+    a_retenter = []
+    for f in feeds:
+        try:
+            articles = lire_fil(telecharger(f["url"]))
+        except Exception as e:
+            if attente and certificat_refuse(e):
+                a_retenter.append(f)
+            else:
+                echecs.append((f["nom"], str(e)[:120]))
+            continue
+        yield f, articles
+    if not a_retenter:
+        return
+    print(f"Certificat refusé pour {len(a_retenter)} fil(s) ({', '.join(f['nom'] for f in a_retenter)}) : "
+          f"nouvel essai dans {attente // 60} min", flush=True)
+    time.sleep(attente)
+    for f in a_retenter:
+        try:
+            articles = lire_fil(telecharger(f["url"]))
+        except Exception as e:
+            echecs.append((f["nom"], f"{str(e)[:100]} (encore au nouvel essai)"))
+            continue
+        yield f, articles
+
+
 def lire_fil(octets):
     """Renvoie une liste de dicts {titre, lien, date, resume, auteur, rubriques} pour RSS 2.0 ou Atom."""
     racine = ET.fromstring(octets)
@@ -278,12 +322,7 @@ def main():
     limite = (aujourdhui - dt.timedelta(days=args.jours)).isoformat() if args.jours else None
 
     retenus, echecs, bilan = [], [], []
-    for f in feeds:
-        try:
-            articles = lire_fil(telecharger(f["url"]))
-        except Exception as e:
-            echecs.append((f["nom"], str(e)[:120]))
-            continue
+    for f, articles in lire_fils(feeds, echecs, 0 if args.test else ATTENTE_CERTIFICAT):
         gardes = 0
         pres_de = pres_de_tous + [(mot_entier(m), [mot_entier(v) for v in voisins])
                                   for m, voisins in f.get("exclure_pres_de", {}).items()]

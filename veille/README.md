@@ -12,6 +12,8 @@ python3 collect_rss.py --jours 3   # collecte les articles des 3 derniers jours
 
 Le résultat arrive dans `corpus/veille_AAAA-MM-JJ.json`, prêt à coller dans l'analyseur. Un article déjà vu n'est jamais repris deux fois (voir `registre.json`) : les liens y sont comparés normalisés, comme dans `dossier.py` (https, sans « www. », sans fragment, sans / final ni paramètres de suivi `utm_…`, `xtor`, `fbclid`…).
 
+Un fil dont le certificat HTTPS est refusé (« self-signed certificate in certificate chain » : le réseau du moment intercepte la connexion, par exemple un portail Wi-Fi, un filtre ou un antivirus) est retenté une fois, 5 minutes après la fin des autres fils (`ATTENTE_CERTIFICAT` dans `collect_rss.py`) ; s'il échoue encore, il figure dans « Fils en échec » avec la mention « encore au nouvel essai ». `--test` ne retente pas. La vérification du certificat n'est jamais levée.
+
 Chaque article indique pourquoi il a été retenu : `mots_reperes` (les mots-clés trouvés), `score` (nombre de passages repérés, ceux du titre comptent double) et `dans_titre` (vrai si un mot-clé figure dans le titre). Rien n'est exclu sur ces critères : un score de 1 sans mot dans le titre signale en général une simple mention en passant.
 
 Un article dont le titre ou le début du chapô (300 premiers caractères) contient « Sponsored », « Partner content », « Contenu sponsorisé » ou « [Sponso] » (Numerama ; sans tenir compte des majuscules ni des accents) porte `categorie: "sponsorise"` au lieu de la catégorie du fil. Il reste dans le corpus, mais n'entre dans aucun lot et `complet.py` ne cherche pas son texte.
