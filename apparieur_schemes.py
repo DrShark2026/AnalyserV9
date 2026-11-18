@@ -150,6 +150,42 @@ def candidats_theta5(t):
     out = [f"{m.group(1)} / {m.group(2)}" for m in RE_T5.finditer(t) if m.group(1).lower() not in _STOP]
     return sorted(set(out))[:10]
 
+# --- moisson des determinations de l'analyseur (proposeur) -------------------
+def moissonner_determinations(art):
+    """Récolte ce que l'analyseur a DÉJÀ posé, indépendamment du catalogue :
+    - θ5 à pôle « inflation » = candidats de CAPTURE (co-hyperonyme qui subsume) ;
+    - antiphrases / σ-inversions = retournements d'énonciation.
+    C'est ce qui fait de la post-passe un *proposeur* : elle montre un schème de
+    capture même quand aucune entrée du catalogue ne correspond encore."""
+    noms = {n["id"]: n.get("label", n["id"]) for n in art.get("notions", [])}
+    t5, iro = [], []
+    for d in art.get("determinations", []):
+        co = d.get("classe_objet") or {}
+        if str(d.get("op", "")).startswith("θ5") and co.get("pole") == "inflation":
+            r = d.get("risk") or {}
+            t5.append({
+                "hyperonyme": co.get("hyperonyme"),
+                "co_notions": [noms.get(i, i) for i in (co.get("co_notions") or d.get("notion_ids") or [])],
+                "intension": co.get("intension"),
+                "source_classe": co.get("source_classe"),
+                "ajout": d.get("ajout"),
+                "risk": r.get("label") or r.get("level"),
+            })
+    for a in art.get("antiphrase", []) or []:        # bloc dédié de l'analyseur
+        paire = a.get("paire") or {}
+        iro.append({
+            "notion": a.get("notion") or noms.get(a.get("notion_id"), a.get("notion_id")),
+            "positif": (paire.get("positif") or {}).get("ajout"),
+            "negatif": (paire.get("negatif") or {}).get("ajout"),
+            "marqueurs": [m.get("extrait") for m in a.get("marqueurs", []) if m.get("extrait")],
+        })
+    if not iro:                                       # repli : pec marquées antiphrase
+        for pc in art.get("pec", []):
+            if pc.get("fonction") == "antiphrase" or pc.get("inversion_sigma"):
+                iro.append({"text": pc.get("text"), "adhesion": pc.get("adhesion"),
+                            "notion": noms.get(pc.get("notion_id"), pc.get("notion_id"))})
+    return {"theta5_inflation": t5, "antiphrases": iro}
+
 # --- appariement -------------------------------------------------------------
 def apparier(art, schemes):
     t = texte(art); ph = phrases(t); hits = []
@@ -162,17 +198,37 @@ def apparier(art, schemes):
             if any(r.search(p) for r in decls):
                 vus.add(p)
                 refs = ops_ref(p, art)
-                occ.append({"phrase": p[:220],
-                            "marquage": marquage_occurrence(refs) or marquage_regex(p),
-                            "degre_theta5": degre_theta5(p, sch, art),
-                            "source": art.get("source", "?"), "ops_ref": refs[:6]})
+                occ.append({
+                    "phrase": p[:220], "source": art.get("source", "?"),
+                    # AXE 1 — construction notionnelle (pré-énoncé) :
+                    "construction": {"degre_theta5": degre_theta5(p, sch, art),
+                                     "ops_ref": refs[:6]},
+                    # AXE 2 — prise en charge (énonciation, en aval) :
+                    "prise_en_charge": {"marquage": marquage_occurrence(refs) or marquage_regex(p)},
+                })
         if occ:
-            hits.append({"id": sch["id"], "valence": sch["valence"], "n": len(occ),
-                         "marquage": dict(collections.Counter(o["marquage"] for o in occ)),
-                         "degres": dict(collections.Counter(o["degre_theta5"] for o in occ)),
-                         "filature": score_filature(art, sch),
-                         "occurrences": occ[:8]})
-    return {"schemes": hits, "candidats_theta5": candidats_theta5(t)}
+            ops_agg = collections.Counter()
+            for o in occ:
+                for r in o["construction"]["ops_ref"]:
+                    ops_agg[r["op"]] += 1
+            hits.append({
+                "id": sch["id"], "valence": sch["valence"], "n": len(occ),
+                # les deux axes, séparés, au niveau du schème :
+                "construction": {
+                    "filature": score_filature(art, sch),
+                    "operations": dict(ops_agg.most_common()),   # la signature (ρ3/γ1 vs γ3/θ2)
+                    "degres_theta5": dict(collections.Counter(
+                        o["construction"]["degre_theta5"] for o in occ)),
+                },
+                "prise_en_charge": {
+                    "marquage": dict(collections.Counter(
+                        o["prise_en_charge"]["marquage"] for o in occ)),
+                },
+                "occurrences": occ[:8],
+            })
+    return {"schemes": hits,
+            "candidats_theta5": candidats_theta5(t),
+            "candidats_analyseur": moissonner_determinations(art)}
 
 def traiter(corpus, schemes):
     r = corpus if isinstance(corpus, list) else next(v for v in corpus.values() if isinstance(v, list))
@@ -191,8 +247,13 @@ if __name__ == "__main__":
     arts = traiter(corpus, schemes)
     out = a.out or os.path.splitext(a.batch)[0] + "__schemes.json"
     json.dump(arts, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
-    g = collections.Counter()
+    g = collections.Counter(); ct5 = 0; cir = 0
     for x in arts:
-        for h in x["analyse_schemes"]["schemes"]:
+        asx = x["analyse_schemes"]
+        for h in asx["schemes"]:
             g[h["id"]] += h["n"]
-    print("schèmes repérés:", dict(g) or "(aucun)", "→", out)
+        ca = asx.get("candidats_analyseur", {})
+        ct5 += len(ca.get("theta5_inflation", []))
+        cir += len(ca.get("antiphrases", []))
+    print("schèmes catalogue:", dict(g) or "(aucun)")
+    print(f"candidats analyseur: θ5-inflation={ct5}, antiphrases={cir}", "→", out)

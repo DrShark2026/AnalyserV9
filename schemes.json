@@ -509,7 +509,11 @@
         "crève l'écran",
         "dieu vivant",
         "idole absolue",
-        "candidat de poids"
+        "candidat de poids",
+        "l'homme le plus fort",
+        "sauveur",
+        "Hercule",
+        "colosse providentiel"
       ],
       "note": "L'analyseur l'a posé en θ5 (« outsider devenu dirigeant ») sur Zelensky. Valence mixte : construit un sauveur, souvent retourné en soupçon."
     },
@@ -532,7 +536,13 @@
         "sous-marin de",
         "torpill\\w+",
         "homme de paille",
-        "candidat.{0,8}leurre"
+        "candidat.{0,8}leurre",
+        "manœuvr\\w+",
+        "sous l'emprise",
+        "tutelle",
+        "sous la coupe",
+        "poussah",
+        "Iznogoud"
       ],
       "note": "Attesté dans le lot Riner sous : pilotage/piloté/téléguidé/intéléguidable/à la manœuvre/manipulé. « sous-marin » et « torpille » = marqueurs du trope politique mais NON attestés dans ce lot (introduits par l'analyste), gardés pour la détection sur d'autres corpus."
     },
@@ -547,7 +557,14 @@
         "machine à broyer",
         "broyeur m[ée]diatique",
         "broyer m[ée]diatique\\w*",
-        "machine à broyer m[ée]diatique"
+        "machine à broyer m[ée]diatique",
+        "tête de turc",
+        "cible de foire",
+        "détestation",
+        "dégagis\\w+",
+        "bon débarras",
+        "tapis roulant",
+        "punition amère"
       ],
       "note": "TOPOS transversal, cross-affaire : attesté chez Huang (« implacable machine à broyer médiatique ») ET Riner (Douillet)."
     },
@@ -696,6 +713,54 @@
         ]
       },
       "note": "Schème de POSITION DE SUJET (ethos), pas de construction d'objet — d'où la famille 'posture' (5e tiroir proposé, à valider). En AVAL de [[homme_vs_machine]] : présuppose le verdict « la machine gagne » et code la réaction. Bipolaire : renoncement (« the game is up », « à quoi bon », dégoût, on arrête) vs relève/centaure (collaborer, « ally not enemy », « study Go more », aller plus loin). La fourche est une TRAJECTOIRE, pas un type : Kasparov (« a massacre, well-deserved » → advanced chess) et Sedol (accablé → « I must study Go more ») la traversent. Distinct de abdication_cognitive (délégation/érosion, l'humain continue diminué) et de ia_compagnon (affectif). Le champ 'poles' documente le partage ; l'apparieur actuel fire sur l'union (valence mixte) — un futur tool pourra taguer le pôle."
+    },
+    {
+      "id": "corps_ogre",
+      "label": "Le candidat-corps / l'ogre national",
+      "valence": "mixte",
+      "declencheurs": [
+        "ogre",
+        "gargantu\\w+",
+        "vorace",
+        "bâfreur",
+        "plantureux",
+        "appétit d'ogre",
+        "bon vivant",
+        "épicurien",
+        "embonpoint",
+        "pays de cocagne",
+        "mise au régime",
+        "régime maigre",
+        "hors norme",
+        "homme fort.{0,15}(plantureux|vorace|physique)"
+      ],
+      "registre_attendu": "le candidat ramené à un CORPS (ventre, appétit, masse) qui rassure ou inquiète un PAYS-corps (gavé / menacé de régime)",
+      "hyperonyme": [
+        "ogre"
+      ],
+      "famille": "scheme_notion",
+      "portee": "transversal",
+      "note": "Candidat-corps : l'ogre vorace qui rassure un pays-corps 'gavé' craignant 'la mise au régime' (austérité). Ni la machine, ni le migrant — le ventre. Valence double : l'abondance rassure, la démesure inquiète. Attesté sur RINER-07 (Gargantua). À confirmer par récurrence avant d'en faire un schème stable."
+    },
+    {
+      "id": "adoubement_fatal",
+      "label": "L'adoubement fatal (le baiser de la mort)",
+      "valence": "negative",
+      "declencheurs": [
+        "adoub\\w+",
+        "baiser de la mort",
+        "onction (élyséenne|présidentielle|de)",
+        "parrain\\w+ par",
+        "béni par",
+        "sacr\\w+ par (Macron|le pouvoir)",
+        "soutenu par Macron",
+        "le ring élyséen"
+      ],
+      "registre_attendu": "l'onction du pouvoir en place (Macron) présentée comme condamnation : être adoubé, c'est être perdu",
+      "hyperonyme": [],
+      "famille": "procede",
+      "portee": "transversal",
+      "note": "Le soutien du sortant comme poison : 'adoubé par Macron' = ticket pour l'échec. Attesté sur RINER-07. Proche de machine_a_broyer (le favori qu'on abat) mais côté énonciation : c'est l'onction elle-même qui tue."
     }
   ]
 }
