@@ -19,6 +19,10 @@ Si plusieurs articles d'une même source donnent exactement le même texte,
 c'est un bandeau ou une page générique, pas l'article : ils passent en « echec ».
 Les panneaux de consentement aux cookies listés dans CONSENTEMENT (Mediapart)
 sont retirés de la page avant l'extraction.
+Un billet de direct (L'Humanité : chaque billet a son lien dans le fil, mais tous
+mènent à la page du direct) est pris dans le JSON-LD LiveBlogPosting de la page :
+le billet dont le titre est celui de l'article, et non toute la page. Un billet
+retrouvé est « complet » dès MOTS_ECHEC mots : il est court, pas tronqué.
 Un article dont le titre, le début du chapô ou le début du texte complet porte
 une mention « Sponsored », « Partner content », « Contenu sponsorisé » ou
 « [Sponso] » (même règle que collect_rss.py) passe en categorie « sponsorise »
@@ -137,6 +141,56 @@ def sans_consentement(page):
     return lxml_html.tostring(doc, encoding="unicode")
 
 
+def _normal(titre):
+    """Titre réduit à ses lettres et chiffres, sans accents ni casse : guillemets et points de
+    suspension diffèrent entre le fil et la page (« … » / « ... »)."""
+    return re.sub(r"[^a-z0-9]+", "", sans_accents(titre).lower())
+
+
+def _objets_jsonld(page):
+    try:
+        doc = lxml_html.fromstring(page)
+    except Exception:
+        return
+    for script in doc.xpath('//script[@type="application/ld+json"]'):
+        try:
+            donnees = json.loads(script.text or "")
+        except ValueError:
+            continue
+        pile = [donnees]
+        while pile:
+            o = pile.pop()
+            if isinstance(o, list):
+                pile.extend(o)
+            elif isinstance(o, dict):
+                yield o
+                pile.extend(o.get("@graph", []))
+
+
+def billet_de_direct(page, titre):
+    """Texte du billet de direct titré comme l'article (JSON-LD LiveBlogPosting) ; None si la page
+    n'est pas un direct ou si aucun billet ne porte ce titre."""
+    cle = _normal(titre)
+    if not cle:
+        return None
+    for o in _objets_jsonld(page):
+        types = o.get("@type")
+        if "LiveBlogPosting" not in (types if isinstance(types, list) else [types]):
+            continue
+        billets = o.get("liveBlogUpdate") or []
+        for b in billets if isinstance(billets, list) else [billets]:
+            if isinstance(b, dict) and _normal(b.get("headline") or "") == cle:
+                corps = b.get("articleBody") or ""
+                try:
+                    blocs = lxml_html.fragment_fromstring(corps, create_parent="div")
+                except Exception:
+                    return corps.strip() or None
+                lignes = [" ".join(" ".join(el.itertext()).split()) for el in blocs.iter("p", "li", "h2", "h3", "blockquote")]
+                texte = "\n".join(l for l in lignes if l) or " ".join(blocs.text_content().split())
+                return texte or None
+    return None
+
+
 def traiter(article):
     """Renvoie (texte_complet, statut, raison, passager)."""
     url = article["lien"]
@@ -156,7 +210,10 @@ def traiter(article):
                 return None, "echec", f"{raison} ({essai + 1} essais)", True
             time.sleep(PAUSES[essai])
 
-    texte = trafilatura.extract(sans_consentement(page), url=url, include_comments=False, include_tables=False)
+    texte = billet_de_direct(page, article["texte"].partition("\n\n")[0])
+    direct = texte is not None
+    if not direct:
+        texte = trafilatura.extract(sans_consentement(page), url=url, include_comments=False, include_tables=False)
     n = len(texte.split()) if texte else 0
     if ANTI_ROBOT.search(texte or "") or (n < MOTS_ECHEC and ANTI_ROBOT.search(page)):
         return None, "echec", "page anti-robot à la place de l'article", False
@@ -164,6 +221,8 @@ def traiter(article):
         return None, "echec", f"extraction vide ({n} mots)", False
     if PAYWALL_JSONLD.search(page) or PAYWALL_TEXTE.search(texte):
         return texte, "partiel", f"réservé aux abonnés ({n} mots publics)", False
+    if direct:     # billet entier : court par nature, pas tronqué
+        return texte, "complet", f"{n} mots, billet de direct", False
     if n < MOTS_COMPLET:
         return texte, "partiel", f"texte court ({n} mots)", False
     return texte, "complet", f"{n} mots", False
